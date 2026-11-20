@@ -1,0 +1,6 @@
+tmp/
+output/
+outputs/
+.playwright-cli/
+.codex-attachments/
+node_modules/
