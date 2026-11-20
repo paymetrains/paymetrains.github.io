@@ -1,7 +1,7 @@
 import { readPdf } from "./pdf-reader.mjs";
 import { parseRoster, toIsoDate } from "./roster-core.mjs";
 import { hydrateMaster, hydrateReferenceMaster, selectMaster } from "./master-store.mjs";
-import { breakdownEntries, buildPayslip } from "./payslip.mjs";
+import { breakdownEntries, buildPayslip } from "./payslip.mjs?v=20261120-2";
 import {
   blankFortnight,
   importLine,
