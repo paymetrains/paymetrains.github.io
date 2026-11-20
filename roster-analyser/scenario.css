@@ -1,0 +1,81 @@
+#scenario-status:empty { display: none; }
+main { max-width: 1480px; }
+main > h1, main > .intro, #scenario-form, #scenario-status { max-width: 600px; margin-inline: auto; }
+#scenario-status { padding: 12px 0; }
+#scenario-status.error { color: var(--error); }
+#scenario-results { margin-top: 32px; }
+.scenario-line { border-top: 1px solid var(--line); }
+.scenario-line > summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  gap: 16px;
+  padding: 18px 0;
+  cursor: pointer;
+}
+.scenario-line > summary strong { font-variant-numeric: tabular-nums; white-space: nowrap; }
+.scenario-line > summary small { display: block; color: var(--muted); font-size: 0.8rem; margin-top: 4px; }
+.scenario-line > summary .scenario-extra { color: var(--green); }
+.scenario-line[open] { padding-bottom: 20px; }
+.scenario-day { padding: 16px 0; border-top: 1px solid var(--line); }
+.scenario-day h4 { margin: 0 0 8px; font-size: 0.95rem; }
+.scenario-day p { margin: 6px 0; }
+.scenario-day .pay-entry { padding: 8px 0; }
+.scenario-note { color: var(--warning); font-size: 0.85rem; }
+.scenario-pay-total { font-weight: 650; font-variant-numeric: tabular-nums; }
+.scenario-exports { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 24px; }
+.scenario-exports button { flex: 1 1 140px; }
+.reference-table { max-height: 360px; overflow: auto; margin-top: 12px; }
+.reference-table table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
+.reference-table caption { text-align: left; padding: 8px 0; color: var(--muted); }
+.reference-table th, .reference-table td { padding: 8px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+.reference-table th small { display: block; font-weight: 400; color: var(--muted); margin-top: 4px; }
+.reference-table td:nth-child(2), .reference-table td:nth-child(3) { white-space: nowrap; }
+.scenario-view-controls { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 12px 24px; margin: 24px 0 8px; }
+.scenario-view-controls > label { margin: 0; min-width: 160px; flex: 1; max-width: 280px; }
+.scenario-view-switch { display: flex; flex-wrap: wrap; border-bottom: 1px solid var(--line); }
+.scenario-view-switch button { min-height: 48px; padding: 10px 16px; border: 0; border-bottom: 3px solid transparent; background: transparent; color: var(--muted); font-weight: 600; }
+.scenario-view-switch button[aria-pressed="true"] { color: var(--green); border-bottom-color: var(--green); }
+.scenario-period-controls { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 24px; margin-top: 16px; }
+.scenario-period-controls .hint { margin: 0; }
+.scenario-day-list { max-width: 680px; }
+.swap-label { color: #85baff; }
+:root[data-theme="light"] .swap-label { color: #1759ad; }
+.master-comparison { display: flex; justify-content: space-between; align-items: start; gap: 8px; }
+.master-shift { min-width: 0; }
+.master-shift > strong, .master-shift > span, .master-shift > small { display: block; }
+.master-shift > small, .master-value > small, .master-basis { color: var(--muted); font-size: 0.75rem; }
+.master-value { text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.master-value > small { display: block; color: var(--green); }
+.master-basis { display: block; margin-top: 8px; line-height: 1.5; }
+.daily-master { margin: 12px 0; padding: 12px; border: 1px solid var(--line); }
+.daily-master > p { margin-top: 0; }
+.daily-master.comparison-higher, .roster-grid td.comparison-higher { background: color-mix(in srgb, var(--green) 12%, var(--paper)); box-shadow: inset 0 0 0 1px var(--green); }
+.time-claim { color: var(--green); }
+.time-claim > span { font-weight: 600; }
+.comparison-alternatives { margin-top: 16px; }
+.comparison-alternatives > summary { min-height: 44px; cursor: pointer; padding: 10px 0; font-size: 0.85rem; }
+.roster-scroll { overflow: auto; max-height: min(78vh, 900px); border: 1px solid var(--line); overscroll-behavior-x: contain; }
+.roster-scroll:focus-visible { outline: 2px solid var(--green); outline-offset: 3px; }
+.roster-grid { --roster-label-width: clamp(80px, 25vw, 112px); --roster-day-width: clamp(180px, calc(100vw - 42px - var(--roster-label-width)), 264px); width: calc(var(--roster-label-width) + var(--roster-days, 14) * var(--roster-day-width)); table-layout: fixed; border-collapse: separate; border-spacing: 0; font-size: 0.85rem; }
+.roster-grid th, .roster-grid td { width: var(--roster-day-width); min-width: var(--roster-day-width); padding: 12px; text-align: left; vertical-align: top; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); background: var(--paper); line-height: 1.5; }
+.roster-grid tr > :first-child { width: var(--roster-label-width); min-width: var(--roster-label-width); padding-inline: 8px; position: sticky; left: 0; z-index: 2; background: var(--surface); font-size: 0.8rem; }
+.roster-grid thead th { position: sticky; top: 0; z-index: 3; border-bottom: 2px solid var(--green); }
+.roster-grid thead tr > :first-child { z-index: 4; }
+.roster-grid td > strong, .roster-grid td > span, .roster-grid td > small { display: block; }
+.roster-grid td > small { color: var(--muted); margin-top: 4px; }
+.roster-grid .roster-wobod { color: var(--green); font-weight: 600; }
+.roster-grid .pay-entry { font-size: 0.8rem; padding: 8px 0; gap: 8px; }
+.roster-grid .pay-entry small { font-size: 0.75rem; }
+.roster-grid .scenario-note, .roster-grid .hint { font-size: 0.8rem; }
+.roster-grid .scenario-pay-total { margin: 14px 0 0; color: var(--green); }
+.timesheet-summary { width: 1100px; border-collapse: separate; border-spacing: 0; table-layout: fixed; font-size: 0.85rem; }
+.timesheet-summary th, .timesheet-summary td { padding: 12px; text-align: left; vertical-align: top; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); background: var(--paper); }
+.timesheet-summary thead th { position: sticky; top: 0; background: var(--surface); z-index: 2; }
+.timesheet-summary tr > :first-child { position: sticky; left: 0; z-index: 1; width: 110px; background: var(--surface); }
+.timesheet-summary thead tr > :first-child { z-index: 3; }
+.timesheet-summary th:nth-child(7) { width: 350px; }
+.timesheet-summary td:nth-child(2) { white-space: nowrap; }
+.timesheet-claims p { margin: 0 0 10px; line-height: 1.5; }
+.timesheet-claims p:last-child { margin-bottom: 0; }
+.visually-hidden { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }

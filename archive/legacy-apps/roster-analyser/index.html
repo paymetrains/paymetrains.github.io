@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Roster Analyser</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="app">
+      <section class="workbench">
+        <div class="titlebar">
+          <div>
+            <h1>Roster Analyser</h1>
+            <p>Compare a master roster pattern with a fortnight roster and export pay-app rows.</p>
+            <p><a href="./fortnight.html">Open the mobile-friendly fortnight calculator</a></p>
+          </div>
+          <div class="actions">
+            <button id="analyseButton" type="button">Analyse</button>
+            <button id="downloadJsonButton" type="button" disabled>JSON</button>
+            <button id="downloadCsvButton" type="button" disabled>CSV</button>
+          </div>
+        </div>
+
+        <div class="input-grid">
+          <label class="file-box">
+            <span>Master roster PDF</span>
+            <input id="masterFile" type="file" accept="application/pdf" />
+          </label>
+          <label class="file-box">
+            <span>Fortnight roster PDF</span>
+            <input id="fortnightFile" type="file" accept="application/pdf" />
+          </label>
+        </div>
+
+        <div id="status" class="status">Load both PDFs to begin.</div>
+
+        <section class="summary-grid" aria-label="Summary">
+          <div>
+            <span id="summaryEmployees">0</span>
+            <label>employees</label>
+          </div>
+          <div>
+            <span id="summaryRows">0</span>
+            <label>pay rows</label>
+          </div>
+          <div>
+            <span id="summaryOt">0</span>
+            <label>extra shifts</label>
+          </div>
+          <div>
+            <span id="summaryFlags">0</span>
+            <label>flags</label>
+          </div>
+          <div>
+            <span id="summaryMileage">0</span>
+            <label>mileage checks</label>
+          </div>
+        </section>
+
+        <section class="split">
+          <div class="panel">
+            <div class="panel-head">
+              <h2>Shifts above master count</h2>
+              <span id="overtimeCount">0</span>
+            </div>
+            <div id="overtimeList" class="list empty">No results yet.</div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-head">
+              <h2>Flags</h2>
+              <span id="flagCount">0</span>
+            </div>
+            <div id="flagList" class="list empty">No flags yet.</div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-head">
+              <h2>Mileage Checks</h2>
+              <span id="mileageCount">0</span>
+            </div>
+            <div id="mileageList" class="list empty">No mileage checks yet.</div>
+          </div>
+        </section>
+
+        <section class="panel wide">
+          <div class="panel-head">
+            <h2>Pay-App Export Preview</h2>
+            <span id="previewCount">0</span>
+          </div>
+          <div class="table-toolbar">
+            <label for="previewSearch">Search name or line</label>
+            <input
+              id="previewSearch"
+              type="search"
+              placeholder="Example: Singh or 24"
+              autocomplete="off"
+            />
+            <button id="fillCalculatorButton" type="button" disabled>Fill calculator</button>
+            <span id="calculatorStatus" class="toolbar-status">Analyse a roster first.</span>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Employee</th>
+                  <th>Line</th>
+                  <th>Date</th>
+                  <th>Rostered</th>
+                  <th>Actual</th>
+                  <th>Worked</th>
+                  <th>Status</th>
+                  <th>Flags</th>
+                </tr>
+              </thead>
+              <tbody id="previewBody">
+                <tr>
+                  <td colspan="8" class="muted">No export rows yet.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="panel wide calculator-panel">
+          <div class="panel-head">
+            <h2>Pay Calculator</h2>
+            <a href="./pay-calculator.html" target="_blank" rel="noreferrer">Open full page</a>
+          </div>
+          <iframe
+            id="payCalculatorFrame"
+            title="Roster-filled pay calculator"
+            src="./pay-calculator.html"
+          ></iframe>
+        </section>
+      </section>
+    </main>
+
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>

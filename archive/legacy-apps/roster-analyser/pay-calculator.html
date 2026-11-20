@@ -1,0 +1,1477 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./pay-calculator.css" />
+    <title>Pay Calculator</title>
+  </head>
+  <body>
+    <section id="rosterImportBanner" class="rosterImportBanner" hidden>
+      <strong id="rosterImportTitle">Roster import</strong>
+      <span id="rosterImportDetail"></span>
+    </section>
+    <h1>Pay Calculator - NEW</h1>
+    <p>
+      <a href="/oldpayCalc/index.html">ACCESS OLD PAY CALCULATOR HERE</a>
+      <br>They both may have bugs in it. old code base too messy to easily fix bugs.
+      <h3>Changes:</h3>
+      Have to fill out the time worked now. same format as start and finish times. 8'30" shift write as 0830. 7'45" shift as 0745.
+      <br>New calculator hasnt got milage in it yet.
+    </p>
+    <p>
+      <b><i>This is NOT an official calculator.</i></b> There is normally about
+      a 50$ leeway due to rounding inconsistencies. Or i messed up.
+    </p>
+    <p>
+      Most errors would be on milage shifts or late shifts that finsh the next
+      day. This is due to lack of data and references. Any errors, or you wish
+      to send me timesheets with milage for testing etc, email
+      tidy.rain9146@fastmail.com
+    </p>
+    <ul>
+      <h3>Instructions:</h3>
+      <li>
+        If you have javascript disabled, this will not work. Turn on javascript.
+      </li>
+      <li>
+        All times are written in 24 hour format eg. 1AM is 0100, 6PM is 1800,
+        midnight is 0000 etc.
+      </li>
+      <li>
+        <b>ALL</b> 'Rostered Sign On Time' and 'Rostered Sign Off Time' and 'Total Worked'
+        <b>MUST</b> be filled out for days rostered on.
+      </li>
+      <li>
+        If you did not work a day - RDO, rostered day off, or ADO, adjusted day
+        off - leave the fields blank.
+      </li>
+      <li>
+        If you were sick, write 'SICK' in the 'Actual Sign On Time' box.
+        eg.&emsp;
+        <u>0600</u> &emsp;<u>SICK</u>&emsp;|&emsp;<u>1400</u>&emsp;_____
+      </li>
+      <li>
+        Remember to fill out the rostered start and finish times for the sick
+        day!
+      </li>
+      <li>
+        Mark the PH box if that day is a public holiday, even if you arent
+        working.
+      </li>
+      <li>
+        If you have a HOL - public holiday not required, write 'HOL' in the rostered sign on box for that day.
+      </li>
+      <li>
+        Tick WOBOD for a confirmed standalone overtime shift on a booked-off day.
+        The estimate includes it in the fortnight the shift was worked.
+      </li>
+    </ul>
+    <div id="container">
+      <div class="payfield">
+        <div id="payinput">
+          <label for="payRate">Pay Rate </label>
+          <input type="text" id="payRate" name="payRate" required />
+          <label for="payPeriodStart">Period start</label>
+          <input type="date" id="payPeriodStart" />
+          <label for="payCrewRole">Crew role</label>
+          <select id="payCrewRole"><option value="driver">Driver</option><option value="guard">Guard</option></select>
+          <label for="payRatePreset">Pay rate preset</label>
+          <select id="payRatePreset"><option value="">Enter my own rate</option></select>
+          <label for="payDiagramAdjustment">Diagram adjustment for eligible shifts</label>
+          <select id="payDiagramAdjustment">
+            <option value="">None</option>
+            <option value="compare">Higher value (suburban)</option>
+            <option value="credit">Approved time credits</option>
+          </select>
+        </div>
+        <div class="longshort">
+          <div class="longweek">
+            <label for="long"> &emsp;&emsp;Long Fortnight</label>
+            <input type="radio" id="long" name="longOrShort" value="long" />
+          </div>
+          <div class="shortweek">
+            <label for="short">short Fortnight</label>
+            <input type="radio" id="short" name="longOrShort" value="short" />
+          </div>
+        </div>
+        <br />
+      </div>
+
+      <form id="timesheet" onsubmit="event.preventDefault();">
+        <table id="timesheetTable" class="timesheet">
+          <colgroup>
+            <col class="dayCol" />
+            <col class="timeCol" />
+            <col class="timeCol" />
+            <col class="timeCol" />
+            <col class="timeCol" />
+            <col class="timeCol" />
+            <col class="commentsCol" />
+            <col class="timeCol" />
+          </colgroup>
+          <tr>
+            <th colspan="10">Week 1</th>
+          </tr>
+          <tr>
+            <th>Day</th>
+            <th>Rostered Sign On Time</th>
+            <th>Actual Sign On Time</th>
+            <th>Rostered Sign Off Time</th>
+            <th>Actual Sign Off Time</th>
+            <th>209km Passed at</th>
+            <th>Comments</th>
+            <th>Total worked</th>
+          </tr>
+          <tr id="1" class="payRow">
+            <td>Sun</td>
+            <td>
+              <input
+                class="timeInput" id="RosteredSignOnRow01"
+                name="RosteredSignOnSun"
+              />
+            </td>
+            <td>
+              <input
+                class="timeInput" id="ActualSignOnSunRow01"
+                name="ActualSignOnSunRow01"
+              />
+            </td>
+            <td>
+              <input
+                class="timeInput" id="RosteredSignOffSunRow01"
+                name="RosteredSignOffSunRow01"
+              />
+            </td>
+            <td>
+              <input
+                class="timeInput" id="ActualSignOffSunRow01"
+                name="ActualSignOffSunRow01"
+              />
+            </td>
+            <td>
+              <input
+                class="timeInput" id="milageTimeSunRow01"
+                name="milageTimeSunRow01"
+              />
+            </td>
+            <td>
+              <div class="Comments">
+                <div class="commentBox">
+                  <label for="payPHSunRow01">PH</label>
+                  <input
+                    type="checkbox" id="payPHSunRow01"
+                    name="payPHSunRow01"
+                    value="true"
+                  />
+                </div>
+                <div class="commentBox">
+                  <label for="accruePHSunRow01">Accrue PH?</label>
+                  <input
+                    type="checkbox" id="accruePHSunRow01"
+                    name="accruePHSunRow01"
+                    value="true"
+                  />
+                </div>
+                <div class="commentBox">
+                  <label for="wobodRow01">WOBOD</label>
+                  <input
+                    type="checkbox" id="wobodRow01"
+                    name="wobodRow01"
+                    value="true"
+                  />
+                </div>
+                <div class="commentBox" hidden>
+                  <label for="calloutSunRow01">Callout</label>
+                  <input
+                    type="checkbox" id="calloutSunRow01"
+                    name="calloutSunRow01"
+                    value="true"
+                  />
+                </div>
+                <div class="extraKmBox">
+                  <label for="extraKmSunRow01">Extra KM:</label>
+                  <input class="timeInput" id="extraKmSunRow01" name="extraKmSunRow01" />
+                </div>
+              </div>
+            </td>
+            <td><input class="timeInput" id="hoursWorkedRow01"/></td>
+          </tr>
+          <tr id="2" class="payRow">
+            <td>Mon</td>
+            <td>
+              <input
+                class="timeInput" id="RosteredSignOnMonRow02"
+                name="RosteredSignOnMonRow02"
+              />
+            </td>
+            <td>
+              <input
+                class="timeInput" id="ActualSignOnMonRow02"
+                name="ActualSignOnMonRow02"
+              />
+            </td>
+            <td>
+              <input
+                class="timeInput" id="RosteredSignOffMonRow02"
+                name="RosteredSignOffMonRow02"
+              />
+            </td>
+            <td>
+              <input
+                class="timeInput" id="ActualSignOffMonRow02"
+                name="ActualSignOffMonRow02"
+              />
+            </td>
+            <td>
+              <input
+                class="timeInput" id="milageTimeMonRow02"
+                name="milageTimeMonRow02"
+              />
+            </td>
+            <td>
+              <div class="Comments">
+                <div class="commentBox">
+                  <label for="payPHMonRow02">PH</label
+                  ><input
+                    type="checkbox" id="payPHMonRow02"
+                    name="payPHMonRow02"
+                    value="true"
+                  />
+                </div>
+                <div class="commentBox">
+                  <label for="accruePHMonRow02">Accrue PH?</label
+                  ><input
+                    type="checkbox" id="accruePHMonRow02"
+                    name="accruePHMonRow02"
+                    value="true"
+                  />
+                </div>
+                <div class="commentBox">
+                  <label for="wobodRow02">WOBOD</label
+                  ><input
+                    type="checkbox" id="wobodRow02"
+                    name="wobodRow02"
+                    value="true"
+                  />
+                </div>
+                <div class="commentBox" hidden>
+                  <label for="calloutMonRow02">Callout</label
+                  ><input
+                    type="checkbox" id="calloutMonRow02"
+                    name="calloutMonRow02"
+                    value="true"
+                  />
+                </div>
+                <div class="extraKmBox">
+                  <label for="extraKmMonRow02">Extra KM:</label>
+                  <input class="timeInput" id="extraKmMonRow02" name="extraKmMonRow02" />
+                </div>
+              </div>
+            </td>
+            <td><input class="timeInput" id="hoursWorkedRow02"/></td>
+          </tr>
+          <tr id="3" class="payRow">
+            <td>Tues</td>
+            <td>
+              <input
+                class="timeInput" id="RosteredSignOnTuesRow03"
+                name="RosteredSignOnTuesRow03"
+              />
+            </td>
+            <td>
+              <input
+                class="timeInput" id="ActualSignOnTuesRow03"
+                name="ActualSignOnTuesRow03"
+              />
+            </td>
+            <td>
+              <input
+                class="timeInput" id="RosteredSignOffTuesRow03"
+                name="RosteredSignOffTuesRow03"
+              />
+            </td>
+            <td>
+              <input
+                class="timeInput" id="ActualSignOffTuesRow03"
+                name="ActualSignOffTuesRow03"
+              />
+            </td>
+            <td>
+              <input
+                class="timeInput" id="milageTimeTuesRow03"
+                name="milageTimeTuesRow03"
+              />
+            </td>
+            <td>
+              <div class="Comments">
+                <div class="commentBox">
+                  <label for="payPHTuesRow03">PH</label
+                  ><input
+                    type="checkbox" id="payPHTuesRow03"
+                    name="payPHTuesRow03"
+                    value="true"
+                  />
+                </div>
+                <div class="commentBox">
+                  <label for="accruePHTuesRow03">Accrue PH?</label
+                  ><input
+                    type="checkbox" id="accruePHTuesRow03"
+                    name="accruePHTuesRow03"
+                    value="true"
+                  />
+                </div>
+                <div class="commentBox">
+                  <label for="wobodRow03">WOBOD</label
+                  ><input
+                    type="checkbox" id="wobodRow03"
+                    name="wobodRow03"
+                    value="true"
+                  />
+                </div>
+                <div class="commentBox" hidden>
+                  <label for="calloutTuesRow03">Callout</label
+                  ><input
+                    type="checkbox" id="calloutTuesRow03"
+                    name="calloutTuesRow03"
+                    value="true"
+                  />
+                </div>
+                <div class="extraKmBox">
+                  <label for="extraKmTuesRow03">Extra KM:</label>
+                  <input
+                    class="timeInput" id="extraKmTuesRow03"
+                    name="extraKmTuesRow03"
+                  />
+                </div>
+              </div>
+            </td>
+            <td><input class="timeInput" id="hoursWorkedRow03"/></td>
+          </tr>
+          <tr id="4" class="payRow">
+            <td>Wed</td>
+            <td>
+              <input
+                class="timeInput" id="RosteredSignOnWedRow04"
+                name="RosteredSignOnWedRow04"
+              />
+            </td>
+            <td>
+              <input
+                class="timeInput" id="ActualSignOnWedRow04"
+                name="ActualSignOnWedRow04"
+              />
+            </td>
+            <td>
+              <input
+                class="timeInput" id="RosteredSignOffWedRow04"
+                name="RosteredSignOffWedRow04"
+              />
+            </td>
+            <td>
+              <input
+                class="timeInput" id="ActualSignOffWedRow04"
+                name="ActualSignOffWedRow04"
+              />
+            </td>
+            <td>
+              <input
+                class="timeInput" id="milageTimeWedRow04"
+                name="milageTimeWedRow04"
+              />
+            </td>
+            <td>
+              <div class="Comments">
+                <div class="commentBox">
+                  <label for="payPHWedRow04">PH</label
+                  ><input
+                    type="checkbox" id="payPHWedRow04"
+                    name="payPHWedRow04"
+                    value="true"
+                  />
+                </div>
+                <div class="commentBox">
+                  <label for="accruePHWedRow04">Accrue PH?</label
+                  ><input
+                    type="checkbox" id="accruePHWedRow04"
+                    name="accruePHWedRow04"
+                    value="true"
+                  />
+                </div>
+                <div class="commentBox">
+                  <label for="wobodRow04">WOBOD</label
+                  ><input
+                    type="checkbox" id="wobodRow04"
+                    name="wobodRow04"
+                    value="true"
+                  />
+                </div>
+                <div class="commentBox" hidden>
+                  <label for="calloutWedRow04">Callout</label
+                  ><input
+                    type="checkbox" id="calloutWedRow04"
+                    name="calloutWedRow04"
+                    value="true"
+                  />
+                </div>
+                <div class="extraKmBox">
+                  <label for="extraKmWedRow04">Extra KM:</label>
+                  <input class="timeInput" id="extraKmWedRow04" name="extraKmWedRow04" />
+                </div>
+              </div>
+            </td>
+            <td><input class="timeInput" id="hoursWorkedRow04"/></td>
+          </tr>
+          <tr id="5" class="payRow">
+            <td>Thurs</td>
+            <td>
+              <input
+                class="timeInput" id="RosteredSignOnThursRow05"
+                name="RosteredSignOnThursRow05"
+              />
+            </td>
+            <td>
+              <input
+                class="timeInput" id="ActualSignOnThursRow05"
+                name="ActualSignOnThursRow05"
+              />
+            </td>
+            <td>
+              <input
+                class="timeInput" id="RosteredSignOffThursRow05"
+                name="RosteredSignOffThursRow05"
+              />
+            </td>
+            <td>
+              <input
+                class="timeInput" id="ActualSignOffThursRow05"
+                name="ActualSignOffThursRow05"
+              />
+            </td>
+            <td>
+              <input
+                class="timeInput" id="milageTimeThursRow05"
+                name="milageTimeThursRow05"
+              />
+            </td>
+            <td>
+              <div class="Comments">
+                <div class="commentBox">
+                  <label for="payPHThursRow05">PH</label
+                  ><input
+                    type="checkbox" id="payPHThursRow05"
+                    name="payPHThursRow05"
+                    value="true"
+                  />
+                </div>
+                <div class="commentBox">
+                  <label for="accruePHThursRow05">Accrue PH?</label
+                  ><input
+                    type="checkbox" id="accruePHThursRow05"
+                    name="accruePHThursRow05"
+                    value="true"
+                  />
+                </div>
+                <div class="commentBox">
+                  <label for="wobodRow05">WOBOD</label
+                  ><input
+                    type="checkbox" id="wobodRow05"
+                    name="wobodRow05"
+                    value="true"
+                  />
+                </div>
+                <div class="commentBox" hidden>
+                  <label for="calloutThursRow05">Callout</label
+                  ><input
+                    type="checkbox" id="calloutThursRow05"
+                    name="calloutThursRow05"
+                    value="true"
+                  />
+                </div>
+                <div class="extraKmBox">
+                  <label for="extraKmThursRow05">Extra KM:</label>
+                  <input
+                    class="timeInput" id="extraKmThursRow05"
+                    name="extraKmThursRow05"
+                  />
+                </div>
+              </div>
+            </td>
+            <td><input class="timeInput" id="hoursWorkedRow05"/></td>
+          </tr>
+          <tr id="6" class="payRow">
+            <td>Fri</td>
+            <td>
+              <input
+                class="timeInput" id="RosteredSignOnFriRow06"
+                name="RosteredSignOnFriRow06"
+              />
+            </td>
+            <td>
+              <input
+                class="timeInput" id="ActualSignOnFriRow06"
+                name="ActualSignOnFriRow06"
+              />
+            </td>
+            <td>
+              <input
+                class="timeInput" id="RosteredSignOffFriRow06"
+                name="RosteredSignOffFriRow06"
+              />
+            </td>
+            <td>
+              <input
+                class="timeInput" id="ActualSignOffFriRow06"
+                name="ActualSignOffFriRow06"
+              />
+            </td>
+            <td>
+              <input
+                class="timeInput" id="milageTimeFriRow06"
+                name="milageTimeFriRow06"
+              />
+            </td>
+            <td>
+              <div class="Comments">
+                <div class="commentBox">
+                  <label for="payPHFriRow06">PH</label
+                  ><input
+                    type="checkbox" id="payPHFriRow06"
+                    name="payPHFriRow06"
+                    value="true"
+                  />
+                </div>
+                <div class="commentBox">
+                  <label for="accruePHFriRow06">Accrue PH?</label
+                  ><input
+                    type="checkbox" id="accruePHFriRow06"
+                    name="accruePHFriRow06"
+                    value="true"
+                  />
+                </div>
+                <div class="commentBox">
+                  <label for="wobodRow06">WOBOD</label
+                  ><input
+                    type="checkbox" id="wobodRow06"
+                    name="wobodRow06"
+                    value="true"
+                  />
+                </div>
+                <div class="commentBox" hidden>
+                  <label for="calloutFriRow06">Callout</label
+                  ><input
+                    type="checkbox" id="calloutFriRow06"
+                    name="calloutFriRow06"
+                    value="true"
+                  />
+                </div>
+                <div class="extraKmbox">
+                  <label for="extraKmFriRow06">Extra KM:</label>
+                  <input class="timeInput" id="extraKmFriRow06" name="extraKmFriRow06" />
+                </div>
+              </div>
+            </td>
+            <td><input class="timeInput" id="hoursWorkedRow06"/></td>
+          </tr>
+          <tr id="7" class="payRow">
+            <td>Sat</td>
+            <td>
+              <input
+                class="timeInput" id="RosteredSignOnSatRow07"
+                name="RosteredSignOnSatRow07"
+              />
+            </td>
+            <td>
+              <input
+                class="timeInput" id="ActualSignOnSatRow07"
+                name="ActualSignOnSatRow07"
+              />
+            </td>
+            <td>
+              <input
+                class="timeInput" id="RosteredSignOffSatRow07"
+                name="RosteredSignOffSatRow07"
+              />
+            </td>
+            <td>
+              <input
+                class="timeInput" id="ActualSignOffSatRow07"
+                name="ActualSignOffSatRow07"
+              />
+            </td>
+            <td>
+              <input
+                class="timeInput" id="milageTimeSatRow07"
+                name="milageTimeSatRow07"
+              />
+            </td>
+            <td>
+              <div class="Comments">
+                <div class="commentBox">
+                  <label for="payPHSatRow07">PH</label
+                  ><input
+                    type="checkbox" id="payPHSatRow07"
+                    name="payPHSatRow07"
+                    value="true"
+                  />
+                </div>
+                <div class="commentBox">
+                  <label for="accruePHSatRow07">Accrue PH?</label
+                  ><input
+                    type="checkbox" id="accruePHSatRow07"
+                    name="accruePHSatRow07"
+                    value="true"
+                  />
+                </div>
+                <div class="commentBox">
+                  <label for="wobodRow07">WOBOD</label
+                  ><input
+                    type="checkbox" id="wobodRow07"
+                    name="wobodRow07"
+                    value="true"
+                  />
+                </div>
+                <div class="commentBox" hidden>
+                  <label for="calloutSatRow07">Callout</label
+                  ><input
+                    type="checkbox" id="calloutSatRow07"
+                    name="calloutSatRow07"
+                    value="true"
+                  />
+                </div>
+                <div class="extraKmBox">
+                  <label for="extraKmSatRow07">Extra KM:</label>
+                  <input class="timeInput" id="extraKmSatRow07" name="extraKmSatRow07" />
+                </div>
+              </div>
+            </td>
+            <td><input class="timeInput" id="hoursWorkedRow07"/></td>
+          </tr>
+          <tr>
+            <th colspan="10">Week 2</th>
+          </tr>
+          <tr>
+            <th>Day</th>
+            <th>Rostered Sign On Time</th>
+            <th>Actual Sign On Time</th>
+            <th>Rostered Sign Off Time</th>
+            <th>Actual Sign Off Time</th>
+            <th>209km Passed at</th>
+            <th>Comments</th>
+            <th>Total worked</th>
+          </tr>
+          <tr id="8" class="payRow">
+            <td>Sun</td>
+            <td>
+              <input
+                class="timeInput" id="RosteredSignOnSunRow08"
+                name="RosteredSignOnSunRow08"
+              />
+            </td>
+            <td>
+              <input
+                class="timeInput" id="ActualSignOnSunRow08"
+                name="ActualSignOnSunRow08"
+              />
+            </td>
+            <td>
+              <input
+                class="timeInput" id="RosteredSignOffSunRow08"
+                name="RosteredSignOffSunRow08"
+              />
+            </td>
+            <td>
+              <input
+                class="timeInput" id="ActualSignOffSunRow08"
+                name="ActualSignOffSunRow08"
+              />
+            </td>
+            <td>
+              <input
+                class="timeInput" id="milageTimeSunRow08"
+                name="milageTimeSunRow08"
+              />
+            </td>
+            <td>
+              <div class="Comments">
+                <div class="commentBox">
+                  <label for="payPHSunRow08"> PH</label>
+                  <input
+                    type="checkbox" id="payPHSunRow08"
+                    name="payPHSunRow08"
+                    value="true"
+                  />
+                </div>
+                <div class="commentBox">
+                  <label for="accruePHSunRow08">Accrue PH?</label>
+                  <input
+                    type="checkbox" id="accruePHSunRow08"
+                    name="accruePHSunRow08"
+                    value="true"
+                  />
+                </div>
+                <div class="commentBox">
+                  <label for="wobodRow08">WOBOD</label>
+                  <input
+                    type="checkbox" id="wobodRow08"
+                    name="wobodRow08"
+                    value="true"
+                  />
+                </div>
+                <div class="commentBox" hidden>
+                  <label for="calloutSunRow08">Callout</label>
+                  <input
+                    type="checkbox" id="calloutSunRow08"
+                    name="calloutSunRow08"
+                    value="true"
+                  />
+                </div>
+                <div class="extraKmBox">
+                  <label for="extraKmSunRow08">Extra KM:</label>
+                  <input class="timeInput" id="extraKmSunRow08" name="extraKmSunRow08" />
+                </div>
+              </div>
+            </td>
+            <td><input class="timeInput" id="hoursWorkedRow08"/></td>
+          </tr>
+          <tr id="9" class="payRow">
+            <td>Mon</td>
+            <td>
+              <input
+                class="timeInput" id="RosteredSignOnMonRow09"
+                name="RosteredSignOnMonRow09"
+              />
+            </td>
+            <td>
+              <input
+                class="timeInput" id="ActualSignOnMonRow09"
+                name="ActualSignOnMonRow09"
+              />
+            </td>
+            <td>
+              <input
+                class="timeInput" id="RosteredSignOffMonRow09"
+                name="RosteredSignOffMonRow09"
+              />
+            </td>
+            <td>
+              <input
+                class="timeInput" id="ActualSignOffMonRow09"
+                name="ActualSignOffMonRow09"
+              />
+            </td>
+            <td>
+              <input
+                class="timeInput" id="milageTimeMonRow09"
+                name="milageTimeMonRow09"
+              />
+            </td>
+            <td>
+              <div class="Comments">
+                <div class="commentBox">
+                  <label for="payPHMonRow09">PH</label
+                  ><input
+                    type="checkbox" id="payPHMonRow09"
+                    name="payPHMonRow09"
+                    value="true"
+                  />
+                </div>
+                <div class="commentBox">
+                  <label for="accruePHMonRow09">Accrue PH?</label
+                  ><input
+                    type="checkbox" id="accruePHMonRow09"
+                    name="accruePHMonRow09"
+                    value="true"
+                  />
+                </div>
+                <div class="commentBox">
+                  <label for="wobodRow09">WOBOD</label
+                  ><input
+                    type="checkbox" id="wobodRow09"
+                    name="wobodRow09"
+                    value="true"
+                  />
+                </div>
+                <div class="commentBox" hidden>
+                  <label for="calloutMonRow09">Callout</label
+                  ><input
+                    type="checkbox" id="calloutMonRow09"
+                    name="calloutMonRow09"
+                    value="true"
+                  />
+                </div>
+                <div class="extraKmBox">
+                  <label for="extraKmMonRow09">Extra KM:</label>
+                  <input class="timeInput" id="extraKmMonRow09" name="extraKmMonRow09" />
+                </div>
+              </div>
+            </td>
+            <td><input class="timeInput" id="hoursWorkedRow09"/></td>
+          </tr>
+          <tr id="10" class="payRow">
+            <td>Tues</td>
+            <td>
+              <input
+                class="timeInput" id="RosteredSignOnTuesRow10"
+                name="RosteredSignOnTuesRow10"
+              />
+            </td>
+            <td>
+              <input
+                class="timeInput" id="ActualSignOnTuesRow10"
+                name="ActualSignOnTuesRow10"
+              />
+            </td>
+            <td>
+              <input
+                class="timeInput" id="RosteredSignOffTuesRow10"
+                name="RosteredSignOffTuesRow10"
+              />
+            </td>
+            <td>
+              <input
+                class="timeInput" id="ActualSignOffTuesRow10"
+                name="ActualSignOffTuesRow10"
+              />
+            </td>
+            <td>
+              <input
+                class="timeInput" id="milageTimeTuesRow10"
+                name="milageTimeTuesRow10"
+              />
+            </td>
+            <td>
+              <div class="Comments">
+                <div class="commentBox">
+                  <label for="payPHTuesRow10">PH</label
+                  ><input
+                    type="checkbox" id="payPHTuesRow10"
+                    name="payPHTuesRow10"
+                    value="true"
+                  />
+                </div>
+                <div class="commentBox">
+                  <label for="accruePHTuesRow10">Accrue PH?</label
+                  ><input
+                    type="checkbox" id="accruePHTuesRow10"
+                    name="accruePHTuesRow10"
+                    value="true"
+                  />
+                </div>
+                <div class="commentBox">
+                  <label for="wobodRow10">WOBOD</label
+                  ><input
+                    type="checkbox" id="wobodRow10"
+                    name="wobodRow10"
+                    value="true"
+                  />
+                </div>
+                <div class="commentBox" hidden>
+                  <label for="calloutTuesRow10">Callout</label
+                  ><input
+                    type="checkbox" id="calloutTuesRow10"
+                    name="calloutTuesRow10"
+                    value="true"
+                  />
+                </div>
+                <div class="extraKmBox">
+                  <label for="extraKmTuesRow10">Extra KM:</label>
+                  <input
+                    class="timeInput" id="extraKmTuesRow10"
+                    name="extraKmTuesRow10"
+                  />
+                </div>
+              </div>
+            </td>
+            <td><input class="timeInput" id="hoursWorkedRow10"/></td>
+          </tr>
+          <tr id="11" class="payRow">
+            <td>Wed</td>
+            <td>
+              <input
+                class="timeInput" id="RosteredSignOnWedRow11"
+                name="RosteredSignOnWedRow11"
+              />
+            </td>
+            <td>
+              <input
+                class="timeInput" id="ActualSignOnWedRow11"
+                name="ActualSignOnWedRow11"
+              />
+            </td>
+            <td>
+              <input
+                class="timeInput" id="RosteredSignOffWedRow11"
+                name="RosteredSignOffWedRow11"
+              />
+            </td>
+            <td>
+              <input
+                class="timeInput" id="ActualSignOffWedRow11"
+                name="ActualSignOffWedRow11"
+              />
+            </td>
+            <td>
+              <input
+                class="timeInput" id="milageTimeWedRow11"
+                name="milageTimeWedRow11"
+              />
+            </td>
+            <td>
+              <div class="Comments">
+                <div class="commentBox">
+                  <label for="payPHWedRow11">PH</label
+                  ><input
+                    type="checkbox" id="payPHWedRow11"
+                    name="payPHWedRow11"
+                    value="true"
+                  />
+                </div>
+                <div class="commentBox">
+                  <label for="accruePHWedRow11">Accrue PH?</label
+                  ><input
+                    type="checkbox" id="accruePHWedRow11"
+                    name="accruePHWedRow11"
+                    value="true"
+                  />
+                </div>
+                <div class="commentBox">
+                  <label for="wobodRow11">WOBOD</label
+                  ><input
+                    type="checkbox" id="wobodRow11"
+                    name="wobodRow11"
+                    value="true"
+                  />
+                </div>
+                <div class="commentBox" hidden>
+                  <label for="calloutWedRow11">Callout</label
+                  ><input
+                    type="checkbox" id="calloutWedRow11"
+                    name="calloutWedRow11"
+                    value="true"
+                  />
+                </div>
+                <div class="extraKmBox">
+                  <label for="extraKmWedRow11">Extra KM:</label>
+                  <input class="timeInput" id="extraKmWedRow11" name="extraKmWedRow11" />
+                </div>
+              </div>
+            </td>
+            <td><input class="timeInput"  /></td>
+          </tr>
+          <tr id="12" class="payRow">
+            <td>Thurs</td>
+            <td>
+              <input
+                class="timeInput" id="RosteredSignOnThursRow12"
+                name="RosteredSignOnThursRow12"
+              />
+            </td>
+            <td>
+              <input
+                class="timeInput" id="ActualSignOnThursRow12"
+                name="ActualSignOnThursRow12"
+              />
+            </td>
+            <td>
+              <input
+                class="timeInput" id="RosteredSignOffThursRow12"
+                name="RosteredSignOffThursRow12"
+              />
+            </td>
+            <td>
+              <input
+                class="timeInput" id="ActualSignOffThursRow12"
+                name="ActualSignOffThursRow12"
+              />
+            </td>
+            <td>
+              <input
+                class="timeInput" id="milageTimeThursRow12"
+                name="milageTimeThursRow12"
+              />
+            </td>
+            <td>
+              <div class="Comments">
+                <div class="commentBox">
+                  <label for="payPHThursRow12">PH</label
+                  ><input
+                    type="checkbox" id="payPHThursRow12"
+                    name="payPHThursRow12"
+                    value="true"
+                  />
+                </div>
+                <div class="commentBox">
+                  <label for="accruePHThursRow12">Accrue PH?</label
+                  ><input
+                    type="checkbox" id="accruePHThursRow12"
+                    name="accruePHThursRow12"
+                    value="true"
+                  />
+                </div>
+                <div class="commentBox">
+                  <label for="wobodRow12">WOBOD</label
+                  ><input
+                    type="checkbox" id="wobodRow12"
+                    name="wobodRow12"
+                    value="true"
+                  />
+                </div>
+                <div class="commentBox" hidden>
+                  <label for="calloutThursRow12">Callout</label
+                  ><input
+                    type="checkbox" id="calloutThursRow12"
+                    name="calloutThursRow12"
+                    value="true"
+                  />
+                </div>
+                <div class="extraKmBox">
+                  <label for="extraKmThursRow12">Extra KM:</label>
+                  <input
+                    class="timeInput" id="extraKmThursRow12"
+                    name="extraKmThursRow12"
+                  />
+                </div>
+              </div>
+            </td>
+            <td><input class="timeInput" id="hoursWorkedRow12"/></td>
+          </tr>
+          <tr id="13" class="payRow">
+            <td>Fri</td>
+            <td>
+              <input
+                class="timeInput" id="RosteredSignOnFriRow13"
+                name="RosteredSignOnFriRow13"
+              />
+            </td>
+            <td>
+              <input
+                class="timeInput" id="ActualSignOnFriRow13"
+                name="ActualSignOnFriRow13"
+              />
+            </td>
+            <td>
+              <input
+                class="timeInput" id="RosteredSignOffFriRow13"
+                name="RosteredSignOffFriRow13"
+              />
+            </td>
+            <td>
+              <input
+                class="timeInput" id="ActualSignOffFriRow13"
+                name="ActualSignOffFriRow13"
+              />
+            </td>
+            <td>
+              <input
+                class="timeInput" id="milageTimeFriRow13"
+                name="milageTimeFriRow13"
+              />
+            </td>
+            <td>
+              <div class="Comments">
+                <div class="commentBox">
+                  <label for="payPHFriRow13">PH</label
+                  ><input
+                    type="checkbox" id="payPHFriRow13"
+                    name="payPHFriRow13"
+                    value="true"
+                  />
+                </div>
+                <div class="commentBox">
+                  <label for="accruePHFriRow13">Accrue PH?</label
+                  ><input
+                    type="checkbox" id="accruePHFriRow13"
+                    name="accruePHFriRow13"
+                    value="true"
+                  />
+                </div>
+                <div class="commentBox">
+                  <label for="wobodRow13">WOBOD</label
+                  ><input
+                    type="checkbox" id="wobodRow13"
+                    name="wobodRow13"
+                    value="true"
+                  />
+                </div>
+                <div class="commentBox" hidden>
+                  <label for="calloutFriRow13">Callout</label
+                  ><input
+                    type="checkbox" id="calloutFriRow13"
+                    name="calloutFriRow13"
+                    value="true"
+                  />
+                </div>
+                <div class="extraKmbox">
+                  <label for="extraKmFriRow13">Extra KM:</label>
+                  <input class="timeInput" id="extraKmFriRow13" name="extraKmFriRow13" />
+                </div>
+              </div>
+            </td>
+            <td><input class="timeInput" id="hoursWorkedRow13"/></td>
+          </tr>
+          <tr id="14" class="payRow">
+            <td>Sat</td>
+            <td>
+              <input
+                class="timeInput" id="RosteredSignOnSatRow14"
+                name="RosteredSignOnSatRow14"
+              />
+            </td>
+            <td>
+              <input
+                class="timeInput" id="ActualSignOnSatRow14"
+                name="ActualSignOnSatRow14"
+              />
+            </td>
+            <td>
+              <input
+                class="timeInput" id="RosteredSignOffSatRow14"
+                name="RosteredSignOffSatRow14"
+              />
+            </td>
+            <td>
+              <input
+                class="timeInput" id="ActualSignOffSatRow14"
+                name="ActualSignOffSatRow14"
+              />
+            </td>
+            <td>
+              <input
+                class="timeInput" id="milageTimeSatRow14"
+                name="milageTimeSatRow14"
+              />
+            </td>
+            <td>
+              <div class="Comments">
+                <div class="commentBox">
+                  <label for="payPHSatRow14">PH</label
+                  ><input
+                    type="checkbox" id="payPHSatRow14"
+                    name="payPHSatRow14"
+                    value="true"
+                  />
+                </div>
+                <div class="commentBox">
+                  <label for="accruePHSatRow14">Accrue PH?</label
+                  ><input
+                    type="checkbox" id="accruePHSatRow14"
+                    name="accruePHSatRow14"
+                    value="true"
+                  />
+                </div>
+                <div class="commentBox">
+                  <label for="wobodRow14">WOBOD</label
+                  ><input
+                    type="checkbox" id="wobodRow14"
+                    name="wobodRow14"
+                    value="true"
+                  />
+                </div>
+                <div class="commentBox" hidden>
+                  <label for="calloutSatRow14">Callout</label
+                  ><input
+                    type="checkbox" id="calloutSatRow14"
+                    name="calloutSatRow14"
+                    value="true"
+                  />
+                </div>
+                <div class="extraKmBox">
+                  <label for="extraKmSatRow14">Extra KM:</label>
+                  <input class="timeInput" id="extraKmSatRow14" name="extraKmSatRow14" />
+                </div>
+              </div>
+            </td>
+            <td><input class="timeInput" id="hoursWorkedRow14"/></td>
+          </tr>
+        </table>
+        <button class="calculatePay" onclick="storeData()">
+          CALCULATE PAY
+        </button>
+      </form>
+      <div class="printpay">
+        <div id="payDetails"></div>
+        <div id="unitDetails"></div>
+        <div id="rateDetails"></div>
+        <div id="amountDetails"></div>
+      </div>
+      <table id="calculatedPay">
+        <tr>
+          <th>Day</th>
+          <th>Rostered Sign On</th>
+          <th>Actual Sign On</th>
+          <th>Rostered Sign Off</th>
+          <th>Actual Sign Off</th>
+          <th>Time Worked / Units</th>
+          <th>Lift Up</th>
+          <th>Lay Back</th>
+          <th>Build Up</th>
+          <th>Milage</th>
+          <th>Extra KM</th>
+          <th>PH</th>
+          <th>Accrue PH</th>
+          <th>WOBOD</th>
+          <th>CallOut</th>
+          <th>Total worked</th>
+        </tr>
+        <tr id="data1" class="dataRow">
+          <td>Sun</td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr id="data2" class="dataRow">
+          <td>Mon</td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr id="data3" class="dataRow">
+          <td>Tues</td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr id="data4" class="dataRow">
+          <td>Wed</td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr id="data5" class="dataRow">
+          <td>Thurs</td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr id="data6" class="dataRow">
+          <td>Fri</td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr id="data7" class="dataRow">
+          <td>Sat</td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr id="data8" class="dataRow">
+          <td>Sun</td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr id="data9" class="dataRow">
+          <td>Mon</td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr id="data10" class="dataRow">
+          <td>Tues</td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr id="data11" class="dataRow">
+          <td>Wed</td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr id="data12" class="dataRow">
+          <td>Thurs</td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr id="data13" class="dataRow">
+          <td>Fri</td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr id="data14" class="dataRow">
+          <td>Sat</td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+      </table>
+    </div>
+    <script src="./standalone-overtime.js"></script>
+    <script src="./pay-rates.js"></script>
+    <script src="./pay-calculator.js"></script>
+    <script src="./pay-bridge.js"></script>
+  </body>
+</html>

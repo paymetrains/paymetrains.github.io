@@ -1,0 +1,7 @@
+{
+  "scripts": {
+    "start": "node ./scripts/serve.mjs",
+    "convert-master": "node ./scripts/convert-master.mjs",
+    "test": "node ./tests/run-tests.mjs && node ./tests/fortnight-tests.mjs && node ./tests/scenario-tests.mjs"
+  }
+}

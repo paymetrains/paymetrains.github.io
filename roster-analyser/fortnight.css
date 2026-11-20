@@ -1,0 +1,565 @@
+:root {
+  color-scheme: dark;
+  --paper: #181c19;
+  --surface: oklch(26% 0.013 151);
+  --ink: oklch(94% 0.01 135);
+  --muted: oklch(74% 0.013 135);
+  --line: oklch(39% 0.013 135);
+  --control-line: oklch(54% 0.013 135);
+  --green: oklch(79% 0.12 151);
+  --green-hover: oklch(85% 0.105 151);
+  --warning: oklch(85% 0.09 83);
+  --warning-wash: oklch(29% 0.039 83);
+  --error: oklch(81% 0.1 27);
+  font-family: system-ui, sans-serif;
+  font-size: 16px;
+  color: var(--ink);
+  background: var(--paper);
+}
+:root[data-theme="light"] {
+  color-scheme: light;
+  --paper: oklch(98% 0.006 90);
+  --surface: oklch(96% 0.006 90);
+  --ink: oklch(23% 0.013 150);
+  --muted: oklch(46% 0.012 150);
+  --line: oklch(83% 0.012 120);
+  --control-line: oklch(60% 0.012 120);
+  --green: oklch(39% 0.09 151);
+  --green-hover: oklch(33% 0.08 151);
+  --warning: oklch(38% 0.07 65);
+  --warning-wash: oklch(96% 0.035 85);
+  --error: oklch(43% 0.14 27);
+}
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+}
+button,
+input,
+select {
+  font: inherit;
+}
+button,
+a,
+input,
+select,
+summary {
+  -webkit-tap-highlight-color: transparent;
+}
+button,
+a,
+summary {
+  touch-action: manipulation;
+}
+button {
+  cursor: pointer;
+}
+button:disabled {
+  opacity: 0.55;
+  cursor: wait;
+}
+a {
+  color: var(--green);
+  text-underline-offset: 3px;
+}
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+summary:focus-visible {
+  outline: 3px solid var(--green);
+  outline-offset: 3px;
+}
+[hidden] {
+  display: none !important;
+}
+.topbar {
+  max-width: 960px;
+  margin: auto;
+  min-height: 76px;
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  border-bottom: 1px solid var(--line);
+}
+.brand {
+  color: var(--ink);
+  font-size: 1.25rem;
+  font-weight: 750;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.topbar-actions a {
+  font-size: 0.8rem;
+  text-align: right;
+}
+.theme-toggle {
+  min-width: 92px;
+  min-height: 44px;
+  padding: 8px;
+  border: 1px solid var(--control-line);
+  border-radius: 6px;
+  background: var(--paper);
+  color: var(--ink);
+  font-size: 0.8rem;
+  white-space: nowrap;
+}
+main {
+  max-width: 600px;
+  margin: auto;
+  padding: 24px 20px 40px;
+}
+.steps {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 0.8rem;
+  color: var(--muted);
+  margin-bottom: 36px;
+}
+.steps [aria-current] {
+  color: var(--green);
+  font-weight: 700;
+}
+h1 {
+  font-size: 1.8rem;
+  line-height: 1.2;
+  letter-spacing: -0.04em;
+  margin: 0 0 12px;
+}
+h2 {
+  font-size: 1.2rem;
+  margin: 28px 0 12px;
+}
+p {
+  line-height: 1.5;
+  margin: 8px 0 20px;
+}
+.intro {
+  color: var(--muted);
+  margin-bottom: 24px;
+}
+.hint,
+.footnote {
+  color: var(--muted);
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+.footnote {
+  margin-top: 24px;
+}
+.person {
+  font-size: 1.1rem;
+  font-weight: 650;
+  margin-bottom: 4px;
+}
+.mode-switch,
+.week-tabs {
+  display: flex;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 24px;
+}
+.mode-switch button,
+.week-tabs button {
+  flex: 1;
+  min-height: 48px;
+  border: 0;
+  border-bottom: 3px solid transparent;
+  background: transparent;
+  color: var(--muted);
+  font-weight: 600;
+}
+.mode-switch button[aria-pressed="true"],
+.week-tabs button[aria-pressed="true"] {
+  border-bottom-color: var(--green);
+  color: var(--green);
+}
+label {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-bottom: 20px;
+  min-width: 0;
+}
+input,
+select {
+  width: 100%;
+  min-width: 0;
+  min-height: 48px;
+  border: 1px solid var(--control-line);
+  border-radius: 6px;
+  padding: 10px 12px;
+  color: var(--ink);
+  background: var(--paper);
+  font-weight: 400;
+}
+input[type="file"] {
+  font-size: 0.85rem;
+  padding: 12px 8px;
+  overflow: hidden;
+}
+input::file-selector-button {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  padding: 7px;
+  border-radius: 4px;
+  margin-right: 8px;
+}
+input[type="checkbox"] {
+  width: 22px;
+  height: 22px;
+  min-height: 22px;
+  accent-color: var(--green);
+}
+input[type="time"] {
+  font-variant-numeric: tabular-nums;
+  padding: 10px 8px;
+}
+.field-pair {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 16px;
+}
+.field-pair label {
+  margin-bottom: 16px;
+}
+.upload {
+  margin-top: 8px;
+}
+.upload .hint {
+  font-weight: 400;
+}
+.primary,
+.secondary {
+  min-height: 50px;
+  padding: 12px 16px;
+  border-radius: 7px;
+  font-weight: 650;
+  border: 1px solid var(--green);
+}
+.primary {
+  background: var(--green);
+  color: var(--paper);
+}
+.secondary {
+  background: transparent;
+  color: var(--green);
+}
+.full {
+  width: 100%;
+}
+.text-button {
+  color: var(--green);
+  min-height: 44px;
+  border: 0;
+  padding: 8px 0;
+  background: transparent;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-align: left;
+}
+.back {
+  margin: -10px 0 18px;
+}
+.master-status {
+  border-block: 1px solid var(--line);
+  padding: 20px 0;
+  margin: 24px 0;
+}
+.master-status p {
+  font-size: 0.85rem;
+  color: var(--muted);
+  margin-bottom: 0;
+}
+.master-status button {
+  font-size: 0.85rem;
+}
+.pay-settings {
+  border-block: 1px solid var(--line);
+  margin: 24px 0;
+  padding: 4px 0 12px;
+}
+.pay-settings > summary,
+.shift-options > summary {
+  padding: 12px 0;
+  min-height: 44px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.pay-settings .hint {
+  margin: 0;
+}
+.review-warning,
+#notice {
+  padding: 14px;
+  background: var(--warning-wash);
+  color: var(--warning);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+#notice {
+  margin: 0 0 24px;
+}
+#notice.error {
+  color: var(--error);
+}
+.week-tabs {
+  margin-bottom: 8px;
+}
+.shift {
+  border-bottom: 1px solid var(--line);
+}
+.shift-toggle {
+  display: grid;
+  grid-template-columns: 66px minmax(0, 1fr) 42px;
+  gap: 12px;
+  align-items: center;
+  padding: 16px 0;
+  width: 100%;
+  min-height: 86px;
+  background: transparent;
+  border: 0;
+  color: var(--ink);
+  text-align: left;
+}
+.shift-date {
+  font-size: 0.85rem;
+  line-height: 1.4;
+}
+.shift-date strong {
+  display: block;
+}
+.shift-time {
+  font-size: 1.15rem;
+  font-weight: 650;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+.shift-job {
+  display: block;
+  font-size: 0.85rem;
+  color: var(--muted);
+  margin-top: 4px;
+  font-weight: 400;
+  overflow-wrap: anywhere;
+}
+.edit-label {
+  font-size: 0.8rem;
+  color: var(--green);
+  text-decoration: underline;
+}
+.shift-attention {
+  display: block;
+  font-size: 0.8rem;
+  color: var(--warning);
+  margin-top: 4px;
+}
+.shift-muted .shift-time {
+  color: var(--muted);
+  font-size: 1rem;
+}
+.shift.edited .shift-job:after {
+  content: " · Edited";
+  color: var(--green);
+}
+.shift-editor {
+  padding: 0 0 24px;
+}
+.shift-options {
+  border-top: 1px solid var(--line);
+}
+.shift-options[open] > summary {
+  margin-bottom: 8px;
+}
+.shift-editor fieldset {
+  padding: 0;
+  border: 0;
+  margin: 12px 0;
+}
+.shift-editor legend {
+  font-weight: 650;
+  font-size: 0.9rem;
+  margin-bottom: 12px;
+}
+.editor-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 16px;
+}
+.editor-actions button {
+  flex: 1;
+}
+.check-label {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 12px;
+  min-height: 44px;
+  font-weight: 400;
+  margin-bottom: 8px;
+}
+.source-text {
+  font-size: 0.85rem;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  color: var(--muted);
+  background: var(--surface);
+  padding: 12px;
+  line-height: 1.5;
+}
+.editor-error {
+  color: var(--error);
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+.review-footer {
+  position: sticky;
+  bottom: 0;
+  background: var(--paper);
+  border-top: 1px solid var(--line);
+  padding: 12px 0 max(12px, env(safe-area-inset-bottom));
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  text-align: center;
+  margin-top: 24px;
+}
+.review-footer .hint {
+  font-size: 0.8rem;
+}
+.review-footer button {
+  min-height: 52px;
+}
+.site-footer {
+  text-align: center;
+  color: var(--muted);
+  padding: 12px 20px 28px;
+  font-size: 0.75rem;
+}
+.gross {
+  margin: 28px 0 20px;
+  padding: 24px 0;
+  border-block: 1px solid var(--line);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.gross strong {
+  font-size: 2.7rem;
+  letter-spacing: -0.04em;
+  color: var(--green);
+  font-variant-numeric: tabular-nums;
+}
+.gross span:last-child {
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+.pay-entry {
+  padding: 12px 0;
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+.pay-entry strong {
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+.pay-entry span small {
+  display: block;
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+.pay-day {
+  margin-top: 24px;
+  font-size: 0.95rem;
+}
+.result-actions {
+  margin-top: 24px;
+}
+.detailed-pay {
+  margin-top: 24px;
+  border-block: 1px solid var(--line);
+  padding: 16px 0;
+}
+.detailed-pay > summary {
+  cursor: pointer;
+  font-weight: 600;
+}
+.payslip-day-note {
+  margin: 8px 0 16px;
+}
+#download-result {
+  margin-top: 28px;
+}
+.entry-options {
+  margin: 12px 0 20px;
+}
+.entry-options button {
+  min-height: 44px;
+  padding: 8px 0;
+  border: 0;
+  color: var(--green);
+  background: transparent;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+#manual-line-info:empty,
+#current-info:empty {
+  display: none;
+}
+@media (min-width: 720px) {
+  main {
+    padding-top: 36px;
+  }
+  .topbar {
+    padding-inline: 32px;
+  }
+  .steps {
+    margin-bottom: 48px;
+  }
+  h1 {
+    font-size: 2rem;
+  }
+  .shift-toggle {
+    grid-template-columns: 86px minmax(0, 1fr) 44px;
+  }
+  .review-footer {
+    padding-bottom: 20px;
+  }
+}
+@media (hover: hover) {
+  button.primary:hover {
+    background: var(--green-hover);
+  }
+  .theme-toggle:hover {
+    background: var(--surface);
+  }
+  .shift-toggle:hover {
+    background: var(--surface);
+  }
+  .text-button:hover,
+  a:hover {
+    text-decoration-thickness: 2px;
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  button {
+    transition: background-color 0.15s ease;
+  }
+}

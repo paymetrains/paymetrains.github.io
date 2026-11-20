@@ -1,0 +1,190 @@
+{
+  "schemaVersion": 1,
+  "depots": [
+    {
+      "id": "auburn",
+      "name": "Auburn Stabling Yard"
+    },
+    {
+      "id": "blacktown",
+      "name": "Blacktown"
+    },
+    {
+      "id": "campbelltown",
+      "name": "Campbelltown"
+    },
+    {
+      "id": "central",
+      "name": "Central"
+    },
+    {
+      "id": "cronulla",
+      "name": "Cronulla"
+    },
+    {
+      "id": "flemington",
+      "name": "Flemington"
+    },
+    {
+      "id": "hornsby",
+      "name": "Hornsby"
+    },
+    {
+      "id": "leppington",
+      "name": "Leppington"
+    },
+    {
+      "id": "mortdale",
+      "name": "Mortdale"
+    },
+    {
+      "id": "north-sydney",
+      "name": "North Sydney"
+    },
+    {
+      "id": "penrith",
+      "name": "Penrith"
+    },
+    {
+      "id": "richmond",
+      "name": "Richmond"
+    },
+    {
+      "id": "waterfall",
+      "name": "Waterfall"
+    }
+  ],
+  "masters": [],
+  "referenceMasters": [
+    {
+      "depot": "auburn",
+      "role": "driver",
+      "path": "bundled/auburn-driver.json"
+    },
+    {
+      "depot": "auburn",
+      "role": "guard",
+      "path": "bundled/auburn-guard.json"
+    },
+    {
+      "depot": "blacktown",
+      "role": "driver",
+      "path": "bundled/blacktown-driver.json"
+    },
+    {
+      "depot": "blacktown",
+      "role": "guard",
+      "path": "bundled/blacktown-guard.json"
+    },
+    {
+      "depot": "campbelltown",
+      "role": "driver",
+      "path": "bundled/campbelltown-driver.json"
+    },
+    {
+      "depot": "campbelltown",
+      "role": "guard",
+      "path": "bundled/campbelltown-guard.json"
+    },
+    {
+      "depot": "central",
+      "role": "driver",
+      "path": "bundled/central-driver.json"
+    },
+    {
+      "depot": "central",
+      "role": "guard",
+      "path": "bundled/central-guard.json"
+    },
+    {
+      "depot": "cronulla",
+      "role": "driver",
+      "path": "bundled/cronulla-driver.json"
+    },
+    {
+      "depot": "cronulla",
+      "role": "guard",
+      "path": "bundled/cronulla-guard.json"
+    },
+    {
+      "depot": "flemington",
+      "role": "driver",
+      "path": "bundled/flemington-driver.json"
+    },
+    {
+      "depot": "flemington",
+      "role": "guard",
+      "path": "bundled/flemington-guard.json"
+    },
+    {
+      "depot": "hornsby",
+      "role": "driver",
+      "path": "bundled/hornsby-driver.json"
+    },
+    {
+      "depot": "hornsby",
+      "role": "guard",
+      "path": "bundled/hornsby-guard.json"
+    },
+    {
+      "depot": "leppington",
+      "role": "driver",
+      "path": "bundled/leppington-driver.json"
+    },
+    {
+      "depot": "leppington",
+      "role": "guard",
+      "path": "bundled/leppington-guard.json"
+    },
+    {
+      "depot": "mortdale",
+      "role": "driver",
+      "path": "bundled/mortdale-driver.json"
+    },
+    {
+      "depot": "mortdale",
+      "role": "guard",
+      "path": "bundled/mortdale-guard.json"
+    },
+    {
+      "depot": "north-sydney",
+      "role": "driver",
+      "path": "bundled/north-sydney-driver.json"
+    },
+    {
+      "depot": "north-sydney",
+      "role": "guard",
+      "path": "bundled/north-sydney-guard.json"
+    },
+    {
+      "depot": "penrith",
+      "role": "driver",
+      "path": "bundled/penrith-driver.json"
+    },
+    {
+      "depot": "penrith",
+      "role": "guard",
+      "path": "bundled/penrith-guard.json"
+    },
+    {
+      "depot": "richmond",
+      "role": "driver",
+      "path": "bundled/richmond-driver.json"
+    },
+    {
+      "depot": "richmond",
+      "role": "guard",
+      "path": "bundled/richmond-guard.json"
+    },
+    {
+      "depot": "waterfall",
+      "role": "driver",
+      "path": "bundled/waterfall-driver.json"
+    },
+    {
+      "depot": "waterfall",
+      "role": "guard",
+      "path": "bundled/waterfall-guard.json"
+    }
+  ]
+}
