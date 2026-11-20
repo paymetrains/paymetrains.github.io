@@ -20,7 +20,8 @@
     "requestedJobs": 152,
     "queriedJobs": 140,
     "diagramTimes": 140,
-    "kilometreEntries": 132,
+    "kilometreEntries": 142,
+    "manualKilometreEntries": 10,
     "notCountedEntries": 8
   },
   "masterRoster": {
@@ -8329,6 +8330,68 @@
       "sourceFlag": null,
       "rosteredStandby": false,
       "referenceSource": "imported-defunct-diagram"
+    }
+  },
+  "kilometreData": {
+    "4020": {
+      "rosteredKm": 187.091,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied",
+      "providedOn": "2026-11-21"
+    },
+    "4021": {
+      "rosteredKm": 92.7,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied",
+      "providedOn": "2026-11-21"
+    },
+    "4022": {
+      "rosteredKm": 164.777,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied",
+      "providedOn": "2026-11-21"
+    },
+    "4023": {
+      "rosteredKm": 175.539,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied",
+      "providedOn": "2026-11-21"
+    },
+    "4024": {
+      "rosteredKm": 137.619,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied",
+      "providedOn": "2026-11-21"
+    },
+    "4025": {
+      "rosteredKm": 151.087,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied",
+      "providedOn": "2026-11-21"
+    },
+    "4026": {
+      "rosteredKm": 208.235,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied",
+      "providedOn": "2026-11-21"
+    },
+    "4027": {
+      "rosteredKm": 0,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied",
+      "providedOn": "2026-11-21"
+    },
+    "4028": {
+      "rosteredKm": 0,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied",
+      "providedOn": "2026-11-21"
+    },
+    "SBDASY1": {
+      "rosteredKm": 0,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied",
+      "providedOn": "2026-11-21"
     }
   }
 }

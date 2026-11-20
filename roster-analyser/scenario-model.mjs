@@ -42,6 +42,13 @@ export function matchingDiagram(master, job, dayIndex) {
     kilometresStatus: diagram.kilometresStatus || (typeof km === "number" ? "known" : "unavailable"), sourceFlag: diagram.sourceFlag || null };
 }
 
+export function matchingKilometres(master, job, dayIndex) {
+  const diagram = matchingDiagram(master, job, dayIndex);
+  const key = normaliseJob(job);
+  const manual = master.kilometreData?.[job] || master.kilometreData?.[key];
+  return manual ? { ...diagram, ...manual } : diagram;
+}
+
 function dailyTotals(result) {
   const totals = Array(14).fill(0);
   let index = -1;
@@ -104,7 +111,7 @@ function optionsFor(row, index, master, defunct, settings) {
   const oldCell = defunct.lines.get(row.line)?.cells[index];
   const diagram = matchingDiagram(master, row.jobNumber, index);
   const existingJob = !diagram && matchingRosterJob(settings.existingJobs, row.jobNumber, index);
-  const defunctDiagram = matchingDiagram(defunct, row.jobNumber, index);
+  const defunctDiagram = settings.role === "guard" ? null : matchingDiagram(defunct, row.jobNumber, index);
   const defunctJob = !defunctDiagram && matchingRosterJob(settings.defunctJobs, row.jobNumber, index);
   const normalBasis = {
     source: diagram?.start === row.rosteredStart && diagram.finish === row.rosteredFinish ? "Diagram data" : "Worked roster",
@@ -192,13 +199,13 @@ export function calculateScenarioLine({ engine, master, defunct, current, line, 
       item.leaveHours = 8;
       notes.push(`${row.date} · CIL modeled as 8 hours of paid accrued leave.`);
     }
-    item.kilometres = scenarioKilometres(item, matchingDiagram(master, item.jobNumber, index), matchingDiagram(defunct, item.jobNumber, index), role);
+    item.kilometres = role === "driver" ? scenarioKilometres(item, matchingKilometres(master, item.jobNumber, index), matchingKilometres(defunct, item.jobNumber, index), role) : null;
     return item;
   });
   if (!rows.some(row => !["off", "ado", "nta", "blank"].includes(row.status)))
     throw new Error("No worked shifts or paid leave remain on this line. Its normal gross pay needs confirmation.");
   const run = values => engine.calculateWithBreakdown(toEngineTable(values, rate, imported.rosterType, { role, weekdayOvertimeAfterFourth, scenarioComparison: true }));
-  const settings = { alignment, existingJobs: master.rosterJobReference || buildRosterJobReference(master), defunctJobs: defunct.rosterJobReference || buildRosterJobReference(defunct) };
+  const settings = { role, alignment, existingJobs: master.rosterJobReference || buildRosterJobReference(master), defunctJobs: defunct.rosterJobReference || buildRosterJobReference(defunct) };
   // The usual fortnight uses the existing master and its job lookup only.
   const baselineOptions = rows.map((row, index) => row.status === "work"
     ? variants(row, optionsFor(row, index, master, defunct, settings)[0].basis, settings)

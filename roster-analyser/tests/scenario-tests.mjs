@@ -3,7 +3,7 @@ import { createRequire } from "node:module";
 import { parseCell } from "../roster-core.mjs";
 import { hydrateReferenceMaster } from "../master-store.mjs";
 import { blankFortnight, toEngineTable } from "../fortnight-model.mjs";
-import { calculateScenarioLine, maximiseOptions } from "../scenario-model.mjs";
+import { calculateScenarioLine, maximiseOptions, matchingKilometres, matchingDiagram } from "../scenario-model.mjs";
 import { buildRosterJobReference, matchingRosterJob } from "../roster-job-reference.mjs";
 import { claimMinutes, timesheetEntries } from "../scenario-timesheet.mjs";
 import { scenarioTimesheetCsv } from "../scenario-export.mjs";
@@ -56,6 +56,20 @@ assert.ok(result.dates[5].wobod);
 assert.deepEqual(result.dates[5].wobodSources, ["Existing master"]);
 assert.equal(Math.round((result.dates.reduce((sum, day) => sum + day.difference, 0) + result.adjustmentDifference) * 100), Math.round(result.difference * 100));
 console.log("PASS scenario traces both-master WOBOD and same-job swap claims to their comparison jobs");
+
+for (const depot of ["auburn", "blacktown"]) {
+  const guard = fixture();
+  guard.role = "guard";
+  guard.master.depot = guard.defunct.depot = depot;
+  guard.defunct.lines.get(10).cells[1] = parseCell("04:00 - 12:00 1", 1);
+  const expected = calculateScenarioLine(guard);
+  guard.defunct.diagramData["1"] = { dayPattern: "Sun-Sat", signOn: "00:01", offDuty: "23:59", rosteredHrs: 23.96, rosteredKm: 999 };
+  const actual = calculateScenarioLine(guard);
+  assert.equal(actual.difference, expected.difference);
+  assert.ok(actual.dates.every(day => day.kilometres === null));
+  assert.ok(actual.dates[1].alternatives.some(item => item.job === "1" && item.start === "0400" && item.finish === "1200"));
+}
+console.log("PASS guards at every depot use defunct master times and ignore separate defunct diagrams and kilometres");
 
 const swapOffFixture = fixture();
 swapOffFixture.defunct.lines.get(10).cells[2] = parseCell("OFF", 2);
@@ -306,6 +320,12 @@ const auburnStandbyKm = scenarioKilometres({ status: "work", jobNumber: "SBYASY"
 assert.equal(auburnStandbyKm.currentKm, 0);
 assert.equal(auburnStandbyKm.defunctKm, 0);
 assert.equal(auburnStandbyKm.assumedActualKm, 0);
+for (const jobNumber of ["SBDASY", "SBDASY1"]) {
+  const kilometres = scenarioKilometres({ status: "work", jobNumber, extraKm: 0 }, null, null, "driver");
+  assert.equal(kilometres.currentKm, 0);
+  assert.equal(kilometres.defunctKm, 0);
+  assert.equal(kilometres.assumedActualKm, 0);
+}
 
 const kilometreFixture = fixture();
 kilometreFixture.master.diagramData["1"].rosteredKm = 100;
@@ -367,6 +387,20 @@ assert.equal(importedDriver.diagramData["14"].rosteredKm, 100.337);
 assert.equal(importedDriver.diagramData["2015"].rosteredKm, 127.711);
 assert.equal(importedDriver.diagramCoverage.status, "partial");
 assert.equal(importedDriver.diagramData["5"].kilometresStatus, "not-counted");
+const manualDriverKm = JSON.parse(readFileSync(new URL("../data/scenarios/auburn-driver-manual-kilometres.json", import.meta.url)));
+for (const [job, km] of Object.entries(manualDriverKm.kilometres)) {
+  assert.equal(matchingKilometres(importedDriver, job, 0).rosteredKm, km);
+}
+assert.equal(matchingDiagram(importedDriver, "4026", 0), null);
+assert.equal(matchingKilometres(importedDriver, "4026", 0).start, undefined);
+assert.equal(matchingKilometres(importedDriver, "4027", 0).rosteredKm, 0);
+const inferredDriverJobs = buildRosterJobReference(importedDriver);
+assert.equal(matchingRosterJob(inferredDriverJobs, "4020", 0).start, "1643");
+assert.equal(matchingRosterJob(inferredDriverJobs, "4020", 0).finish, "0115");
+assert.equal(matchingRosterJob(inferredDriverJobs, "SBDASY1", 7).start, "0600");
+assert.equal(matchingRosterJob(inferredDriverJobs, "SBDASY1", 7).finish, "1400");
+assert.equal(matchingRosterJob(inferredDriverJobs, "4026", 0).start, "1804");
+assert.equal(matchingRosterJob(inferredDriverJobs, "4026", 0).finish, "0237");
 console.log("PASS imported master catalogues validate, preserve supplied Auburn cells, expose real diagram kilometres and retain partial-coverage flags");
 
 const weekdayMaster = {

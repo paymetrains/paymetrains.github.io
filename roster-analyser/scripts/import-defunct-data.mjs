@@ -66,11 +66,19 @@ for (const depot of manifest.depots) for (const role of held[depot.id] || []) {
     };
   }
   const record = progress.datasets.find(item => item.depot === id && item.role === role);
+  const manualName = `${stem}-manual-kilometres.json`;
+  const manual = await read(resolve(output, manualName)).catch(error => { if (error.code === "ENOENT") return null; throw error; });
+  const kilometreData = {};
+  for (const [job, km] of Object.entries(manual?.kilometres || {})) {
+    if (typeof km !== "number" || !Number.isFinite(km) || km < 0) throw new Error(`${stem}: invalid manual kilometres for ${job}`);
+    kilometreData[job] = { rosteredKm: km, kilometresStatus: "known", referenceSource: "owner-supplied", providedOn: manual.providedOn };
+  }
   const coverage = {
     status: record?.diagramsComplete ? "complete-for-requested-jobs" : Object.keys(diagramData).length ? "partial" : "not-downloaded",
     requestedJobs: record?.requestedJobs ?? null, queriedJobs: record?.loadedJobs ?? 0,
     diagramTimes: Object.keys(diagramData).length,
-    kilometreEntries: Object.values(diagramData).filter(job => job.kilometresStatus === "known").length,
+    kilometreEntries: new Set([...Object.keys(diagramData).filter(job => diagramData[job].kilometresStatus === "known"), ...Object.keys(kilometreData)]).size,
+    ...(manual ? { manualKilometreEntries: Object.keys(kilometreData).length } : {}),
     notCountedEntries: Object.keys(lookup.notCounted || {}).length,
   };
   const value = {
@@ -79,7 +87,7 @@ for (const depot of manifest.depots) for (const role of held[depot.id] || []) {
     provenance: { source: "https://wobod.me", masterUrl: `https://wobod.me/defunct/${depot.id}/${role}.json`, diagramEndpoint: "https://wobod.me/api/defunct/diagrams", retrievedAt },
     diagramCoverage: coverage,
     ...(id === "penrith" && role === "guard" ? { lineAliases: { "229": "301", "230": "302" } } : {}),
-    masterRoster, diagramData,
+    masterRoster, diagramData, ...(manual ? { kilometreData } : {}),
   };
   // Auburn's owner-supplied PDFs remain the line-assignment baseline. Imported
   // diagrams supplement them; they do not replace those master roster cells.

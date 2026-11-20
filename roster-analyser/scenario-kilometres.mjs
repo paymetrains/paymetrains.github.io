@@ -6,9 +6,10 @@ export function scenarioKilometres(row, currentDiagram, defunctDiagram, role) {
   if (!Number.isFinite(enteredExtraKm) || enteredExtraKm < 0 || enteredExtraKm > 1000)
     throw new Error(`${row.date}: enter extra kilometres from 0 to 1000.`);
   const known = diagram => typeof diagram?.rosteredKm === "number" && Number.isFinite(diagram.rosteredKm) && diagram.rosteredKm >= 0;
-  // Owner-confirmed: RR (Review Roads), SBY and SBYASY (Standby) have zero diagram kilometres.
+  // Owner-confirmed: RR (Review Roads), SBY, SBYASY and SBDASY standby jobs have zero diagram kilometres.
   // This distance rule does not supply or change any shift times.
-  const zeroDistanceDuty = ["RR", "SBY", "SBYASY"].includes(String(row.jobNumber || "").trim().toUpperCase());
+  const job = String(row.jobNumber || "").trim().toUpperCase();
+  const zeroDistanceDuty = ["RR", "SBY", "SBYASY"].includes(job) || /^SBDASY\d*$/.test(job);
   const currentKm = zeroDistanceDuty ? 0 : known(currentDiagram) ? currentDiagram.rosteredKm : null;
   const defunctKm = zeroDistanceDuty ? 0 : known(defunctDiagram) ? defunctDiagram.rosteredKm : null;
   return {

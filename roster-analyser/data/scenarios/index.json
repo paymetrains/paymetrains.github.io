@@ -13,7 +13,8 @@
         "requestedJobs": 152,
         "queriedJobs": 140,
         "diagramTimes": 140,
-        "kilometreEntries": 132,
+        "kilometreEntries": 142,
+        "manualKilometreEntries": 10,
         "notCountedEntries": 8
       }
     },
