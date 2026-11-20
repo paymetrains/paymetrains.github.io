@@ -19,6 +19,7 @@ export function buildPayslip(result, rows) {
   let dayIndex = -1;
   let normalCents = 0;
   let normalHours = 0;
+  let normalRate = null;
   let fortnightAdjustment = false;
   for (const entry of breakdownEntries(result.breakdown)) {
     if (!entry.label || entry.label === "Details" || entry.label === "Gross Pay:") continue;
@@ -36,6 +37,7 @@ export function buildPayslip(result, rows) {
     if (label === "Ordinary hours" || label === "Public holiday worked") {
       normalCents += Math.round(item.amount * 100);
       normalHours += item.hours;
+      normalRate = item.rate;
       continue;
     }
     if (label === "ADO Adjustment") fortnightAdjustment = true;
@@ -43,7 +45,7 @@ export function buildPayslip(result, rows) {
     else days[dayIndex].claims.push(item);
   }
   return {
-    normalWorking: { hours: Math.round(normalHours * 100) / 100, amount: normalCents / 100 },
+    normalWorking: { hours: Math.round(normalHours * 100) / 100, rate: normalRate, amount: normalCents / 100 },
     days,
     adjustments,
     grossPay: result.grossPay,

@@ -501,9 +501,14 @@ input[type="time"] {
   cursor: pointer;
   font-weight: 600;
 }
-.payslip-day-note {
-  margin: 8px 0 16px;
-}
+.payslip-scroll { max-width: 100%; overflow-x: auto; }
+.payslip-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+.payslip-table th, .payslip-table td { padding: 12px; border-bottom: 1px solid var(--line); white-space: nowrap; text-align: left; }
+.payslip-table tbody th { font-weight: 400; }
+.payslip-table tr > :nth-child(n + 3) { text-align: right; font-variant-numeric: tabular-nums; }
+.payslip-table thead { color: var(--muted); }
+.payslip-table .payslip-ordinary > * { border-top: 2px solid var(--line); }
+.payslip-table tfoot > tr > * { font-weight: 700; }
 #download-result {
   margin-top: 28px;
 }

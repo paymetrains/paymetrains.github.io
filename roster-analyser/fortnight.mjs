@@ -725,18 +725,19 @@ function renderBreakdown(breakdown) {
 }
 function renderPayslip(payslip) {
   const hours = value => Number(value).toLocaleString("en-AU", { maximumFractionDigits: 2 });
-  const entry = item => {
-    const extra = [item.hours === null ? "" : `${hours(item.hours)} ${Math.abs(item.hours) === 1 ? "hour" : "hours"}`,
-      item.rate === null ? "" : `${money(item.rate)}/hour`].filter(Boolean).join(" · ");
-    return `<div class="pay-entry"><span>${escape(item.label)}${extra ? `<small>${escape(extra)}</small>` : ""}</span><strong>${item.amount === null ? "" : money(item.amount)}</strong></div>`;
-  };
-  $("payslip").innerHTML =
-    entry({ label: "Normal working", hours: payslip.normalWorking.hours, rate: null, amount: payslip.normalWorking.amount }) +
-    payslip.days.map(day => `<h3 class="pay-day">${escape(niceDate(day.date, { weekday: "short", day: "numeric", month: "short" }))}</h3>` +
-      (day.claims.length ? day.claims.map(entry).join("") :
-        `<p class="hint payslip-day-note">${day.status === "work" ? "Normal working included above. No additional claims." : escape(STATUS_LABELS[day.status] || "No claims")}</p>`)).join("") +
-    `<h3 class="pay-day">Fortnight adjustments</h3>` + payslip.adjustments.map(entry).join("") +
-    entry({ label: "Gross pay before tax", hours: null, rate: null, amount: payslip.grossPay });
+  const entry = (item, date = "", className = "") => `<tr${className ? ` class="${className}"` : ""}>
+    <th scope="row">${escape(item.label)}</th><td>${escape(date || "—")}</td>
+    <td>${item.hours == null ? "—" : hours(item.hours)}</td>
+    <td>${item.rate == null ? "—" : money(item.rate)}</td>
+    <td>${item.amount == null ? "—" : money(item.amount)}</td></tr>`;
+  $("payslip").innerHTML = `<div class="payslip-scroll" tabindex="0" role="region" aria-label="Payslip, scroll horizontally to see all columns">
+    <table class="payslip-table" aria-label="Fortnight payslip summary">
+      <thead><tr><th scope="col">Claim</th><th scope="col">Date</th><th scope="col">Units</th><th scope="col">Rate</th><th scope="col">Amount</th></tr></thead>
+      <tbody>${payslip.days.map(day => day.claims.map(item => entry(item, day.date.split("-").reverse().join("/"))).join("")).join("")}
+        ${payslip.adjustments.map(item => entry(item)).join("")}
+        ${entry({ label: "Ordinary hours", ...payslip.normalWorking }, "", "payslip-ordinary")}</tbody>
+      <tfoot>${entry({ label: "Gross pay before tax", hours: null, rate: null, amount: payslip.grossPay })}</tfoot>
+    </table></div>`;
 }
 function downloadResult() {
   if (!state.result) return;

@@ -111,6 +111,7 @@ test("payslip groups ordinary pay and keeps dated claims and adjustments equal t
   const payslip = buildPayslip(result, rows);
   assert.deepEqual(payslip.days.map(day => day.date), rows.map(row => row.date));
   assert.ok(payslip.normalWorking.amount > 0);
+  assert.equal(payslip.normalWorking.rate, 52.23);
   assert.ok(payslip.days[0].claims.some(item => item.label.includes("Sunday loading")));
   assert.ok(payslip.days[2].claims.some(item => item.label === "WOBOD @ 50%"));
   assert.ok(payslip.days[3].claims.some(item => item.label === "Public Holiday Paid" && item.amount > 0));
