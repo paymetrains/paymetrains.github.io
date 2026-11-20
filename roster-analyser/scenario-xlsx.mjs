@@ -88,7 +88,7 @@ export async function scenarioWorkbook(report, lines, period, lineAmount, view =
     sheet.getRow(2).height = 26;
     mergedCell(sheet, 3, 1, 20).value = `${report.current} · ${report.role} · ${money(report.rate)}/hour · ${dates[0]} to ${dates.at(-1)}`;
     mergedCell(sheet, 4, 1, 20).value = `Existing: ${report.existingMaster}. Defunct: ${report.defunctMaster}. ${report.alignment === "same-date" ? "Time comparisons use the same roster date." : "Time credits excluded for starts over 12 hours apart."} Fifth and later weekday WOBOD: ${report.weekdayOvertimeAfterFourth * 100}% plus 50% on worked time.`;
-    mergedCell(sheet, 5, 1, 20).value = "Green: higher comparison. Blue: swapped. Lines without diagram or SBY shifts are blank. Amounts are a snapshot of the app calculation.";
+    mergedCell(sheet, 5, 1, 20).value = "Green: higher comparison. Blue: swapped. Lines without diagram, SBY or Freelance shifts are blank. Amounts are a snapshot of the app calculation.";
     sheet.getRow(3).height = 20;
     sheet.getRow(4).height = 30;
     sheet.getRow(5).height = 20;

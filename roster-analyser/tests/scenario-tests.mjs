@@ -244,6 +244,50 @@ assert.equal(swappedStandbyDay.separateTimeClaims.length, 0);
 assert.ok(swappedStandbyDay.alternatives.filter(item => item.amendment !== "actual").every(item => item.job === "SBY"));
 console.log("PASS swapped SBY retains the same-job restriction for time claims");
 
+const freelanceCell = parseCell("15:00 - 23:00 Freelance Sector 2 + M Set Prep/Stable + Continuity F50", 1);
+assert.equal(freelanceCell.status, "WORK");
+assert.equal(freelanceCell.jobNumber, "FREELANCE");
+assert.equal(freelanceCell.start, "1500");
+assert.equal(freelanceCell.finish, "2300");
+assert.match(freelanceCell.jobLabel, /Sector 2/);
+assert.equal(parseCell("Freelance Sector 2", 1).status, "BLANK");
+for (const [role, rate] of [["guard", 51.76316], ["driver", 58.04211]]) {
+  for (const [start, finish, label] of [["04:00", "12:00", "Lift-up"], ["08:00", "16:00", "Lay-back"], ["08:00", "14:00", "Build-up"]]) {
+    const freelance = fixture();
+    Object.assign(freelance, { role, rate });
+    freelance.current.rows[0].cells[1] = parseCell(`${start} - ${finish} Freelance Sector 2 PRB Completion/Drive F96`, 1);
+    freelance.defunct.lines.get(10).cells[1] = parseCell("06:00 - 14:00 2", 1);
+    const day = calculateScenarioLine(freelance).dates[1];
+    assert.equal(day.status, "work");
+    assert.equal(day.worked.job, "FREELANCE");
+    assert.equal(day.worked.minutes, finish === "14:00" ? 360 : 480);
+    assert.ok(day.scenarioPay > 0);
+    assert.ok(day.separateTimeClaims.some(claim => claim.label === label && claim.minutes === 120));
+  }
+}
+console.log("PASS guard and driver trainer Freelance duties retain their times and allow lift-up, lay-back and build-up comparisons");
+
+const swappedFreelance = fixture();
+swappedFreelance.current.rows[0].cells[2] = parseCell("08:00 - 16:00 Freelance (WS 20)", 2);
+swappedFreelance.defunct.lines.get(10).cells[2] = parseCell("OFF", 2);
+let freelanceDay = calculateScenarioLine(swappedFreelance).dates[2];
+assert.equal(freelanceDay.wobod, false);
+assert.equal(freelanceDay.separateTimeClaims.length, 0);
+swappedFreelance.defunct.lines.get(10).cells[2] = parseCell("06:00 - 14:00 Freelance", 2);
+freelanceDay = calculateScenarioLine(swappedFreelance).dates[2];
+assert.ok(freelanceDay.separateTimeClaims.some(claim => claim.label === "Lay-back" && claim.minutes === 120 && claim.comparison.job === "FREELANCE"));
+swappedFreelance.current.rows[0].cells[5] = parseCell("08:00 - 16:00 Freelance (WS 20)", 5);
+swappedFreelance.defunct.lines.get(10).cells[5] = parseCell("OFF", 5);
+freelanceDay = calculateScenarioLine(swappedFreelance).dates[5];
+assert.equal(freelanceDay.wobod, true);
+assert.deepEqual(freelanceDay.wobodSources, ["Existing master"]);
+const unswappedFreelance = fixture();
+unswappedFreelance.current.rows[0].cells[0] = parseCell("08:00 - 16:00 Freelance", 0);
+freelanceDay = calculateScenarioLine(unswappedFreelance).dates[0];
+assert.equal(freelanceDay.wobod, true);
+assert.deepEqual(freelanceDay.wobodSources, ["Defunct master"]);
+console.log("PASS Freelance swaps use same-job references only, retain current WOBOD and ignore swapped defunct book-off days");
+
 const weekdayMaster = {
   fileName: "example.pdf", rows: [{ line: 1, cells: [
     parseCell("06:00 - 14:00 0007", 1), parseCell("07:00 - 15:00 7", 2),

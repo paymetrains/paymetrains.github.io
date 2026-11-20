@@ -105,15 +105,15 @@ function optionsFor(row, index, master, defunct, settings) {
     source: diagram?.start === row.rosteredStart && diagram.finish === row.rosteredFinish ? "Diagram data" : "Worked roster",
     job: row.jobNumber, start: row.rosteredStart, finish: row.rosteredFinish,
   };
-  if ((currentCell?.jobNumber === row.jobNumber || row.jobNumber === "SBY") && currentCell?.status === "WORK" && currentCell.start === row.rosteredStart && currentCell.finish === row.rosteredFinish)
+  if ((currentCell?.jobNumber === row.jobNumber || ["SBY", "FREELANCE"].includes(row.jobNumber)) && currentCell?.status === "WORK" && currentCell.start === row.rosteredStart && currentCell.finish === row.rosteredFinish)
     Object.assign(normalBasis, { source: "Existing master", job: currentCell.jobNumber });
   if (row.workSwap?.assignedLine) {
     const assigned = master.lines.get(row.workSwap.assignedLine)?.cells[index];
     Object.assign(normalBasis, { source: `Existing master · swapped line ${row.workSwap.assignedLine}`, job: assigned?.jobNumber || row.jobNumber });
   }
   if (row.status !== "work") return [{ row, basis: normalBasis }];
-  const timedStandby = row.jobNumber === "SBY";
-  if (row.changeType === "custom_duty" && !existingJob && !defunctJob && !timedStandby) return variants(row, normalBasis, settings);
+  const timedShiftDuty = ["SBY", "FREELANCE"].includes(row.jobNumber);
+  if (row.changeType === "custom_duty" && !existingJob && !defunctJob && !timedShiftDuty) return variants(row, normalBasis, settings);
   const bases = [normalBasis];
   if (currentCell?.status === "WORK") bases.push({ source: "Existing master", job: currentCell.jobNumber, start: currentCell.start, finish: currentCell.finish });
   if (oldCell?.status === "WORK") bases.push({ source: "Defunct master", job: oldCell.jobNumber, start: oldCell.start, finish: oldCell.finish });

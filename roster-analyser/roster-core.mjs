@@ -202,6 +202,7 @@ function parseCell(text, dayIndex) {
   const timeRange = compact.match(/(\d{1,2}):(\d{2})\s*-\s*(\d{1,2}):(\d{2})/);
   const afterTimes = timeRange ? compact.slice(timeRange.index + timeRange[0].length).trim() : "";
   const duty = afterTimes.replace(/^L(?:\s+|$)/i, "").replace(/^\d{1,2}:\d{2}W\s*/i, "");
+  const freelance = Boolean(timeRange && /^FREE\s*LANCE\b/i.test(duty));
   const jobMatch = timeRange
     ? duty.match(/^(\d+[A-Z]*|[A-Z]+[A-Z0-9]*\d[A-Z0-9]*|SBY|RR)(?:\(i\))?(?=\s|$|\()/i)
     : compact.match(/\b([5-8]\d{3})(?:\(i\))?\b/);
@@ -232,7 +233,7 @@ function parseCell(text, dayIndex) {
     status,
     start: timeRange ? toHHMM(timeRange[1], timeRange[2]) : "",
     finish: timeRange ? toHHMM(timeRange[3], timeRange[4]) : "",
-    jobNumber: jobMatch ? jobMatch[1] : "",
+    jobNumber: freelance ? "FREELANCE" : jobMatch ? jobMatch[1] : "",
     jobLabel: jobMatch?.[1] || duty.replace(swapPattern, "").replace(/\bF\d+\s*$/i, "").trim(),
     swapLines,
     mileageOver209Candidate: jobMatch ? new RegExp(`\\b${jobMatch[1]}\\(i\\)`).test(compact) : false,
@@ -748,8 +749,8 @@ function getBaseline(actualCell, masterCell, dictionaryJob, flags, diagramData, 
   const jobNumber = actualCell.jobNumber || masterCell.jobNumber;
   const publishedDiagram = diagramData && actualCell.jobNumber && findDiagram(diagramData, actualCell.jobNumber);
   const standbyAssignment = swapMasterCell || masterCell;
-  if (timedDuty && actualCell.jobNumber === "SBY" && isWorkCell(standbyAssignment) &&
-      (!actualCell.swapLines?.length || standbyAssignment.jobNumber === "SBY")) {
+  if (timedDuty && ["SBY", "FREELANCE"].includes(actualCell.jobNumber) && isWorkCell(standbyAssignment) &&
+      (!actualCell.swapLines?.length || standbyAssignment.jobNumber === actualCell.jobNumber)) {
     return {
       source: swapMasterCell ? "swap_master_line" : "master_line_day",
       jobNumber: actualCell.jobNumber,

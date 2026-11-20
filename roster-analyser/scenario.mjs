@@ -230,7 +230,7 @@ function filteredLines() {
 function spreadsheetLines() {
   const query = $("scenario-filter").value.toLowerCase().replace(/^line\s*/, "").trim();
   const results = new Map(report.lines.map(line => [line.line, line]));
-  return (report.rosterLines || report.lines.map(line => ({ line: line.line, hasNormalJobs: line.dates?.some(day => day.status === "work" && /^(?:\d+|SBY)$/.test(day.worked.job)) })))
+  return (report.rosterLines || report.lines.map(line => ({ line: line.line, hasNormalJobs: line.dates?.some(day => day.status === "work" && /^(?:\d+|SBY|FREELANCE)$/i.test(day.worked.job)) })))
     .filter(line => String(line.line).includes(query))
     .map(line => !line.hasNormalJobs || !results.has(line.line) ? { line: line.line, blank: true } : results.get(line.line));
 }
@@ -301,7 +301,7 @@ $("scenario-form").onsubmit = async event => {
     report = { generatedAt: new Date().toISOString(), depot, role, rate, alignment, weekdayOvertimeAfterFourth,
       current: raw.fileName, existingMaster: master.fileName || "Bundled existing master", defunctMaster: defunct.fileName || "Bundled defunct master",
       dates: current.dates.map(toIsoDate), skippedInactive: current.rows.filter(row => row.employeeName.trim()).length - named.length,
-      rosterLines: current.rows.map(row => ({ line: row.line, hasNormalJobs: row.cells.some(cell => cell.status === "WORK" && /^(?:\d+|SBY)$/.test(cell.jobNumber)) })).sort((a, b) => a.line - b.line), lines: [] };
+      rosterLines: current.rows.map(row => ({ line: row.line, hasNormalJobs: row.cells.some(cell => cell.status === "WORK" && /^(?:\d+|SBY|FREELANCE)$/i.test(cell.jobNumber)) })).sort((a, b) => a.line - b.line), lines: [] };
     for (const [index, row] of named.entries()) {
       $("scenario-status").textContent = `Calculating line ${row.line} · ${index + 1} of ${named.length}…`;
       await new Promise(resolve => setTimeout(resolve, 0));
