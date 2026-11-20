@@ -524,22 +524,9 @@ function editorMarkup(row) {
       ${checkbox("ph", "Public holiday", row.ph)}${checkbox("accruePh", "Accrue public holiday", row.accruePh)}
       <div id="annual-loading">${selectField("annualLoading", "Confirmed annual leave loading", row.annualLoading, [["", "None"], ["0.175", "17.5%"], ["0.20", "20%"]])}</div>
       <div id="work-extras">
-        ${selectField("amendment", "Confirmed diagram adjustment", row.amendment, [["", "None"], ["compare", "Pay higher value (suburban)"], ["credit", "Approved lift-up, lay-back or build-up credit"]])}
-        <fieldset id="original-diagram-fields"><legend>Original diagram for comparison</legend>
-          <div class="field-pair">${timeField("originalStart", "Start", row.originalStart)}${timeField("originalFinish", "Finish", row.originalFinish)}</div>
-          <p class="hint">Leave both blank to use the rostered times above.</p>
-        </fieldset>
-        ${selectField("ordinaryMinutes", "Scheduled overtime starts after", row.ordinaryMinutes, [["", "Default · 8 hours"], ["456", "7 hours 36 minutes (confirmed)"],
-          ...[540, 600, 660, 720].map((minutes) => [String(minutes), `${minutes / 60} hours (agreed lengthened shift)`])])}
-        ${numberField("sickRemainderHours", "Approved part-shift sick leave hours", row.sickRemainderHours)}
         ${timeField("milageTime", "Time 209 km was passed (suburban)", row.milageTime)}
         ${state.role === "driver" ? numberField("extraKm", "Approved extra kilometres (suburban driver)", row.extraKm) : ""}
         ${state.role === "driver" ? checkbox("straightSix", "Qualifying suburban straight six-hour shift", row.straightSix) : ""}
-        ${numberField("intercityKm", "Intercity kilometres (including 0 if applicable)", row.intercityKm)}
-        ${numberField("unassociatedMinutes", "Intercity unassociated work minutes", row.unassociatedMinutes)}
-        <div class="field-pair">${numberField("departureGap", "Sign-on to departure (min)", row.departureGap)}${numberField("arrivalGap", "Arrival to sign-off (min)", row.arrivalGap)}</div>
-        ${checkbox("mealClaim", "Confirmed away-from-home-station meal claim", row.mealClaim)}
-        ${numberField("travelMinutes", "Approved excess travel minutes (paid at base rate)", row.travelMinutes)}
         ${selectField("picnicClaim", "Confirmed picnic day credit", row.picnicClaim, [["", "None"], ["paid", "Pay"], ["bank", "Accrue"]])}
       </div>
     </details>
@@ -590,14 +577,11 @@ function wireEditor() {
     $("rostered-default").hidden = !work || relinquished;
     $("leave-extras").hidden = !leave;
     $("annual-loading").hidden = status !== "annual";
-    $("original-diagram-fields").hidden = relinquished || !work || form.elements.amendment.value !== "compare";
     $("actual-fields").hidden = !work && !relinquished;
     const total = entry.actualStart && entry.actualFinish ? durationBetween(entry.actualStart, entry.actualFinish) : "";
     $("worked-total").value = displayClock(total);
     $("worked-duration").hidden = !total;
     $("relinquishment-fields").hidden = !relinquished;
-    form.elements.amendment.closest("label").hidden = relinquished;
-    form.elements.sickRemainderHours.closest("label").hidden = relinquished;
     $("work-extras").hidden = !work;
     $("standalone-overtime-field").hidden = !work;
   };
@@ -605,7 +589,6 @@ function wireEditor() {
     updateFields();
     if (!rosteredFields.hidden && form.elements.status.value !== "work") rosteredFields.open = true;
   });
-  form.elements.amendment.addEventListener("change", updateFields);
   updateFields();
   for (const name of ["actualStart", "actualFinish"])
     form.elements[name].addEventListener("input", updateFields);
@@ -625,18 +608,19 @@ function wireEditor() {
       row[key] = form.elements[key].value.trim();
     if (row.jobNumber !== state.rows[index].jobNumber) delete row.rosteredKm;
     if (useActualTimes()) row.jobLabel = row.jobNumber;
-    for (const key of ["extraKm", "amendment", "intercityKm", "unassociatedMinutes", "departureGap",
-      "arrivalGap", "sickRemainderHours", "ordinaryMinutes", "picnicClaim", "travelMinutes"])
+    for (const key of ["extraKm", "picnicClaim"])
       row[key] = row.status === "work" ? form.elements[key]?.value.trim() || "" : "";
+    // Removed manual controls must not leave invisible pay overrides behind.
+    for (const key of ["amendment", "intercityKm", "unassociatedMinutes", "departureGap",
+      "arrivalGap", "sickRemainderHours", "ordinaryMinutes", "travelMinutes"])
+      row[key] = "";
     row.leaveHours = LEAVE_STATUSES.includes(row.status) ? form.elements.leaveHours.value : "";
     row.annualLoading = row.status === "annual" ? form.elements.annualLoading.value : "";
     row.straightSix = row.status === "work" && Boolean(form.elements.straightSix?.checked);
-    row.mealClaim = row.status === "work" && form.elements.mealClaim.checked;
+    row.mealClaim = false;
     for (const key of [
       "rosteredStart",
       "rosteredFinish",
-      "originalStart",
-      "originalFinish",
       "actualStart",
       "actualFinish",
       "milageTime",
