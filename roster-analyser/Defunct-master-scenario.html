@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en-AU">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <meta name="color-scheme" content="dark light" />
+    <meta name="theme-color" content="#181c19" />
+    <script>
+      (() => {
+        const themeKey = "roster-pay-theme";
+        const root = document.documentElement;
+        const themeColor = document.querySelector('meta[name="theme-color"]');
+        const applyTheme = (theme) => {
+          root.dataset.theme = theme;
+          themeColor.content = theme === "light" ? "#faf8f3" : "#181c19";
+        };
+        try {
+          if (localStorage.getItem(themeKey) === "light") applyTheme("light");
+        } catch {
+          // The default theme also works when browser storage is unavailable.
+        }
+        document.addEventListener("DOMContentLoaded", () => {
+          const toggle = document.getElementById("theme-toggle");
+          const updateLabel = () => {
+            toggle.textContent = root.dataset.theme === "light" ? "Dark mode" : "Light mode";
+          };
+          updateLabel();
+          toggle.hidden = false;
+          toggle.addEventListener("click", () => {
+            const theme = root.dataset.theme === "light" ? "dark" : "light";
+            applyTheme(theme);
+            updateLabel();
+            try {
+              localStorage.setItem(themeKey, theme);
+            } catch {
+              // Apply the theme for this page even if it cannot be saved.
+            }
+          });
+        });
+      })();
+    </script>
+    <link rel="icon" href="./roster-pay.svg" type="image/svg+xml" />
+    <title>Roster pay · Defunct master roster scenario</title>
+    <link rel="stylesheet" href="./fortnight.css" />
+    <link rel="stylesheet" href="./scenario.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="./index.html">Roster pay</a>
+      <div class="topbar-actions">
+        <a href="./index.html">Fortnight calculator</a>
+        <button type="button" id="theme-toggle" class="theme-toggle" hidden>Light mode</button>
+      </div>
+    </header>
+    <main id="main">
+      <h1>Defunct master roster scenario</h1>
+      <p class="intro">Compare every named line against the existing and defunct master rosters.</p>
+      <form id="scenario-form">
+        <div class="field-pair">
+          <label>Depot<select id="scenario-depot" required><option value="auburn">Auburn Stabling Yard</option></select></label>
+          <label>Role<select id="scenario-role"><option value="guard">Guard</option><option value="driver">Driver</option></select></label>
+        </div>
+        <label>Pay grade<select id="scenario-grade"></select></label>
+        <label id="scenario-custom-rate" hidden>Hourly rate ($)<input id="scenario-rate" type="number" min="0.01" step="any" required></label>
+        <label>Fortnight roster PDF<input id="scenario-current" type="file" accept=".pdf,application/pdf" required></label>
+        <p id="scenario-master-info" class="hint">Auburn's existing and defunct masters are included.</p>
+        <details class="shift-options">
+          <summary>Comparison settings</summary>
+          <label>Replace existing master for this run<input id="scenario-existing" type="file" accept=".pdf,application/pdf"></label>
+          <label>Replace defunct master for this run<input id="scenario-defunct" type="file" accept=".pdf,application/pdf"></label>
+          <label>Time comparisons<select id="scenario-alignment">
+            <option value="same-date">Use the same roster date for both shifts</option>
+            <option value="exclude-large">Exclude time credits for starts over 12 hours apart</option>
+          </select></label>
+          <label>Weekday overtime multiplier after the fourth WOBOD<input id="scenario-later-rate" type="number" min="1" max="3" step="0.01" value="2" required></label>
+          <p class="hint">The fifth and later weekday overtime shifts use this scenario assumption, plus the usual 50% WOBOD component on worked time.</p>
+        </details>
+        <details class="shift-options">
+          <summary>Defunct job reference</summary>
+          <p id="scenario-reference-info" class="hint"></p>
+          <a id="scenario-reference-download" hidden>Download job reference JSON</a>
+          <div id="scenario-reference-table" class="reference-table" tabindex="0" role="region" aria-label="Defunct job start and finish times"></div>
+        </details>
+        <p class="hint">Work on an OFF or ADO day in either master counts as WOBOD. For swapped shifts, only the current master's OFF/ADO can trigger WOBOD; time credits use the same job only.</p>
+        <button class="primary full" type="submit" id="scenario-run">Compare all lines</button>
+      </form>
+      <p id="scenario-status" role="status" aria-live="polite"></p>
+      <section id="scenario-results" hidden aria-labelledby="scenario-results-title">
+        <h2 id="scenario-results-title" tabindex="-1">Line comparison</h2>
+        <p id="scenario-context" class="hint"></p>
+        <p id="scenario-total"></p>
+        <p class="hint">Each day selects the higher value across both line assignments and the worked job's existing or defunct reference times. The fortnight total includes the resulting guarantee adjustment.</p>
+        <div class="scenario-view-controls">
+          <label>Find a line<input id="scenario-filter" type="search" placeholder="Line number"></label>
+          <div class="scenario-view-switch" role="group" aria-label="Comparison view">
+            <button type="button" data-result-view="roster" aria-pressed="true">Roster rows</button>
+            <button type="button" data-result-view="daily" aria-pressed="false">Daily list</button>
+            <button type="button" data-result-view="timesheet" aria-pressed="false">Timesheet summary</button>
+          </div>
+        </div>
+        <div class="scenario-period-controls">
+          <div class="scenario-view-switch" role="group" aria-label="Dates shown">
+            <button type="button" data-result-period="full" aria-pressed="true">Full fortnight</button>
+            <button type="button" data-result-period="week1" aria-pressed="false">Week 1</button>
+            <button type="button" data-result-period="week2" aria-pressed="false">Week 2</button>
+          </div>
+          <p id="scenario-period-dates" class="hint" aria-live="polite"></p>
+        </div>
+        <p id="roster-scroll-hint" class="hint">Scroll sideways to compare dates. The roster rows and each day's claims stay in the same column.</p>
+        <div id="scenario-lines"></div>
+        <div class="scenario-exports" role="group" aria-label="Export comparison">
+          <button id="scenario-xlsx" type="button" class="secondary">Export Excel</button>
+          <button id="scenario-pdf" type="button" class="secondary">Export PDF</button>
+          <button id="scenario-csv" type="button" class="secondary">Export CSV</button>
+          <button id="scenario-download" type="button" class="secondary">Full report JSON</button>
+        </div>
+        <p id="scenario-export-scope" class="hint"></p>
+        <p id="scenario-export-status" class="hint" role="status"></p>
+        <p class="hint">Timesheet summary exports use the timesheet columns. Other Excel exports use the roster layout, with a tab for each selected week. Lines without diagram or SBY shifts keep their line number with blank results.</p>
+        <p class="hint">PDF and CSV include the filtered lines and selected dates. PDF opens the print dialog; choose Save as PDF. Full-fortnight timesheet summaries keep all 14 days together; roster comparisons use two weekly sections per line.</p>
+      </section>
+    </main>
+    <footer class="site-footer">Unofficial train crew pay calculator</footer>
+    <script src="./standalone-overtime.js"></script>
+    <script src="./pay-rates.js"></script>
+    <script src="./pay-calculator.js"></script>
+    <script type="module" src="./scenario.mjs"></script>
+  </body>
+</html>

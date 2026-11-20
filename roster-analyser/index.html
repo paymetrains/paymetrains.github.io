@@ -2,10 +2,239 @@
 <html lang="en-AU">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta http-equiv="refresh" content="0; url=./fortnight.html" />
-    <title>Roster pay</title>
-    <script>location.replace("./fortnight.html" + location.search + location.hash);</script>
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <meta name="color-scheme" content="dark light" />
+    <meta name="theme-color" content="#181c19" />
+    <script>
+      (() => {
+        const themeKey = "roster-pay-theme";
+        const root = document.documentElement;
+        const themeColor = document.querySelector('meta[name="theme-color"]');
+        const applyTheme = (theme) => {
+          root.dataset.theme = theme;
+          themeColor.content = theme === "light" ? "#faf8f3" : "#181c19";
+        };
+        try {
+          if (localStorage.getItem(themeKey) === "light") applyTheme("light");
+        } catch {
+          // The default theme also works when browser storage is unavailable.
+        }
+        document.addEventListener("DOMContentLoaded", () => {
+          const toggle = document.getElementById("theme-toggle");
+          const updateLabel = () => {
+            toggle.textContent = root.dataset.theme === "light" ? "Dark mode" : "Light mode";
+          };
+          updateLabel();
+          toggle.hidden = false;
+          toggle.addEventListener("click", () => {
+            const theme = root.dataset.theme === "light" ? "dark" : "light";
+            applyTheme(theme);
+            updateLabel();
+            try {
+              localStorage.setItem(themeKey, theme);
+            } catch {
+              // Apply the theme for this page even if it cannot be saved.
+            }
+          });
+        });
+      })();
+    </script>
+    <link rel="icon" href="./roster-pay.svg" type="image/svg+xml" />
+    <title>Roster pay · Your fortnight</title>
+    <link rel="stylesheet" href="./fortnight.css?v=20261120-2" />
   </head>
-  <body><a href="./fortnight.html">Open your fortnight calculator</a></body>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="#main">Roster pay</a>
+      <div class="topbar-actions">
+        <button type="button" id="theme-toggle" class="theme-toggle" hidden>Light mode</button>
+      </div>
+    </header>
+    <main id="main">
+      <nav class="steps" aria-label="Progress">
+        <span id="step-select" aria-current="step">1. Your roster</span
+        ><span id="step-review">2. Preview</span
+        ><span id="step-result">3. Pay estimate</span>
+      </nav>
+      <div id="notice" role="status" aria-live="polite" hidden></div>
+      <section id="select-screen" aria-labelledby="select-title">
+        <h1 id="select-title" tabindex="-1">Your fortnight</h1>
+        <p class="intro">
+          Upload your roster to review your shifts.
+        </p>
+        <form id="select-form">
+          <div class="field-pair">
+            <label
+              >Depot<select id="depot" required>
+                <option value="auburn">Auburn Stabling Yard</option>
+                <option value="other">Other depot</option>
+              </select></label
+            ><label
+              >Role<select id="role">
+                <option value="guard">Guard</option>
+                <option value="driver">Driver</option>
+              </select></label
+            >
+          </div>
+          <label id="other-depot-field" hidden
+            >Depot name<input id="other-depot" type="text" maxlength="100"
+          /></label>
+          <label>Pay grade<select id="pay-classification"></select></label>
+          <label id="custom-rate-field" hidden>Hourly rate ($)<input
+            id="pay-rate" type="number" inputmode="decimal" min="0.01"
+            step="any" placeholder="Enter rate"></label>
+          <label>Line<select id="manual-line" aria-describedby="manual-line-info">
+            <option value="">Select your line</option>
+          </select></label>
+          <p id="manual-line-info" class="hint"></p>
+          <div id="import-fields">
+            <label class="upload"
+              >Current fortnight roster<input
+                id="current-file"
+                type="file"
+                accept="application/pdf,.pdf"
+              /></label
+            >
+            <p id="current-info" class="hint">
+            </p>
+          </div>
+          <div id="manual-fields" hidden>
+            <label
+              >Fortnight starts<input type="date" id="start-date" required
+            /></label>
+            <p class="hint">Choose a Sunday. You can leave days off blank.</p>
+            <label
+              >Your name (optional)<input
+                id="manual-name"
+                type="text"
+                autocomplete="name"
+                maxlength="100"
+            /></label>
+          </div>
+          <div class="entry-options" role="group" aria-label="Entry method">
+            <button type="button" id="import-mode" aria-pressed="true">
+              Upload a roster instead</button
+            ><button type="button" id="manual-mode" aria-pressed="false">
+              Enter manually instead
+            </button>
+          </div>
+          <details class="pay-settings" id="pay-settings">
+            <summary>Pay options <span id="pay-settings-summary" class="hint"></span></summary>
+            <label>Fortnight type<select id="roster-type">
+                <option value="long">Long · 10 shifts</option>
+                <option value="short">Short · 9 shifts</option>
+            </select></label>
+            <label class="check-label"><input type="checkbox" id="pay-guarantee" checked>Fortnight guarantee applies</label>
+            <label>Opening public holiday bank (hours)<input type="number" id="pay-holiday-balance" min="0" step="any" placeholder="Optional"></label>
+            <label>Other confirmed gross pay ($)<input type="number" id="pay-other" step="0.01" placeholder="Optional"></label>
+          </details>
+          <details class="shift-options" id="master-options">
+            <summary>Master roster options</summary>
+            <div class="master-status">
+              <strong>Master roster</strong>
+              <p id="master-info">Checking available masters…</p>
+              <button
+                id="change-master"
+                type="button"
+                class="text-button"
+                aria-expanded="false"
+              >
+                Upload a different master
+              </button>
+            </div>
+            <div id="master-upload" hidden>
+              <label class="upload"
+                >Master roster for this session<input
+                  id="master-file"
+                  type="file"
+                  accept="application/pdf,.pdf"
+                /><span class="hint"
+                  >Used for this session only. Never uploaded or saved.</span
+                ></label
+              ><button
+                id="clear-master"
+                type="button"
+                class="text-button"
+                hidden
+              >
+                Use supplied master instead
+              </button>
+              <p class="hint">
+                Make sure this master matches your depot, role, and fortnight.
+              </p>
+            </div>
+          </details>
+          <button class="primary full" id="review-button" type="submit">
+            Preview roster
+          </button>
+        </form>
+        <p class="footnote">
+          Your PDFs and edits stay on this page. Refreshing clears the session.
+        </p>
+      </section>
+      <section id="review-screen" hidden aria-labelledby="review-title">
+        <button class="text-button back" id="back-select" type="button">
+          ← Your details
+        </button>
+        <h1 id="review-title" tabindex="-1">Preview your fortnight</h1>
+        <p id="review-person" class="person"></p>
+        <p id="review-context" class="hint"></p>
+        <p id="preview-pay" class="hint"></p>
+        <p id="review-warning" class="review-warning" hidden></p>
+        <div class="week-tabs" role="group" aria-label="Week">
+          <button type="button" data-week="0" aria-pressed="true">Week 1</button
+          ><button type="button" data-week="1" aria-pressed="false">
+            Week 2
+          </button>
+        </div>
+        <p id="week-dates" class="hint"></p>
+        <div id="shift-list"></div>
+        <div class="review-footer" id="review-footer">
+          <span id="review-count" class="hint"></span
+          ><button id="calculate" type="button" class="primary full">
+            Confirm &amp; calculate pay</button
+          ><span class="hint">Estimate before tax</span>
+        </div>
+      </section>
+      <section id="result-screen" hidden aria-labelledby="result-title">
+        <button class="text-button back" id="back-review" type="button">
+          ← Back to shifts
+        </button>
+        <h1 id="result-title" tabindex="-1">Your pay estimate</h1>
+        <p id="result-context" class="hint"></p>
+        <div class="gross">
+          <span>Gross pay before tax</span><strong id="gross-pay"></strong
+          ><span>AUD · Fortnight total</span>
+        </div>
+        <p class="hint">
+          Estimated using the existing calculator. Tax and super are not
+          included in this total.
+        </p>
+        <h2>Payslip version</h2>
+        <div id="payslip"></div>
+        <details class="detailed-pay">
+          <summary>Detailed pay breakdown</summary>
+          <div id="breakdown"></div>
+        </details>
+        <button id="download-result" type="button" class="secondary full">
+          Download summary</button
+        ><button id="edit-result" type="button" class="text-button full">
+          Edit shifts and recalculate
+        </button>
+      </section>
+    </main>
+    <footer class="site-footer">
+      <a href="./Defunct-master-scenario.html">Defunct Master Roster Scenario</a><br>
+      Unofficial train crew pay calculator.
+      Not affiliated with Sydney Trains or Transport for NSW.
+      No data is saved on any servers. Everything is local to your browser.
+    </footer>
+    <script src="./standalone-overtime.js"></script>
+    <script src="./pay-rates.js"></script>
+    <script src="./pay-calculator.js"></script>
+    <script type="module" src="./fortnight.mjs?v=20261120-2"></script>
+  </body>
 </html>

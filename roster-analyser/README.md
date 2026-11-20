@@ -6,13 +6,15 @@ Run from this directory:
 npm start
 ```
 
-Open **http://127.0.0.1:4173/**. The main app is `fortnight.html`; `index.html` also opens it. It supports PDF import or completely manual entry, one-week shift lists, inline editing, the shared pay engine, and a downloadable JSON pay summary. The master roster scenario remains linked in the footer. Use `npm test` for the engine and flow-model checks. No npm dependencies need installing.
+Open **http://127.0.0.1:4173/**. The main app is `index.html`; the old `fortnight.html` URL redirects there. It supports PDF import or completely manual entry, one-week shift lists, inline editing, the shared pay engine, and a downloadable JSON pay summary. The defunct master roster scenario remains linked in the footer. Use `npm test` for the engine and flow-model checks. No npm dependencies need installing.
+
+GitHub Pages uses `.github/workflows/pages.yml` to deploy only this directory at **https://paymetrains.github.io/**. The main page stays at `/index.html`, and the scenario is `/Defunct-master-scenario.html`. The nested `roster-analyser/` folder contains redirects for previously published URLs.
 
 Legacy calculator interfaces, the original analyser UI, and old OCR/conversion work are preserved in `../archive/legacy-apps/`, outside this server's document root. Publish only this `roster-analyser/` directory; do not publish the workspace root, archive, attachments, backups, or generated reports. Shared calculation and parser modules remain here because both active apps use them.
 
 ## Master roster scenario
 
-Open **http://127.0.0.1:4173/scenario.html** to compare every named crew line in a fortnight PDF with the existing and defunct masters. Auburn's supplied final-draft guard and driver masters are bundled under `data/scenarios/`. Temporary PDF overrides are available for either master.
+Open **http://127.0.0.1:4173/Defunct-master-scenario.html** to compare every named crew line in a fortnight PDF with the existing and defunct masters. Auburn's supplied final-draft guard and driver masters are bundled under `data/scenarios/`. Temporary PDF overrides are available for either master.
 
 Open a result line in Roster rows view to compare four aligned rows across all 14 dates: existing master, defunct master, uploaded roster and daily breakdown. Date headings and source labels stay visible while scrolling. Daily list provides a vertical view of the same data. Both views show the two master amounts, actual job duration, separate time claims and WOBOD eligibility. Result labels and downloaded comparisons use line numbers only.
 

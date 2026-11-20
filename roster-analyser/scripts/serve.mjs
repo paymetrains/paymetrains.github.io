@@ -26,7 +26,7 @@ createServer(async (request, response) => {
     );
     const path = resolve(
       root,
-      "." + (pathname === "/" ? "/fortnight.html" : pathname),
+      "." + (pathname === "/" ? "/index.html" : pathname),
     );
     if (!path.startsWith(root + sep)) {
       response.writeHead(403);
@@ -52,5 +52,5 @@ createServer(async (request, response) => {
     response.end("Not found");
   }
 }).listen(port, "127.0.0.1", () =>
-  console.log(`Roster pay: http://127.0.0.1:${port}/fortnight.html`),
+  console.log(`Roster pay: http://127.0.0.1:${port}/`),
 );
