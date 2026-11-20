@@ -491,7 +491,7 @@ function moneyTotal(lines) {
 function priceNonWorkingDay(row, rate, rates, ordinaryMinutes, role) {
   const scheduled = scheduledMinutes(row, ordinaryMinutes);
   const leave = row.leaveType || (row.sick ? "sick" : "");
-  const minutes = row.leaveMinutes ?? scheduled;
+  const minutes = leave === "sick" ? 480 : row.leaveMinutes ?? scheduled;
   if (leave === "jury" || leave === "seconded") {
     addPayLine(row.lines, leave === "jury" ? "Jury duty" : "Seconded duty", 480, rate);
     row.guaranteeHours = 8;

@@ -132,6 +132,23 @@ run("sick day reduces guarantee by time lost", () => {
   assert.equal(PayEngine.GuaranteePayment(payObj), 0);
 });
 
+run("a full sick day pays eight base hours regardless of diagram, manual leave hours or crew role", () => {
+  for (const role of ["driver", "guard"]) {
+    const table = createTable({ longFortnight: true, payrate: 50 });
+    table.role = role;
+    for (const [index, start, finish] of [[1, "0600", "1200"], [2, "2100", "0630"], [6, "", ""]]) {
+      setSick(table, index);
+      Object.assign(table[index], { rosteredStart: start, rosteredFinish: finish, leaveMinutes: 150 });
+    }
+    const pay = PayEngine.buildPayObject(table);
+    for (const index of [1, 2, 6]) {
+      assert.deepEqual(pay[index].lines, [{ label: "Sick leave", minutes: 480, rate: 50 }]);
+      assert.equal(PayEngine.lineAmount(pay[index].lines[0]), 400);
+      assert.equal(pay[index].timeLostHours, 8);
+    }
+  }
+});
+
 run("extra-day overtime is skipped for guarantee", () => {
   const table = createTable({ longFortnight: true, payrate: 50 });
   for (let index = 0; index < 10; index += 1) {

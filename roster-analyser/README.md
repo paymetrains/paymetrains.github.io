@@ -36,6 +36,10 @@ The scenario tests the existing assignment, defunct assignment, existing diagram
 
 Both shift starts use their listed roster date. Shifts finishing after midnight end on the next day. This avoids the earlier nearest-day alignment issue on morning standby versus evening work. Starts more than 12 hours apart are marked in the results, with an optional setting to exclude those time credits. Fifth and later weekday WOBOD shifts default to an explicit 200% scenario assumption plus the normal 50% worked-time component. That multiplier can be changed in Comparison settings. CIL is modeled as eight hours of paid accrued leave and is noted on each affected line. Unrecognised entries or missing master lines produce a visible per-line error.
 
+## Sick leave
+
+For both roles, a full day of sick leave pays eight hours at base rate and counts as eight hours lost for the guarantee, regardless of the rostered shift length. Under four hours worked before relinquishing is a full sick day; from four hours worked, only the unworked scheduled remainder is sick leave. A day off on the roster does not create sick pay.
+
 ## Data connections and privacy
 
 This is a static application. The included development server serves HTML, JavaScript, and approved master JSON using GET/HEAD. It rejects POST and does not receive roster files. PDF.js is bundled locally (version 4.10.38, Apache-2.0); PDF extraction, master comparison, and pay calculation run on the user's device. No LLM or external API is involved.

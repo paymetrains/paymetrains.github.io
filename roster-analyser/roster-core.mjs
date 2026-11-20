@@ -625,7 +625,8 @@ function compareCell({
       rosteredStart = timedRelinquishment && !hasRelinquishmentSchedule ? "" : leaveStart;
       rosteredFinish = timedRelinquishment && !hasRelinquishmentSchedule ? "" : leaveFinish;
       actualStart = "SICK";
-      if (!rosteredStart || !rosteredFinish) flags.push("confirm_sick_leave_hours");
+      if (!baselineHasWork && !timedRelinquishment && !actualCell.crossedOut)
+        flags.push("confirm_sick_workday");
     } else {
       status = "blank";
       changeType = "sick_on_day_off";

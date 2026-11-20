@@ -27,10 +27,11 @@ export const STATUS_LABELS = {
 
 export const LEAVE_STATUSES = ["sick", "annual", "lsl", "lsl-half", "lsl-double", "unpaid", "unapproved", "ph-taken", "picnic-off"];
 export const FIXED_PAID_STATUSES = ["jury", "seconded"];
+export const FULL_SICK_HOURS = 8;
 const REVIEW_MESSAGES = {
   part_day_sick_relief: "Enter the full scheduled shift duration to calculate the sick leave remainder.",
   crossed_out_shift: "The PDF crosses out this shift. Choose the correct status before calculating.",
-  confirm_sick_leave_hours: "Confirm the sick leave hours for this day.",
+  confirm_sick_workday: "Check that this was a shift to be worked, not a day off.",
 };
 
 export function blankFortnight(start) {
@@ -99,6 +100,7 @@ export function importLine(master, current, line) {
     return {
       ...pay,
       status,
+      ...(status === "sick" ? { leaveHours: FULL_SICK_HOURS } : {}),
       rosteredStart: pay.leaveRosteredStart || (/^\d{4}$/.test(pay.rosteredStart) ? pay.rosteredStart : ""),
       rosteredFinish: pay.leaveRosteredFinish || pay.rosteredFinish,
       actualStart: pay.timedRelinquishment ? cell.start : /^\d{4}$/.test(pay.actualStart) ? pay.actualStart : "",
@@ -190,22 +192,20 @@ export function validateShift(row) {
     const fullShift = relinquishmentShiftMinutes(row);
     if (worked === null)
       errors.push("Enter the start and finish of the time worked before relinquishing.");
-    if (fullShift === null)
+    if (row.status === "work" && fullShift === null)
       errors.push("Enter the full scheduled shift duration or its rostered times.");
-    else if (!row.hasRelinquishmentSchedule && worked !== null && fullShift < worked)
+    else if (row.status === "work" && !row.hasRelinquishmentSchedule && worked !== null && fullShift < worked)
       errors.push("The full scheduled shift cannot be shorter than the time worked.");
   }
   if (!STATUS_LABELS[row.status] || row.status === "unknown")
     errors.push("Choose a recognised shift status.");
   if (["work", "cancelled"].includes(row.status) ||
-      (LEAVE_STATUSES.includes(row.status) && (row.rosteredStart || row.rosteredFinish))) {
+      (row.status !== "sick" && LEAVE_STATUSES.includes(row.status) && (row.rosteredStart || row.rosteredFinish))) {
     if (!valid(row.rosteredStart) || !valid(row.rosteredFinish))
       errors.push("Enter valid rostered start and finish times.");
     else if (row.rosteredStart === row.rosteredFinish)
       errors.push("Rostered start and finish must differ.");
   }
-  if (row.status === "sick" && !relinquished && !row.rosteredStart && !row.rosteredFinish && !Number(row.leaveHours))
-    errors.push("Enter rostered times or confirmed sick leave hours.");
   if (row.status === "work") {
     if (!valid(row.actualStart) || !valid(row.actualFinish))
       errors.push("Enter valid actual start and finish times.");
@@ -255,7 +255,7 @@ export function validateShift(row) {
         errors.push("Worked time and the sick leave remainder must fit the rostered shift.");
     }
   }
-  if (LEAVE_STATUSES.includes(row.status) && row.leaveHours != null && row.leaveHours !== "" &&
+  if (row.status !== "sick" && LEAVE_STATUSES.includes(row.status) && row.leaveHours != null && row.leaveHours !== "" &&
       (!Number.isFinite(Number(row.leaveHours)) || Number(row.leaveHours) <= 0 || Number(row.leaveHours) > 24))
     errors.push("Paid or unpaid leave hours must be greater than 0 and at most 24.");
   if (row.accruePh && !row.ph && row.status !== "hol")
@@ -295,14 +295,14 @@ export function toEngineTable(rows, payrate, rosterType, settings = {}) {
     item.wobod = row.status === "work" && Boolean(row.wobod);
     if (item.hol) item.ph = true;
     item.leaveType = [...LEAVE_STATUSES, ...FIXED_PAID_STATUSES, "cancelled"].includes(row.status) ? row.status : "";
-    item.leaveMinutes = item.leaveType && row.leaveHours ? Number(row.leaveHours) * 60 : undefined;
+    if (item.sick) item.leaveHours = FULL_SICK_HOURS;
+    item.leaveMinutes = item.leaveType && item.leaveHours ? Number(item.leaveHours) * 60 : undefined;
     item.annualLoading = item.leaveType === "annual" ? Number(row.annualLoading || 0) : 0;
     item.sickRemainderMinutes = row.status === "work" ? Number(row.sickRemainderHours || 0) * 60 : 0;
     if (isTimedRelinquishment(row)) {
-      const fullShift = relinquishmentShiftMinutes(row);
       item.amendment = "";
-      if (row.status === "sick") item.leaveMinutes = fullShift;
-      else item.sickRemainderMinutes = Math.max(0, fullShift - shiftDurationMinutes(row.actualStart, row.actualFinish));
+      if (row.status === "work") item.sickRemainderMinutes = Math.max(0,
+        relinquishmentShiftMinutes(row) - shiftDurationMinutes(row.actualStart, row.actualFinish));
     }
     item.ordinaryMinutes = row.status === "work" && row.ordinaryMinutes ? Number(row.ordinaryMinutes) : undefined;
     item.travelMinutes = row.status === "work" ? Number(row.travelMinutes || 0) : 0;

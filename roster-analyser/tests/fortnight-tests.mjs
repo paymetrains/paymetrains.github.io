@@ -514,7 +514,7 @@ test("custom timed duties use their own times while known diagrams keep their pl
   assert.equal(rows[4].actualStart, "0700");
 });
 
-test("relinquishment pays the full shift under four hours and splits pay at four hours", () => {
+test("relinquishment pays eight hours under four worked and only the scheduled remainder from four", () => {
   const night = parseCell("22:00 - 06:00 5018", 1);
   const nightMaster = hydrateMaster(serialiseMaster({ rows: [{
     line: 10, cells: Array.from({ length: 14 }, (_, dayIndex) => ({ ...night, dayIndex })),
@@ -530,19 +530,22 @@ test("relinquishment pays the full shift under four hours and splits pay at four
   assert.equal(rows[1].status, "sick");
   assert.equal(rows[1].actualFinish, "0159");
   assert.equal(rows[2].status, "work");
-  assert.throws(() => toEngineTable(rows, 50, "long"), /full scheduled shift/);
-  Object.assign(rows[4], { relinquishmentShiftHours: "8.5", reviewed: true });
+  assert.equal(rows[4].reviewed, true);
   const table = toEngineTable(rows, 50, "long");
   assert.equal(table[1].leaveMinutes, 480);
   assert.equal(table[2].sickRemainderMinutes, 240);
   assert.equal(table[3].sickRemainderMinutes, 99);
-  assert.equal(table[4].leaveMinutes, 510);
+  assert.equal(table[4].leaveMinutes, 480);
   const payObj = engine.buildPayObject(table);
   assert.deepEqual(payObj[1].lines, [{ label: "Sick leave", minutes: 480, rate: 50 }]);
   assert.ok(payObj[2].lines.some(line => line.label === "Ordinary hours" && line.minutes === 240));
   assert.ok(payObj[2].lines.some(line => line.label === "Sick leave · remainder of shift" && line.minutes === 240));
   Object.assign(rows[2], { actualFinish: "0159", timeWorked: "0359" });
   assert.equal(toEngineTable(rows, 50, "long")[2].leaveMinutes, 480);
+  Object.assign(rows[4], { actualFinish: "0200", timeWorked: "0400", rosteredStart: "2200", rosteredFinish: "0200" });
+  assert.throws(() => toEngineTable(rows, 50, "long"), /full scheduled shift/);
+  rows[4].relinquishmentShiftHours = "8.5";
+  assert.equal(toEngineTable(rows, 50, "long")[4].sickRemainderMinutes, 270);
 });
 
 test("PH roster leave draws down the holiday bank without creating a public holiday", () => {
@@ -576,7 +579,7 @@ test("injury, maternity, unpaid and long service roster leave use the confirmed 
   const { rows } = importLine(master, modified, 10);
   assert.deepEqual(rows.slice(1, 6).map(row => row.status), ["sick", "unpaid", "unpaid", "lsl", "off"]);
   const payObj = engine.buildPayObject(toEngineTable(rows, 50, "long", { holidayBalance: 40 }));
-  assert.deepEqual(payObj[1].lines, [{ label: "Sick leave", minutes: 450, rate: 50 }]);
+  assert.deepEqual(payObj[1].lines, [{ label: "Sick leave", minutes: 480, rate: 50 }]);
   assert.equal(payObj[2].timeLostHours, 7.5);
   assert.equal(payObj[3].timeLostHours, 8);
   assert.deepEqual(payObj[2].lines, []);

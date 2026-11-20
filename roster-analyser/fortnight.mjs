@@ -16,6 +16,7 @@ import {
   withAutomaticTimeClaim,
   STATUS_LABELS,
   LEAVE_STATUSES,
+  FULL_SICK_HOURS,
   FIXED_PAID_STATUSES,
 } from "./fortnight-model.mjs";
 
@@ -454,6 +455,7 @@ function renderReview() {
         : row.jobLabel ||
           (row.status === "blank" ? "Tap to enter a shift" : "");
       const shiftDetails = [job, ...(row.swapLines || []).map(line => `WS ${line}`)];
+      if (row.status === "sick" && !row.ph) shiftDetails.push(`${FULL_SICK_HOURS} hours at base rate`);
       const claim = rosterTimeClaim(row);
       if (claim) shiftDetails.push(`${claim.label}: ${claim.minutes} min included`);
       if (work && row.wobod) shiftDetails.push("WOBOD");
@@ -516,14 +518,14 @@ function editorMarkup(row) {
       <p class="hint" id="worked-duration" hidden>Total worked <output for="actualStart actualFinish" id="worked-total"></output></p>
     </fieldset>
     <div id="relinquishment-fields" hidden>
-      <p class="hint">Under four hours worked, the full scheduled shift is sick leave. From four hours, only the remainder is sick leave.</p>
+      <p class="hint">Under four hours worked: eight hours of sick leave. From four hours worked: only the scheduled remainder is sick leave.</p>
       ${row.timedRelinquishment && !row.hasRelinquishmentSchedule ? numberField("relinquishmentShiftHours", "Full scheduled shift (hours)", row.relinquishmentShiftHours) : ""}
     </div>
     <details class="shift-options" id="rostered-fields" ${showRostered ? "open" : ""}>
       <summary id="rostered-summary">Rostered times</summary>
       <div class="field-pair">${timeField("rosteredStart", "Rostered start", implicitTimes ? "" : row.rosteredStart)}${timeField("rosteredFinish", "Rostered finish", implicitTimes ? "" : row.rosteredFinish)}</div>
       <p class="hint" id="rostered-default">Leave both blank to use the worked times.</p>
-      <div id="leave-extras">${numberField("leaveHours", "Leave hours", row.leaveHours)}</div>
+      <div id="leave-extras">${numberField("leaveHours", "Leave hours", row.status === "sick" ? "" : row.leaveHours)}</div>
     </details>
     <p id="time-claim" class="hint" hidden></p>
     <details class="shift-options" id="pay-adjustments"><summary>Pay adjustments</summary>
@@ -586,7 +588,7 @@ function wireEditor() {
     $("time-claim").hidden = !claim;
     $("time-claim").textContent = claim ? `${claim.label}: ${claim.minutes} min included` : "";
     $("job-field").hidden = !work && !relinquished && !["cancelled", "unknown"].includes(status);
-    rosteredFields.hidden = useActualTimes() || (relinquished && !saved.hasRelinquishmentSchedule) ||
+    rosteredFields.hidden = status === "sick" || useActualTimes() || (relinquished && !saved.hasRelinquishmentSchedule) ||
       !["work", "cancelled", ...LEAVE_STATUSES].includes(status);
     $("rostered-summary").textContent = leave ? "Rostered times and leave hours" : "Rostered times";
     $("rostered-default").hidden = !work || relinquished;
@@ -597,6 +599,8 @@ function wireEditor() {
     $("worked-total").value = displayClock(total);
     $("worked-duration").hidden = !total;
     $("relinquishment-fields").hidden = !relinquished;
+    if (form.elements.relinquishmentShiftHours)
+      form.elements.relinquishmentShiftHours.closest("label").hidden = !work;
     $("work-extras").hidden = !work;
     $("standalone-overtime-field").hidden = !work;
   };
@@ -665,6 +669,7 @@ function wireEditor() {
     for (const key of ["ph", "accruePh"])
       row[key] = form.elements[key].checked;
     row.status = relinquishmentStatus(row);
+    if (row.status === "sick") row.leaveHours = FULL_SICK_HOURS;
     if (row.changeType === "custom_duty")
       row.manualRosterTimes = row.status === "work" && Boolean(row.rosteredStart && row.rosteredFinish);
     if (row.status === "work" && !row.rosteredStart && !row.rosteredFinish) {
