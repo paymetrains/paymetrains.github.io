@@ -1,58 +1,23 @@
 <!doctype html>
-<html lang="en-AU">
+<html lang="en-AU" data-theme="dark">
   <head>
     <meta charset="utf-8" />
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1, viewport-fit=cover"
     />
-    <meta name="color-scheme" content="dark light" />
+    <meta name="color-scheme" content="dark" />
     <meta name="theme-color" content="#181c19" />
-    <script>
-      (() => {
-        const themeKey = "roster-pay-theme";
-        const root = document.documentElement;
-        const themeColor = document.querySelector('meta[name="theme-color"]');
-        const applyTheme = (theme) => {
-          root.dataset.theme = theme;
-          themeColor.content = theme === "light" ? "#faf8f3" : "#181c19";
-        };
-        try {
-          if (localStorage.getItem(themeKey) === "light") applyTheme("light");
-        } catch {
-          // The default theme also works when browser storage is unavailable.
-        }
-        document.addEventListener("DOMContentLoaded", () => {
-          const toggle = document.getElementById("theme-toggle");
-          const updateLabel = () => {
-            toggle.textContent = root.dataset.theme === "light" ? "Dark mode" : "Light mode";
-          };
-          updateLabel();
-          toggle.hidden = false;
-          toggle.addEventListener("click", () => {
-            const theme = root.dataset.theme === "light" ? "dark" : "light";
-            applyTheme(theme);
-            updateLabel();
-            try {
-              localStorage.setItem(themeKey, theme);
-            } catch {
-              // Apply the theme for this page even if it cannot be saved.
-            }
-          });
-        });
-      })();
-    </script>
     <link rel="icon" href="./roster-pay.svg" type="image/svg+xml" />
-    <title>Roster pay · Defunct master roster scenario</title>
-    <link rel="stylesheet" href="./fortnight.css" />
+    <title>Unofficial Pay Calculator · Defunct master roster scenario</title>
+    <link rel="stylesheet" href="./fortnight.css?v=20261120-3" />
     <link rel="stylesheet" href="./scenario.css" />
   </head>
   <body>
     <header class="topbar">
-      <a class="brand" href="./index.html">Roster pay</a>
+      <a class="brand" href="./index.html">Unofficial Pay Calculator</a>
       <div class="topbar-actions">
         <a href="./index.html">Fortnight calculator</a>
-        <button type="button" id="theme-toggle" class="theme-toggle" hidden>Light mode</button>
       </div>
     </header>
     <main id="main">

@@ -60,7 +60,7 @@ function mergedCell(sheet, row, first, last) {
 export async function scenarioWorkbook(report, lines, period, lineAmount, view = "roster") {
   const Excel = await loadExcel();
   const workbook = new Excel.Workbook();
-  workbook.creator = "Roster pay";
+  workbook.creator = "Unofficial Pay Calculator";
   workbook.created = new Date(report.generatedAt);
   workbook.calcProperties.fullCalcOnLoad = true;
   const weeks = period === "full" ? [0, 1] : [period === "week1" ? 0 : 1];

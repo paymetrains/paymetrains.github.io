@@ -83,6 +83,7 @@ summary:focus-visible {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex-wrap: wrap;
   gap: 12px;
   border-bottom: 1px solid var(--line);
 }
@@ -101,17 +102,6 @@ summary:focus-visible {
 .topbar-actions a {
   font-size: 0.8rem;
   text-align: right;
-}
-.theme-toggle {
-  min-width: 92px;
-  min-height: 44px;
-  padding: 8px;
-  border: 1px solid var(--control-line);
-  border-radius: 6px;
-  background: var(--paper);
-  color: var(--ink);
-  font-size: 0.8rem;
-  white-space: nowrap;
 }
 main {
   max-width: 600px;
@@ -551,9 +541,6 @@ input[type="time"] {
 @media (hover: hover) {
   button.primary:hover {
     background: var(--green-hover);
-  }
-  .theme-toggle:hover {
-    background: var(--surface);
   }
   .shift-toggle:hover {
     background: var(--surface);
