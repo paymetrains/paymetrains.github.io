@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { createRequire } from "node:module";
-import { parseCell } from "../roster-core.mjs";
+import { editedJobReference, parseCell, rosterTimeClaim } from "../roster-core.mjs";
 import { buildPayslip } from "../payslip.mjs";
 import {
   hydrateMaster,
@@ -15,6 +15,7 @@ import {
   durationBetween,
   validateShift,
   toEngineTable,
+  withAutomaticTimeClaim,
 } from "../fortnight-model.mjs";
 const engine = createRequire(import.meta.url)("../pay-calculator.js");
 function test(name, fn) {
@@ -79,7 +80,6 @@ test("manual line prefilling uses the chosen master's times and retains the orig
   const originals = structuredClone(data.rows);
   data.rows[1].actualStart = "0400";
   data.rows[1].actualFinish = "1200";
-  data.rows[1].amendment = "credit";
   assert.equal(data.rows[1].rosteredStart, "0300");
   const pay = engine.buildPayObject(toEngineTable(data.rows, 50, data.rosterType));
   assert.ok(pay[1].lines.some(item => item.label === "Lay-back included in shift pay"));
@@ -256,7 +256,7 @@ test("imported and manually entered identical shifts use identical existing pay 
   assert.ok(a.breakdown.details.includes("Gross Pay:"));
   assert.ok(a.breakdown.amounts.includes(a.grossPay.toFixed(2)));
 });
-test("ordinary time changes can be calculated directly or claimed as diagram adjustments", () => {
+test("normal guard imports automatically include lift-up and lay-back without marking shifts for review", () => {
   const modified = structuredClone(current);
   modified.rows[0].cells[1] = parseCell("05:30 - 13:30 5018", 1);
   modified.rows[0].cells[2] = parseCell("07:00 - 16:00 5018", 2);
@@ -264,12 +264,42 @@ test("ordinary time changes can be calculated directly or claimed as diagram adj
   assert.deepEqual([rows[1].rosteredStart, rows[1].rosteredFinish], ["0600", "1400"]);
   assert.deepEqual([rows[1].actualStart, rows[1].actualFinish], ["0530", "1330"]);
   assert.ok(rows.slice(1, 3).every(row => row.reviewed && row.flags.length === 0));
-  const ordinary = engine.buildPayObject(toEngineTable(rows, 50, "long"));
+  assert.deepEqual(rosterTimeClaim(rows[1]), { label: "Lift-up", minutes: 30 });
+  assert.deepEqual(rosterTimeClaim(rows[2]), { label: "Lay-back", minutes: 60 });
+  const ordinary = engine.buildPayObject(toEngineTable(rows, 50, "long", { scenarioComparison: true }));
   assert.equal(ordinary[2].lines.find(line => line.label === "Scheduled OT @ 150%").minutes, 60);
-  rows[1].amendment = rows[2].amendment = "credit";
-  const claimed = engine.buildPayObject(toEngineTable(rows, 50, "long"));
+  const automatic = rows.map(withAutomaticTimeClaim);
+  assert.ok(automatic.slice(1, 3).every(row => row.reviewed));
+  const claimed = engine.buildPayObject(toEngineTable(automatic, 50, "long", { role: "guard" }));
   assert.equal(claimed[1].lines.find(line => line.label === "Lift-up included in shift pay").minutes, 30);
   assert.equal(claimed[2].lines.find(line => line.label === "Lay-back included in shift pay").minutes, 60);
+});
+test("guard line 10 Sunday: build-up is automatic and clears when edited times match the roster", () => {
+  const rows = blankFortnight("2026-11-01");
+  const row = Object.assign(rows[0], {
+    status: "work", jobNumber: "8005", rosteredStart: "0238", rosteredFinish: "1047",
+    actualStart: "0252", actualFinish: "1032", timeWorked: "0740",
+  });
+  assert.deepEqual(rosterTimeClaim(row), { label: "Build-up", minutes: 29 });
+  for (const change of [{ status: "sick" }, { timedRelinquishment: true }, { rosteredFinish: "" },
+    { actualStart: "0238", actualFinish: "1047" }]) {
+    assert.equal(withAutomaticTimeClaim({ ...row, amendment: "credit", ...change }).amendment, "");
+  }
+  const minutes = () => {
+    rows[0] = withAutomaticTimeClaim(rows[0]);
+    return Object.fromEntries(engine.buildPayObject(toEngineTable(rows, 50, "long", { role: "guard" }))[0]
+      .lines.map(line => [line.label, line.minutes]));
+  };
+  const claimed = minutes();
+  assert.equal(claimed["Build-up included in shift pay"], 29);
+  assert.equal(claimed["Ordinary hours"], 480);
+  assert.equal(claimed["Sunday loading @ 100%"], 480);
+  assert.equal(claimed["Scheduled OT @ 200%"], 9);
+  Object.assign(rows[0], { rosteredStart: "0252", rosteredFinish: "1032" });
+  const worked = minutes();
+  assert.equal(worked["Ordinary hours"], 460);
+  assert.equal(worked["Build-up included in shift pay"], undefined);
+  assert.equal(worked["Scheduled OT @ 200%"], undefined);
 });
 test("unswapped booked-off work imports as WOBOD regardless of shift count", () => {
   const modified = structuredClone(current);
@@ -287,6 +317,75 @@ test("unswapped booked-off work imports as WOBOD regardless of shift count", () 
   assert.equal(engine.buildPayObject(table)[10].standaloneOvertimeRate, 1.5);
   rows[10].wobod = false;
   assert.equal(toEngineTable(rows, 50, "long")[10].wobod, false);
+});
+
+test("both roles pay exactly the worked minutes plus one claim across all start/finish boundaries", () => {
+  // Expected paid base minutes exclude parallel allowances and loadings.
+  const cases = [
+    ["0600", "1400", "0530", "1350", "Lift-up", 10, 510],
+    ["0600", "1400", "0530", "1400", null, 0, 510],
+    ["0600", "1400", "0530", "1430", null, 0, 540],
+    ["0600", "1400", "0600", "1350", "Build-up", 10, 480],
+    ["0600", "1400", "0600", "1400", null, 0, 480],
+    ["0600", "1400", "0600", "1430", null, 0, 510],
+    ["0600", "1400", "0620", "1350", "Build-up", 30, 480],
+    ["0600", "1400", "0620", "1400", "Build-up", 20, 480],
+    ["0600", "1400", "0620", "1430", "Lay-back", 20, 510],
+    ["2200", "0600", "2130", "0550", "Lift-up", 10, 510],
+    ["2200", "0600", "2220", "0550", "Build-up", 30, 480],
+    ["2200", "0600", "2220", "0630", "Lay-back", 20, 510],
+    ["1600", "0000", "1610", "2350", "Build-up", 20, 480],
+    ["0400", "1200", "1600", "0000", "Lay-back", 720, 1200],
+    ["0400", "1200", "1700", "0100", "Lay-back", 780, 1260],
+  ];
+  for (const role of ["guard", "driver"]) for (const [rosteredStart, rosteredFinish, actualStart, actualFinish, label, credit, paid] of cases) {
+    const rows = blankFortnight("2026-11-01");
+    Object.assign(rows[6], { status: "work", rosteredStart, rosteredFinish, actualStart, actualFinish, timeWorked: durationBetween(actualStart, actualFinish) });
+    const row = rows[6];
+    const table = toEngineTable(rows, 50, "long", { role });
+    const priced = engine.buildPayObject(table)[6];
+    const claims = priced.lines.filter(line => /included in shift pay/.test(line.label));
+    const base = priced.lines.filter(line => /^(Ordinary hours|Scheduled OT)/.test(line.label));
+    assert.deepEqual(rosterTimeClaim(row), label ? { label, minutes: credit } : null);
+    assert.deepEqual(claims.map(line => [line.label, line.minutes, line.amount]), label ? [[label + " included in shift pay", credit, 0]] : []);
+    assert.equal(table[6].payableMinutes, paid);
+    assert.equal(table[6].workedMinutes, paid - credit);
+    assert.equal(base.reduce((sum, line) => sum + line.minutes, 0), paid);
+  }
+});
+
+test("missing diagrams use matching master assignments, swaps and unique weekday variants, never an unrelated job", () => {
+  const off = () => Array.from({ length: 14 }, () => ({ job: "OFF" }));
+  const masterRoster = { 10: off(), 20: off(), 21: off() };
+  masterRoster[10][0] = { job: "8005(i)", start: "02:38", finish: "10:47" };
+  masterRoster[20][1] = { job: "0007", start: "06:00", finish: "14:00" };
+  masterRoster[21][1] = { job: "7", start: "07:00", finish: "15:00" };
+  masterRoster[20][2] = { job: "7", start: "22:00", finish: "06:00" };
+  const ref = hydrateReferenceMaster({ schemaVersion: 1, depot: "auburn", role: "driver", masterRoster, diagramData: {} });
+  const roster = structuredClone(current);
+  const cells = roster.rows[0].cells = off().map((_, i) => parseCell("OFF", i));
+  cells[0] = parseCell("02:52 - 10:32 8005(i)", 0);
+  cells[1] = parseCell("06:30 - 14:30 7 (WS 20)", 1);
+  cells[2] = parseCell("21:40 - 05:40 0007", 2);
+  cells[8] = parseCell("08:00 - 16:00 7", 8);
+  cells[9] = parseCell("08:00 - 16:00 9999", 9);
+  const { rows } = importLine(ref, roster, 10);
+  assert.equal(rows[0].buildupMinutes, 29);
+  assert.equal(rows[1].workSwap.assignedLine, 20);
+  assert.equal(rows[1].laybackMinutes, 30);
+  assert.equal(rows[2].liftUpMinutes, 20);
+  assert.equal(editedJobReference(ref, rows[1], "0007(i)").start, "0600");
+  assert.equal(editedJobReference(ref, rows[1], "9999"), null);
+  for (const row of [rows[8], rows[9]]) {
+    assert.equal(row.reviewed, false);
+    assert.equal(rosterTimeClaim(row), null);
+    assert.match(row.flags.join(" "), /No unique rostered times/);
+  }
+  const table = toEngineTable(rows.map(row => ({ ...row, reviewed: true })), 50, "long", { role: "driver" });
+  const pay = engine.buildPayObject(table);
+  assert.equal(pay[0].lines.find(line => line.label.startsWith("Build-up")).minutes, 29);
+  assert.equal(pay[2].lines.find(line => line.label === "WOBOD @ 50%").minutes, 480);
+  assert.equal(pay[2].lines.find(line => line.label.startsWith("Standalone overtime")).minutes, 500);
 });
 test("invalid times, unresolved reviews and inconsistent durations cannot reach engine", () => {
   const rows = blankFortnight("2026-11-01");

@@ -7,6 +7,7 @@ import { buildRosterJobReference } from "./roster-job-reference.mjs";
 import { scenarioCsv, scenarioTimesheetCsv, timeClaimReference } from "./scenario-export.mjs";
 import { scenarioWorkbook } from "./scenario-xlsx.mjs";
 import { timesheetEntries } from "./scenario-timesheet.mjs";
+import { kilometreClaimText } from "./scenario-kilometres.mjs";
 
 const $ = id => document.getElementById(id);
 const money = value => Number(value).toLocaleString("en-AU", { style: "currency", currency: "AUD" });
@@ -20,6 +21,9 @@ let referenceVersion = 0;
 let referenceDownloadUrl;
 let resultView = "roster";
 let resultPeriod = "full";
+let defunctCatalogue;
+let calculationContext = null;
+let extraKilometresByLine = {};
 
 function visibleDates(dates) {
   return resultPeriod === "full" ? dates : resultPeriod === "week1" ? dates.slice(0, 7) : dates.slice(7, 14);
@@ -36,12 +40,19 @@ function updateSelection() {
   updateGrades(role);
   $("scenario-grade").value = role === "guard" ? "Guard Thereafter" : "Driver Thereafter";
   $("scenario-grade").dispatchEvent(new Event("change"));
-  $("scenario-master-info").textContent = $("scenario-depot").value === "auburn"
-    ? "Auburn's existing and defunct masters are included."
-    : "The existing master is included. Upload this depot's defunct master in Comparison settings.";
+  const selected = defunctCatalogue?.masters.find(item => item.depot === $("scenario-depot").value && item.role === role);
+  $("scenario-master-info").textContent = selected
+    ? `Current and defunct masters are included. ${role === "driver" ? `${selected.diagramCoverage.kilometreEntries} defunct diagram kilometre records available; coverage is ${selected.diagramCoverage.status}. Current diagram kilometres plus entered extras are assumed driven.` : ""}`
+    : "The current master is included. Upload this depot's defunct master in Comparison settings.";
   $("scenario-existing").value = "";
   $("scenario-defunct").value = "";
   previewReference();
+}
+
+async function bundledDefunct(depot, role) {
+  const entry = defunctCatalogue?.masters.find(item => item.depot === depot && item.role === role);
+  if (!entry || !/^[a-z-]+-(?:driver|guard)-defunct\.json$/.test(entry.path)) return null;
+  return hydrateReferenceMaster(await json(`./data/scenarios/${entry.path}`));
 }
 
 async function previewReference() {
@@ -54,9 +65,8 @@ async function previewReference() {
     const file = $("scenario-defunct").files[0];
     let master;
     if (file) master = await uploadedMaster(file);
-    else if ($("scenario-depot").value === "auburn")
-      master = hydrateReferenceMaster(await json(`./data/scenarios/auburn-${$("scenario-role").value}-defunct.json`));
-    else {
+    else master = await bundledDefunct($("scenario-depot").value, $("scenario-role").value);
+    if (!master) {
       $("scenario-reference-info").textContent = "Upload a defunct master to build its job reference.";
       return;
     }
@@ -64,9 +74,10 @@ async function previewReference() {
     const reference = buildRosterJobReference(master);
     const jobs = Object.values(reference.jobs);
     const conflicts = jobs.filter(job => job.conflictingWeekdays.length);
-    $("scenario-reference-info").textContent = `${jobs.length} job labels from ${reference.sourceFile}. ${conflicts.length ? conflicts.map(job => job.job).join(", ") + " has multiple line-specific times." : "Each job has unambiguous times for its observed weekdays."}`;
-    $("scenario-reference-table").innerHTML = `<table><caption>Times observed in the defunct master roster</caption><thead><tr><th scope="col">Job</th><th scope="col">Start</th><th scope="col">Finish</th><th scope="col">Length</th></tr></thead><tbody>${jobs.flatMap(job => job.variants.map(variant => `<tr><th scope="row">${escape(job.job)}<small>${escape(variant.weekdays.join(", "))}${job.conflictingWeekdays.length ? "<br>Line/day specific" : ""}</small></th><td>${time(variant.start)}</td><td>${time(variant.finish)}</td><td>${Math.floor(variant.durationMinutes / 60)}h ${variant.durationMinutes % 60}m</td></tr>`)).join("")}</tbody></table>`;
-    referenceDownloadUrl = URL.createObjectURL(new Blob([JSON.stringify(reference, null, 2)], { type: "application/json" }));
+    const imported = Object.entries(master.diagramData || {});
+    $("scenario-reference-info").textContent = `${jobs.length} job labels observed in ${reference.sourceFile}. ${imported.length} imported diagrams, ${master.diagramCoverage?.kilometreEntries || 0} kilometre records. Diagram coverage: ${master.diagramCoverage?.status || "master roster only"}. ${conflicts.length ? conflicts.map(job => job.job).join(", ") + " has line-specific times in the master." : ""}`;
+    $("scenario-reference-table").innerHTML = `<table><caption>Imported diagrams and times observed in the defunct master</caption><thead><tr><th scope="col">Job</th><th scope="col">Start</th><th scope="col">Finish</th><th scope="col">Length</th><th scope="col">Km</th><th scope="col">Source</th></tr></thead><tbody>${imported.map(([job, diagram]) => `<tr><th scope="row">${escape(job)}</th><td>${escape(diagram.signOn)}</td><td>${escape(diagram.offDuty)}</td><td>${durationText(Math.round(diagram.rosteredHrs * 60))}</td><td>${typeof diagram.rosteredKm === "number" ? diagram.rosteredKm : escape(diagram.kilometresStatus || "Unknown")}</td><td>Imported diagram${diagram.sourceFlag ? ` · ${escape(diagram.sourceFlag)}` : ""}</td></tr>`).join("")}${jobs.flatMap(job => job.variants.map(variant => `<tr><th scope="row">${escape(job.job)}<small>${escape(variant.weekdays.join(", "))}</small></th><td>${time(variant.start)}</td><td>${time(variant.finish)}</td><td>${durationText(variant.durationMinutes)}</td><td>Unknown</td><td>Master roster · inferred</td></tr>`)).join("")}</tbody></table>`;
+    referenceDownloadUrl = URL.createObjectURL(new Blob([JSON.stringify({ ...reference, importedDiagrams: master.diagramData || {}, diagramCoverage: master.diagramCoverage || null }, null, 2)], { type: "application/json" }));
     $("scenario-reference-download").href = referenceDownloadUrl;
     $("scenario-reference-download").download = `defunct-${$("scenario-role").value}-job-reference.json`;
     $("scenario-reference-download").hidden = false;
@@ -118,8 +129,8 @@ async function loadMasters(current, depot, role) {
   }
   let defunct;
   if (defunctFile) defunct = await uploadedMaster(defunctFile);
-  else if (depot === "auburn") defunct = hydrateReferenceMaster(await json(`./data/scenarios/auburn-${role}-defunct.json`));
-  else throw new Error("Upload the defunct master for this depot and role in Comparison settings.");
+  else defunct = await bundledDefunct(depot, role);
+  if (!defunct) throw new Error("Upload the defunct master for this depot and role in Comparison settings.");
   defunct.rosterJobReference = buildRosterJobReference(defunct);
   return { master, defunct };
 }
@@ -170,7 +181,8 @@ function claimsMarkup(day) {
     return `<div class="pay-entry"><span>${escape(label)}${claim.minutes ? `<small>${durationText(claim.minutes)}</small>` : ""}</span><strong>${money(window.PayEngine.lineAmount(claim))}</strong></div>`;
   }).join("");
   const timeClaims = day.separateTimeClaims.map(claim => `<div class="pay-entry time-claim"><span>${escape(claim.label)} claim${claim.minutes ? `<small>${durationText(claim.minutes)}</small>` : ""}<small class="claim-reference">Against ${escape(timeClaimReference(claim, day.comparison))}</small></span><strong>${money(claim.amount)}</strong></div>`).join("");
-  return (items || '<p class="hint">No paid claim</p>') + timeClaims +
+  const kilometres = day.kilometres?.additionalPay ? `<div class="pay-entry time-claim"><span>Extra kilometre comparison<small>${escape(kilometreClaimText(day))}</small></span><strong>${money(day.kilometres.additionalPay)}</strong></div>` : "";
+  return (items || '<p class="hint">No paid claim</p>') + timeClaims + kilometres +
     (day.wobod ? `<p class="scenario-note">WOBOD triggered by ${escape(day.wobodSources.join(" and "))} OFF/ADO.</p>` : "");
 }
 
@@ -219,7 +231,8 @@ function renderLineDetail(element) {
   target.innerHTML = line.notes.map(note => `<p class="scenario-note">${escape(note)}</p>`).join("") +
     (resultView === "roster" ? rosterMarkup(line) : resultView === "timesheet" ? timesheetMarkup(line) : `<div class="scenario-day-list">${visibleDates(line.dates).map(dayMarkup).join("")}</div>`) +
     (resultPeriod !== "full" ? `<p class="scenario-pay-total">Week ${resultPeriod === "week1" ? "1" : "2"} daily extra ${money(visibleDates(line.dates).reduce((sum, day) => sum + day.difference, 0))}</p>` : "") +
-    `<p class="scenario-pay-total">Fortnight daily extra ${money(line.dates.reduce((sum, day) => sum + day.difference, 0))} · Fortnight adjustment difference ${money(line.adjustmentDifference)} · Fortnight total extra ${money(line.difference)}</p>`;
+    `<p class="scenario-pay-total">Fortnight daily extra ${money(line.dates.reduce((sum, day) => sum + day.difference, 0))} · Fortnight adjustment difference ${money(line.adjustmentDifference)} · Fortnight total extra ${money(line.difference)}</p>` +
+    (report.role === "driver" ? `<details class="scenario-kilometre-editor"><summary>Extra kilometres driven</summary><p class="hint">Enter only distance beyond the current diagram. Actual distance is assumed to be the current diagram plus these extras. Unknown diagram distances are not treated as zero.</p>${line.dates.filter(day => day.status === "work").map(day => `<label>${escape(dateLabel(day.date))} · ${escape(day.worked.job || "Custom")}<input type="number" min="0" max="1000" step="0.001" inputmode="decimal" data-extra-km-line="${line.line}" data-extra-km-date="${day.date}" value="${day.kilometres?.enteredExtraKm || 0}"><span class="hint">Current diagram: ${day.kilometres?.currentKm ?? "unknown"} km · Defunct diagram: ${day.kilometres?.defunctKm ?? "unknown"} km</span></label>`).join("")}</details>` : "");
 }
 
 function filteredLines() {
@@ -268,6 +281,8 @@ $("scenario-form").onsubmit = async event => {
   if (!catalogue) return;
   $("scenario-results").hidden = true;
   report = null;
+  calculationContext = null;
+  extraKilometresByLine = {};
   $("scenario-status").className = "";
   const controls = [...$("scenario-form").querySelectorAll("input, select, button")];
   controls.forEach(control => { control.disabled = true; });
@@ -296,10 +311,11 @@ $("scenario-form").onsubmit = async event => {
     const unique = new Set(current.rows.map(row => row.line));
     if (unique.size !== current.rows.length) throw new Error("The fortnight PDF repeats line numbers. Choose one depot and role.");
     const { master, defunct } = await loadMasters(current, depot, role);
+    calculationContext = { engine: window.PayEngine, master, defunct, current, role, rate, alignment, weekdayOvertimeAfterFourth };
     const named = activeScenarioRows(master, current);
     if (!named.length) throw new Error("No named, active crew lines were found in this roster.");
     report = { generatedAt: new Date().toISOString(), depot, role, rate, alignment, weekdayOvertimeAfterFourth,
-      current: raw.fileName, existingMaster: master.fileName || "Bundled existing master", defunctMaster: defunct.fileName || "Bundled defunct master",
+      current: raw.fileName, existingMaster: master.fileName || "Bundled existing master", defunctMaster: defunct.fileName || "Bundled defunct master", diagramCoverage: defunct.diagramCoverage || null, kilometreAssumption: role === "driver" ? "current-diagram-plus-entered-extras" : null,
       dates: current.dates.map(toIsoDate), skippedInactive: current.rows.filter(row => row.employeeName.trim()).length - named.length,
       rosterLines: current.rows.map(row => ({ line: row.line, hasNormalJobs: row.cells.some(cell => cell.status === "WORK" && /^(?:\d+|SBY|FREELANCE)$/i.test(cell.jobNumber)) })).sort((a, b) => a.line - b.line), lines: [] };
     for (const [index, row] of named.entries()) {
@@ -318,7 +334,7 @@ $("scenario-form").onsubmit = async event => {
     }
     report.lines.sort((a, b) => a.line - b.line);
     const priced = report.lines.filter(line => !line.error);
-    $("scenario-context").textContent = `${dateLabel(report.dates[0])}–${dateLabel(report.dates[13])} · ${role === "guard" ? "Guard" : "Driver"} · ${money(rate)}/hour. Fifth and later weekday WOBOD rate assumed at ${weekdayOvertimeAfterFourth * 100}% plus 50% on worked time. ${alignment === "same-date" ? "Time comparisons use the same roster date." : "Time credits are excluded for starts over 12 hours apart."}`;
+    $("scenario-context").textContent = `${dateLabel(report.dates[0])}–${dateLabel(report.dates[13])} · ${role === "guard" ? "Guard" : "Driver"} · ${money(rate)}/hour. Fifth and later weekday WOBOD rate assumed at ${weekdayOvertimeAfterFourth * 100}% plus 50% on worked time. ${alignment === "same-date" ? "Time comparisons use the same roster date." : "Time credits are excluded for starts over 12 hours apart."}${role === "driver" ? " Actual kilometres assumed from the current job diagram plus entered extras. Missing kilometre data remain unknown." : ""}`;
     $("scenario-total").textContent = `${priced.length} lines calculated · ${money(priced.reduce((sum, line) => sum + line.difference, 0))} total extra${priced.length !== named.length ? ` · ${named.length - priced.length} lines need an entry checked` : ""}${report.skippedInactive ? ` · ${report.skippedInactive} seconded lines excluded` : ""}`;
     $("scenario-filter").value = "";
     renderLines();
@@ -336,6 +352,25 @@ $("scenario-form").onsubmit = async event => {
   }
 };
 $("scenario-filter").oninput = renderLines;
+$("scenario-lines").addEventListener("change", event => {
+  const input = event.target.closest("[data-extra-km-line]");
+  if (!input || !report || !calculationContext) return;
+  if (!input.checkValidity()) { input.reportValidity(); return; }
+  const line = Number(input.dataset.extraKmLine);
+  const editorOpen = input.closest("details")?.open;
+  const extras = { ...extraKilometresByLine[line], [input.dataset.extraKmDate]: input.value };
+  try {
+    const { employeeName, ...result } = calculateScenarioLine({ ...calculationContext, line, extraKilometres: extras });
+    extraKilometresByLine[line] = extras;
+    report.lines[report.lines.findIndex(item => item.line === line)] = result;
+    renderLines();
+    if (editorOpen) $("scenario-lines").querySelector(`details[data-line="${line}"] .scenario-kilometre-editor`).open = true;
+    const priced = report.lines.filter(item => !item.error);
+    const unpriced = report.lines.length - priced.length;
+    $("scenario-total").textContent = `${priced.length} lines calculated · ${money(priced.reduce((sum, item) => sum + item.difference, 0))} total extra${unpriced ? ` · ${unpriced} lines not priced` : ""}${report.skippedInactive ? ` · ${report.skippedInactive} seconded lines excluded` : ""}`;
+    $("scenario-status").textContent = `Line ${line} recalculated with entered extra kilometres.`;
+  } catch (error) { $("scenario-status").textContent = error.message; }
+});
 for (const button of document.querySelectorAll("[data-result-period]")) button.onclick = () => {
   resultPeriod = button.dataset.resultPeriod;
   for (const item of document.querySelectorAll("[data-result-period]")) item.setAttribute("aria-pressed", String(item === button));
@@ -395,8 +430,8 @@ $("scenario-pdf").onclick = () => {
       ? [{ label: "Full fortnight", dates: line.dates }]
       : (resultPeriod === "full" ? [0, 1] : [resultPeriod === "week1" ? 0 : 1]).map(week => ({ label: `Week ${week + 1}`, dates: line.dates.slice(week * 7, week * 7 + 7) }));
     return periods.map(({ label, dates }) => {
-      return `<section class="print-line${resultView === "timesheet" ? " print-timesheet" : ""}"><h1>${resultView === "timesheet" ? "Timesheet summary" : "Roster scenario"} · Line ${line.line} · ${label}</h1>
-        <p class="print-context">${escape(report.current)} · ${escape(report.role)} · ${money(report.rate)}/hour · ${escape(dateLabel(dates[0].date))}–${escape(dateLabel(dates.at(-1).date))}<br>Current: ${escape(report.existingMaster)} · Defunct: ${escape(report.defunctMaster)}<br>${report.alignment === "same-date" ? "Time comparisons use the same roster date." : "Time credits excluded for starts over 12 hours apart."} Fifth and later weekday WOBOD: ${report.weekdayOvertimeAfterFourth * 100}% plus 50% on worked time.</p>
+      return `<section class="print-line${resultView === "timesheet" ? " print-timesheet" : ""}${dates.some(day => day.kilometres?.claimedExtraKm) ? " print-with-kilometres" : ""}"><h1>${resultView === "timesheet" ? "Timesheet summary" : "Roster scenario"} · Line ${line.line} · ${label}</h1>
+        <p class="print-context">${escape(report.current)} · ${escape(report.role)} · ${money(report.rate)}/hour · ${escape(dateLabel(dates[0].date))}–${escape(dateLabel(dates.at(-1).date))}<br>Current: ${escape(report.existingMaster)} · Defunct: ${escape(report.defunctMaster)}<br>${report.alignment === "same-date" ? "Time comparisons use the same roster date." : "Time credits excluded for starts over 12 hours apart."} Fifth and later weekday WOBOD: ${report.weekdayOvertimeAfterFourth * 100}% plus 50% on worked time.${report.role === "driver" ? `<br>Actual kilometres assumed from the current job diagram plus entered extras. Defunct diagram coverage: ${escape(report.diagramCoverage?.status || "unknown")}; missing distances remain unknown.` : ""}</p>
         ${resultView === "timesheet" ? timesheetMarkup(line, dates) : rosterMarkup(line, dates)}
         <p class="print-totals"><strong>${label === "Full fortnight" ? "Fortnight" : label} daily extra ${money(dates.reduce((sum, day) => sum + day.difference, 0))}</strong><br>Fortnight baseline ${money(line.baseline)} · Fortnight scenario gross ${money(line.maximum)} · Fortnight adjustment difference ${money(line.adjustmentDifference)} · <strong>Fortnight total extra ${money(line.difference)}</strong></p>
         <p class="print-context">${resultView === "timesheet" ? "MR marks a defunct-roster claim. Job length is actual work only." : "Green marks the higher daily comparison. Actual work and separate time claims are shown separately."} Unofficial train crew pay calculator.</p></section>`;
@@ -427,7 +462,7 @@ $("scenario-download").onclick = () => {
   setTimeout(() => URL.revokeObjectURL(url), 1000);
 };
 try {
-  catalogue = await json("./data/masters/index.json");
+  [catalogue, defunctCatalogue] = await Promise.all([json("./data/masters/index.json"), json("./data/scenarios/index.json")]);
   $("scenario-depot").innerHTML = catalogue.depots.map(depot => `<option value="${escape(depot.id)}">${escape(depot.name)}</option>`).join("");
   updateSelection();
 } catch (error) {

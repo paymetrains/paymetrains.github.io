@@ -1,6 +1,9 @@
 const standaloneOvertime = typeof module !== "undefined" && module.exports
   ? require("./standalone-overtime.js")
   : StandaloneOvertime;
+const payShiftClaims = typeof module !== "undefined" && module.exports
+  ? require("./shift-claims.js")
+  : globalThis.RosterShiftClaims;
 
 var payDiv = getCalculatorElement("payDetails");
 var unitDiv = getCalculatorElement("unitDetails");
@@ -538,29 +541,6 @@ function priceNonWorkingDay(row, rate, rates, ordinaryMinutes, role) {
   if (leave === "ph-taken") row.holidayTaken = minutes;
 }
 
-function shiftCredit(row, actualStart, workedMinutes) {
-  if (row.amendment !== "credit") return null;
-  let scheduledStart = parseTimeToMinutes(row.rosteredStart);
-  if (row.creditAlignment !== "same-date") {
-    if (scheduledStart - actualStart > 720) scheduledStart -= 1440;
-    if (actualStart - scheduledStart > 720) scheduledStart += 1440;
-  }
-  const scheduledFinish = scheduledStart + scheduledMinutes(row, 480);
-  const actualFinish = actualStart + workedMinutes;
-  const laterStart = actualStart - scheduledStart;
-  const earlierFinish = scheduledFinish - actualFinish;
-  if (laterStart >= 0 && earlierFinish >= 0 && laterStart + earlierFinish > 0) {
-    return { label: "Build-up", before: laterStart, after: earlierFinish, field: "buildupAsUnits" };
-  }
-  if (laterStart > 0 && earlierFinish < 0) {
-    return { label: "Lay-back", before: laterStart, after: 0, field: "laybackAsUnits" };
-  }
-  if (laterStart < 0 && earlierFinish > 0) {
-    return { label: "Lift-up", before: 0, after: earlierFinish, field: "liftupAsUnits" };
-  }
-  return null;
-}
-
 function standaloneRate(day, row) {
   if (day !== "sat" && day !== "sun" && row.overtimeShiftNumber > 4 &&
       Number.isFinite(row.weekdayOvertimeAfterFourth) && row.weekdayOvertimeAfterFourth > 0) {
@@ -609,7 +589,8 @@ function priceWorkingDay(row, rate, rates, defaultOrdinaryMinutes, role) {
   }
   const ordinary = row.ordinaryMinutes || defaultOrdinaryMinutes;
   const isIntercity = row.intercityKm !== "" && row.intercityKm != null;
-  const credit = shiftCredit(row, start, worked);
+  const credit = row.amendment === "credit"
+    ? payShiftClaims.compare(row, row.creditAlignment === "same-date" ? "same-date" : "nearest").credit : null;
   const extra = role === "driver" && !isIntercity ? extraKmMinutes(row.extraKm) : 0;
   const spans = [];
   if (credit?.before) spans.push({ start: start - credit.before, minutes: credit.before, actual: false });

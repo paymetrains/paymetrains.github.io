@@ -31,7 +31,7 @@
         <label>Pay grade<select id="scenario-grade"></select></label>
         <label id="scenario-custom-rate" hidden>Hourly rate ($)<input id="scenario-rate" type="number" min="0.01" step="any" required></label>
         <label>Fortnight roster PDF<input id="scenario-current" type="file" accept=".pdf,application/pdf" required></label>
-        <p id="scenario-master-info" class="hint">Auburn's existing and defunct masters are included.</p>
+        <p id="scenario-master-info" class="hint">Checking included masters and diagrams…</p>
         <details class="shift-options">
           <summary>Comparison settings</summary>
           <label>Replace existing master for this run<input id="scenario-existing" type="file" accept=".pdf,application/pdf"></label>
@@ -47,7 +47,7 @@
           <summary>Defunct job reference</summary>
           <p id="scenario-reference-info" class="hint"></p>
           <a id="scenario-reference-download" hidden>Download job reference JSON</a>
-          <div id="scenario-reference-table" class="reference-table" tabindex="0" role="region" aria-label="Defunct job start and finish times"></div>
+          <div id="scenario-reference-table" class="reference-table" tabindex="0" role="region" aria-label="Defunct job times, kilometres and reference source"></div>
         </details>
         <p class="hint">Work on an OFF or ADO day in either master counts as WOBOD. For swapped shifts, only the current master's OFF/ADO can trigger WOBOD; time credits use the same job only.</p>
         <button class="primary full" type="submit" id="scenario-run">Compare all lines</button>
@@ -90,6 +90,7 @@
     </main>
     <footer class="site-footer">Unofficial train crew pay calculator</footer>
     <script src="./standalone-overtime.js"></script>
+    <script src="./shift-claims.js"></script>
     <script src="./pay-rates.js"></script>
     <script src="./pay-calculator.js"></script>
     <script type="module" src="./scenario.mjs"></script>

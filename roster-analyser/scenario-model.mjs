@@ -1,7 +1,8 @@
 import { importLine, toEngineTable } from "./fortnight-model.mjs";
 import { breakdownEntries } from "./payslip.mjs";
 import { buildRosterJobReference, matchingRosterJob } from "./roster-job-reference.mjs";
-import { shiftDurationMinutes } from "./roster-core.mjs";
+import { normaliseJob, shiftDurationMinutes } from "./roster-core.mjs";
+import { scenarioKilometres, kilometreOptions } from "./scenario-kilometres.mjs";
 
 const cents = value => Math.round((value + Number.EPSILON) * 100);
 const round = value => cents(value) / 100;
@@ -35,7 +36,10 @@ export function matchingDiagram(master, job, dayIndex) {
     return first >= 0 && first <= day && day <= last;
   });
   if (!matches && !Object.hasOwn(diagram.kmByDay || {}, days[day])) return null;
-  return { jobNumber: job, start: diagram.signOn.replace(":", ""), finish: diagram.offDuty.replace(":", "") };
+  const km = diagram.kmByDay?.[days[day]] ?? diagram.rosteredKm;
+  return { jobNumber: job, start: diagram.signOn.replace(":", ""), finish: diagram.offDuty.replace(":", ""),
+    rosteredKm: diagram.kilometresStatus === "not-counted" || typeof km !== "number" || !Number.isFinite(km) ? null : km,
+    kilometresStatus: diagram.kilometresStatus || (typeof km === "number" ? "known" : "unavailable"), sourceFlag: diagram.sourceFlag || null };
 }
 
 function dailyTotals(result) {
@@ -85,7 +89,7 @@ function variants(row, basis, settings) {
     creditAlignment: "same-date",
   };
   const swapped = Boolean(row.swapLines?.length);
-  const sameJob = basis.job === row.jobNumber;
+  const sameJob = normaliseJob(basis.job) === normaliseJob(row.jobNumber);
   const largeChange = Math.abs(clockMinutes(basis.start) - clockMinutes(row.actualStart)) > 720;
   const allowCredit = (!swapped || sameJob) && !(largeChange && settings.alignment === "exclude-large");
   const result = [{ row: { ...candidate, amendment: "" }, basis }];
@@ -100,7 +104,8 @@ function optionsFor(row, index, master, defunct, settings) {
   const oldCell = defunct.lines.get(row.line)?.cells[index];
   const diagram = matchingDiagram(master, row.jobNumber, index);
   const existingJob = !diagram && matchingRosterJob(settings.existingJobs, row.jobNumber, index);
-  const defunctJob = matchingRosterJob(settings.defunctJobs, row.jobNumber, index);
+  const defunctDiagram = matchingDiagram(defunct, row.jobNumber, index);
+  const defunctJob = !defunctDiagram && matchingRosterJob(settings.defunctJobs, row.jobNumber, index);
   const normalBasis = {
     source: diagram?.start === row.rosteredStart && diagram.finish === row.rosteredFinish ? "Diagram data" : "Worked roster",
     job: row.jobNumber, start: row.rosteredStart, finish: row.rosteredFinish,
@@ -113,13 +118,14 @@ function optionsFor(row, index, master, defunct, settings) {
   }
   if (row.status !== "work") return [{ row, basis: normalBasis }];
   const timedShiftDuty = ["SBY", "FREELANCE"].includes(row.jobNumber);
-  if (row.changeType === "custom_duty" && !existingJob && !defunctJob && !timedShiftDuty) return variants(row, normalBasis, settings);
+  if (row.changeType === "custom_duty" && !diagram && !existingJob && !defunctDiagram && !defunctJob && !timedShiftDuty) return variants(row, normalBasis, settings);
   const bases = [normalBasis];
   if (currentCell?.status === "WORK") bases.push({ source: "Existing master", job: currentCell.jobNumber, start: currentCell.start, finish: currentCell.finish });
   if (oldCell?.status === "WORK") bases.push({ source: "Defunct master", job: oldCell.jobNumber, start: oldCell.start, finish: oldCell.finish });
   if (diagram) bases.push({ source: "Diagram data", job: row.jobNumber, start: diagram.start, finish: diagram.finish });
   if (existingJob) bases.push({ source: "Existing master job reference", job: row.jobNumber, start: existingJob.start, finish: existingJob.finish, referenceOccurrences: existingJob.occurrences });
   if (defunctJob) bases.push({ source: "Defunct master job reference", job: row.jobNumber, start: defunctJob.start, finish: defunctJob.finish, referenceOccurrences: defunctJob.occurrences });
+  if (defunctDiagram) bases.push({ source: "Defunct master job reference", job: row.jobNumber, start: defunctDiagram.start, finish: defunctDiagram.finish, referenceKind: "imported-diagram", sourceFlag: defunctDiagram.sourceFlag });
   const unique = new Map();
   for (const basis of bases) {
     if (!basis.start || !basis.finish) continue;
@@ -133,7 +139,7 @@ function optionsFor(row, index, master, defunct, settings) {
       }
     }
   }
-  return [...unique.values()];
+  return kilometreOptions([...unique.values()], row.kilometres);
 }
 
 // A lower guarantee contribution can increase the fortnight top-up. Keep every
@@ -166,11 +172,12 @@ export function maximiseOptions(options, limit, guaranteeEligible = true) {
   return best.choices;
 }
 
-export function calculateScenarioLine({ engine, master, defunct, current, line, rate, role, alignment = "same-date", weekdayOvertimeAfterFourth = 2 }) {
+export function calculateScenarioLine({ engine, master, defunct, current, line, rate, role, alignment = "same-date", weekdayOvertimeAfterFourth = 2, extraKilometres = {} }) {
   const imported = importLine(master, current, line);
   const notes = [];
-  const rows = imported.rows.map(row => {
+  const rows = imported.rows.map((row, index) => {
     const item = { ...row, reviewed: true, creditAlignment: "same-date" };
+    if (role === "driver" && Object.hasOwn(extraKilometres, row.date)) item.extraKm = extraKilometres[row.date];
     if (/^NR\b|Off\s+RosteP/i.test(row.rawText)) {
       item.status = "off";
       notes.push(`${row.date} · ${row.rawText} treated as a day off.`);
@@ -185,11 +192,12 @@ export function calculateScenarioLine({ engine, master, defunct, current, line, 
       item.leaveHours = 8;
       notes.push(`${row.date} · CIL modeled as 8 hours of paid accrued leave.`);
     }
+    item.kilometres = scenarioKilometres(item, matchingDiagram(master, item.jobNumber, index), matchingDiagram(defunct, item.jobNumber, index), role);
     return item;
   });
   if (!rows.some(row => !["off", "ado", "nta", "blank"].includes(row.status)))
     throw new Error("No worked shifts or paid leave remain on this line. Its normal gross pay needs confirmation.");
-  const run = values => engine.calculateWithBreakdown(toEngineTable(values, rate, imported.rosterType, { role, weekdayOvertimeAfterFourth }));
+  const run = values => engine.calculateWithBreakdown(toEngineTable(values, rate, imported.rosterType, { role, weekdayOvertimeAfterFourth, scenarioComparison: true }));
   const settings = { alignment, existingJobs: master.rosterJobReference || buildRosterJobReference(master), defunctJobs: defunct.rosterJobReference || buildRosterJobReference(defunct) };
   // The usual fortnight uses the existing master and its job lookup only.
   const baselineOptions = rows.map((row, index) => row.status === "work"
@@ -231,6 +239,8 @@ export function calculateScenarioLine({ engine, master, defunct, current, line, 
   const maximum = optimise(scenarioOptions, scenarioRows, true);
   const workedOnly = run(scenarioRows.map(row => ({ ...row, amendment: "" })));
   const workedOnlyTotals = dailyTotals(workedOnly);
+  const withoutKilometreGain = run(maximum.chosen.map((choice, index) => ({ ...choice.row, extraKm: scenarioRows[index].extraKm })));
+  const withoutKilometreTotals = dailyTotals(withoutKilometreGain);
   const workedHolidayLines = dailyHolidayLines(workedOnly);
   const dates = rows.map((row, index) => {
     const original = snapshot(master.lines.get(Number(line))?.cells[index]);
@@ -240,7 +250,8 @@ export function calculateScenarioLine({ engine, master, defunct, current, line, 
     const wobodSources = wobodSourcesFor(row, index, master, defunct);
     const largeChange = row.status === "work" && [original, old].some(cell => cell?.start && Math.abs(clockMinutes(cell.start) - clockMinutes(row.actualStart)) > 720);
     const timeCredit = pay.lines.find(item => /^(Lift-up|Lay-back|Build-up) included in shift pay$/.test(item.label));
-    const claimDifference = (maximum.totals[index] - workedOnlyTotals[index]) / 100;
+    const claimDifference = (withoutKilometreTotals[index] - workedOnlyTotals[index]) / 100;
+    const kilometreDifference = (maximum.totals[index] - withoutKilometreTotals[index]) / 100;
     const separateTimeClaims = [];
     const claimComparison = { source: chosen.basis.source, sources: chosen.basis.sources || [chosen.basis.source], job: chosen.basis.job, start: chosen.basis.start, finish: chosen.basis.finish };
     if (timeCredit) separateTimeClaims.push({ label: timeCredit.label.replace(" included in shift pay", ""), minutes: timeCredit.minutes, amount: claimDifference, comparison: claimComparison });
@@ -255,6 +266,7 @@ export function calculateScenarioLine({ engine, master, defunct, current, line, 
       worked: { job: row.jobNumber, start: row.actualStart, finish: row.actualFinish, minutes: row.actualStart && row.actualFinish ? shiftDurationMinutes(row.actualStart, row.actualFinish) : null, rawText: row.rawText },
       rostered: { job: row.jobNumber, start: row.rosteredStart, finish: row.rosteredFinish },
       currentJobReference,
+      kilometres: row.kilometres ? { ...row.kilometres, claimedExtraKm: pay.lines.some(item => /^Extra kilometre time included/.test(item.label)) ? Number(chosen.row.extraKm || 0) : 0, reference: chosen.basis.kilometreReference ? "defunct" : "current", additionalPay: kilometreDifference } : null,
       existing: original, defunct: old, comparison: chosen.basis,
       comparisons: {
         defunct: masterComparison(maximum.priced[index], "defunct", row.swapLines?.length ? row.jobNumber : null),

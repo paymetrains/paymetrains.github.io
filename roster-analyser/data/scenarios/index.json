@@ -1,0 +1,359 @@
+{
+  "schemaVersion": 1,
+  "retrievedAt": "2026-11-20T20:10:57.884Z",
+  "source": "https://wobod.me",
+  "masters": [
+    {
+      "depot": "auburn",
+      "role": "driver",
+      "path": "auburn-driver-defunct.json",
+      "lines": 92,
+      "diagramCoverage": {
+        "status": "partial",
+        "requestedJobs": 152,
+        "queriedJobs": 140,
+        "diagramTimes": 140,
+        "kilometreEntries": 132,
+        "notCountedEntries": 8
+      }
+    },
+    {
+      "depot": "auburn",
+      "role": "guard",
+      "path": "auburn-guard-defunct.json",
+      "lines": 94,
+      "diagramCoverage": {
+        "status": "not-downloaded",
+        "requestedJobs": null,
+        "queriedJobs": 0,
+        "diagramTimes": 0,
+        "kilometreEntries": 0,
+        "notCountedEntries": 0
+      }
+    },
+    {
+      "depot": "blacktown",
+      "role": "driver",
+      "path": "blacktown-driver-defunct.json",
+      "lines": 122,
+      "diagramCoverage": {
+        "status": "not-downloaded",
+        "requestedJobs": null,
+        "queriedJobs": 0,
+        "diagramTimes": 0,
+        "kilometreEntries": 0,
+        "notCountedEntries": 0
+      }
+    },
+    {
+      "depot": "blacktown",
+      "role": "guard",
+      "path": "blacktown-guard-defunct.json",
+      "lines": 122,
+      "diagramCoverage": {
+        "status": "not-downloaded",
+        "requestedJobs": null,
+        "queriedJobs": 0,
+        "diagramTimes": 0,
+        "kilometreEntries": 0,
+        "notCountedEntries": 0
+      }
+    },
+    {
+      "depot": "campbelltown",
+      "role": "driver",
+      "path": "campbelltown-driver-defunct.json",
+      "lines": 146,
+      "diagramCoverage": {
+        "status": "not-downloaded",
+        "requestedJobs": null,
+        "queriedJobs": 0,
+        "diagramTimes": 0,
+        "kilometreEntries": 0,
+        "notCountedEntries": 0
+      }
+    },
+    {
+      "depot": "campbelltown",
+      "role": "guard",
+      "path": "campbelltown-guard-defunct.json",
+      "lines": 134,
+      "diagramCoverage": {
+        "status": "not-downloaded",
+        "requestedJobs": null,
+        "queriedJobs": 0,
+        "diagramTimes": 0,
+        "kilometreEntries": 0,
+        "notCountedEntries": 0
+      }
+    },
+    {
+      "depot": "central",
+      "role": "driver",
+      "path": "central-driver-defunct.json",
+      "lines": 546,
+      "diagramCoverage": {
+        "status": "not-downloaded",
+        "requestedJobs": null,
+        "queriedJobs": 0,
+        "diagramTimes": 0,
+        "kilometreEntries": 0,
+        "notCountedEntries": 0
+      }
+    },
+    {
+      "depot": "central",
+      "role": "guard",
+      "path": "central-guard-defunct.json",
+      "lines": 628,
+      "diagramCoverage": {
+        "status": "not-downloaded",
+        "requestedJobs": null,
+        "queriedJobs": 0,
+        "diagramTimes": 0,
+        "kilometreEntries": 0,
+        "notCountedEntries": 0
+      }
+    },
+    {
+      "depot": "cronulla",
+      "role": "driver",
+      "path": "cronulla-driver-defunct.json",
+      "lines": 30,
+      "diagramCoverage": {
+        "status": "not-downloaded",
+        "requestedJobs": null,
+        "queriedJobs": 0,
+        "diagramTimes": 0,
+        "kilometreEntries": 0,
+        "notCountedEntries": 0
+      }
+    },
+    {
+      "depot": "cronulla",
+      "role": "guard",
+      "path": "cronulla-guard-defunct.json",
+      "lines": 24,
+      "diagramCoverage": {
+        "status": "not-downloaded",
+        "requestedJobs": null,
+        "queriedJobs": 0,
+        "diagramTimes": 0,
+        "kilometreEntries": 0,
+        "notCountedEntries": 0
+      }
+    },
+    {
+      "depot": "flemington",
+      "role": "driver",
+      "path": "flemington-driver-defunct.json",
+      "lines": 158,
+      "diagramCoverage": {
+        "status": "not-downloaded",
+        "requestedJobs": null,
+        "queriedJobs": 0,
+        "diagramTimes": 0,
+        "kilometreEntries": 0,
+        "notCountedEntries": 0
+      }
+    },
+    {
+      "depot": "flemington",
+      "role": "guard",
+      "path": "flemington-guard-defunct.json",
+      "lines": 93,
+      "diagramCoverage": {
+        "status": "not-downloaded",
+        "requestedJobs": null,
+        "queriedJobs": 0,
+        "diagramTimes": 0,
+        "kilometreEntries": 0,
+        "notCountedEntries": 0
+      }
+    },
+    {
+      "depot": "hornsby",
+      "role": "driver",
+      "path": "hornsby-driver-defunct.json",
+      "lines": 200,
+      "diagramCoverage": {
+        "status": "not-downloaded",
+        "requestedJobs": null,
+        "queriedJobs": 0,
+        "diagramTimes": 0,
+        "kilometreEntries": 0,
+        "notCountedEntries": 0
+      }
+    },
+    {
+      "depot": "hornsby",
+      "role": "guard",
+      "path": "hornsby-guard-defunct.json",
+      "lines": 146,
+      "diagramCoverage": {
+        "status": "not-downloaded",
+        "requestedJobs": null,
+        "queriedJobs": 0,
+        "diagramTimes": 0,
+        "kilometreEntries": 0,
+        "notCountedEntries": 0
+      }
+    },
+    {
+      "depot": "leppington",
+      "role": "driver",
+      "path": "leppington-driver-defunct.json",
+      "lines": 96,
+      "diagramCoverage": {
+        "status": "not-downloaded",
+        "requestedJobs": null,
+        "queriedJobs": 0,
+        "diagramTimes": 0,
+        "kilometreEntries": 0,
+        "notCountedEntries": 0
+      }
+    },
+    {
+      "depot": "leppington",
+      "role": "guard",
+      "path": "leppington-guard-defunct.json",
+      "lines": 98,
+      "diagramCoverage": {
+        "status": "not-downloaded",
+        "requestedJobs": null,
+        "queriedJobs": 0,
+        "diagramTimes": 0,
+        "kilometreEntries": 0,
+        "notCountedEntries": 0
+      }
+    },
+    {
+      "depot": "mortdale",
+      "role": "driver",
+      "path": "mortdale-driver-defunct.json",
+      "lines": 134,
+      "diagramCoverage": {
+        "status": "not-downloaded",
+        "requestedJobs": null,
+        "queriedJobs": 0,
+        "diagramTimes": 0,
+        "kilometreEntries": 0,
+        "notCountedEntries": 0
+      }
+    },
+    {
+      "depot": "mortdale",
+      "role": "guard",
+      "path": "mortdale-guard-defunct.json",
+      "lines": 100,
+      "diagramCoverage": {
+        "status": "not-downloaded",
+        "requestedJobs": null,
+        "queriedJobs": 0,
+        "diagramTimes": 0,
+        "kilometreEntries": 0,
+        "notCountedEntries": 0
+      }
+    },
+    {
+      "depot": "north-sydney",
+      "role": "driver",
+      "path": "north-sydney-driver-defunct.json",
+      "lines": 24,
+      "diagramCoverage": {
+        "status": "not-downloaded",
+        "requestedJobs": null,
+        "queriedJobs": 0,
+        "diagramTimes": 0,
+        "kilometreEntries": 0,
+        "notCountedEntries": 0
+      }
+    },
+    {
+      "depot": "north-sydney",
+      "role": "guard",
+      "path": "north-sydney-guard-defunct.json",
+      "lines": 32,
+      "diagramCoverage": {
+        "status": "not-downloaded",
+        "requestedJobs": null,
+        "queriedJobs": 0,
+        "diagramTimes": 0,
+        "kilometreEntries": 0,
+        "notCountedEntries": 0
+      }
+    },
+    {
+      "depot": "penrith",
+      "role": "driver",
+      "path": "penrith-driver-defunct.json",
+      "lines": 98,
+      "diagramCoverage": {
+        "status": "not-downloaded",
+        "requestedJobs": null,
+        "queriedJobs": 0,
+        "diagramTimes": 0,
+        "kilometreEntries": 0,
+        "notCountedEntries": 0
+      }
+    },
+    {
+      "depot": "penrith",
+      "role": "guard",
+      "path": "penrith-guard-defunct.json",
+      "lines": 88,
+      "diagramCoverage": {
+        "status": "not-downloaded",
+        "requestedJobs": null,
+        "queriedJobs": 0,
+        "diagramTimes": 0,
+        "kilometreEntries": 0,
+        "notCountedEntries": 0
+      }
+    },
+    {
+      "depot": "richmond",
+      "role": "driver",
+      "path": "richmond-driver-defunct.json",
+      "lines": 30,
+      "diagramCoverage": {
+        "status": "not-downloaded",
+        "requestedJobs": null,
+        "queriedJobs": 0,
+        "diagramTimes": 0,
+        "kilometreEntries": 0,
+        "notCountedEntries": 0
+      }
+    },
+    {
+      "depot": "richmond",
+      "role": "guard",
+      "path": "richmond-guard-defunct.json",
+      "lines": 30,
+      "diagramCoverage": {
+        "status": "not-downloaded",
+        "requestedJobs": null,
+        "queriedJobs": 0,
+        "diagramTimes": 0,
+        "kilometreEntries": 0,
+        "notCountedEntries": 0
+      }
+    }
+  ],
+  "missingMasters": [
+    {
+      "depot": "waterfall",
+      "role": "driver"
+    },
+    {
+      "depot": "waterfall",
+      "role": "guard"
+    }
+  ],
+  "diagramImportStatus": "partial",
+  "importStopped": {
+    "message": "api/defunct/diagrams?depot=auburn&role=driver&jobs=4020,4021,4022,4023,4024,4025,4026,4027,4028,RR,SBDASY1,SBY HTTP 429",
+    "status": 429,
+    "reason": "daily-cap"
+  }
+}

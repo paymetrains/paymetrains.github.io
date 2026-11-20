@@ -1,5 +1,5 @@
 import { readPdf } from "./pdf-reader.mjs";
-import { parseRoster, toIsoDate } from "./roster-core.mjs";
+import { editedJobReference, normaliseJob, parseRoster, rosterTimeClaim, toIsoDate } from "./roster-core.mjs";
 import { hydrateMaster, hydrateReferenceMaster, selectMaster } from "./master-store.mjs";
 import { breakdownEntries, buildPayslip } from "./payslip.mjs?v=20261120-2";
 import {
@@ -13,6 +13,7 @@ import {
   relinquishmentStatus,
   validateShift,
   toEngineTable,
+  withAutomaticTimeClaim,
   STATUS_LABELS,
   LEAVE_STATUSES,
   FIXED_PAID_STATUSES,
@@ -361,7 +362,7 @@ async function startReview() {
     )
       return;
   }
-  let data;
+  let data, master;
   if (state.mode === "manual") {
     data = {
       rows: blankFortnight($("start-date").value),
@@ -372,7 +373,7 @@ async function startReview() {
       masterSource: null,
     };
     if ($("manual-line").value) {
-      const master = await loadMaster();
+      master = await loadMaster();
       data = prefillMasterLine(master, $("manual-line").value, $("start-date").value, $("manual-name").value);
       data.masterSource = master.source === "bundled" ? "bundled" : null;
     }
@@ -400,11 +401,13 @@ async function startReview() {
     }
     if (!$("manual-line").value)
       throw new Error("Select your line.");
-    const master = await loadMaster();
+    master = await loadMaster();
     data = importLine(master, state.current, $("manual-line").value);
     data.masterSource = master.source === "bundled" ? "bundled" : null;
   }
+  data.rows = data.rows.map(withAutomaticTimeClaim);
   Object.assign(state, data, {
+    masterForReview: master,
     selectionKey: key,
     originals: structuredClone(data.rows),
     week: 0,
@@ -451,6 +454,8 @@ function renderReview() {
         : row.jobLabel ||
           (row.status === "blank" ? "Tap to enter a shift" : "");
       const shiftDetails = [job, ...(row.swapLines || []).map(line => `WS ${line}`)];
+      const claim = rosterTimeClaim(row);
+      if (claim) shiftDetails.push(`${claim.label}: ${claim.minutes} min included`);
       if (work && row.wobod) shiftDetails.push("WOBOD");
       if (row.ph && row.status !== "hol") shiftDetails.push("Public holiday");
       const original = row.workSwap
@@ -494,6 +499,7 @@ function selectField(name, label, value, options) {
     `<option value="${key}" ${String(value ?? "") === key ? "selected" : ""}>${text}</option>`).join("")}</select></label>`;
 }
 function editorMarkup(row) {
+  const implicitTimes = row.status === "work" && row.changeType === "custom_duty" && !row.manualRosterTimes;
   const showRostered = row.status === "cancelled" || LEAVE_STATUSES.includes(row.status) ||
     (row.status === "work" && (row.rosteredStart !== row.actualStart || row.rosteredFinish !== row.actualFinish));
   return `<form id="shift-form" class="shift-editor" novalidate>
@@ -515,10 +521,11 @@ function editorMarkup(row) {
     </div>
     <details class="shift-options" id="rostered-fields" ${showRostered ? "open" : ""}>
       <summary id="rostered-summary">Rostered times</summary>
-      <div class="field-pair">${timeField("rosteredStart", "Rostered start", row.rosteredStart)}${timeField("rosteredFinish", "Rostered finish", row.rosteredFinish)}</div>
+      <div class="field-pair">${timeField("rosteredStart", "Rostered start", implicitTimes ? "" : row.rosteredStart)}${timeField("rosteredFinish", "Rostered finish", implicitTimes ? "" : row.rosteredFinish)}</div>
       <p class="hint" id="rostered-default">Leave both blank to use the worked times.</p>
       <div id="leave-extras">${numberField("leaveHours", "Leave hours", row.leaveHours)}</div>
     </details>
+    <p id="time-claim" class="hint" hidden></p>
     <details class="shift-options" id="pay-adjustments"><summary>Pay adjustments</summary>
       <div id="standalone-overtime-field">${checkbox("wobod", "Worked on a booked-off day (WOBOD)", row.wobod)}</div>
       ${checkbox("ph", "Public holiday", row.ph)}${checkbox("accruePh", "Accrue public holiday", row.accruePh)}
@@ -549,6 +556,8 @@ function wireEditor() {
   const saved = state.rows[state.editor];
   const rosteredFields = $("rostered-fields");
   const error = $("editor-error");
+  const originalJob = normaliseJob(saved.jobNumber || saved.jobLabel);
+  const jobChanged = () => normaliseJob(form.elements.jobNumber.value) !== originalJob;
   const formRelinquishment = () => ({
     timedRelinquishment: saved.timedRelinquishment,
     status: form.elements.status.value,
@@ -556,7 +565,7 @@ function wireEditor() {
     actualFinish: clock(form.elements.actualFinish.value),
   });
   const useActualTimes = () => form.elements.status.value === "work" &&
-    (saved.changeType === "custom_duty" || (saved.timedRelinquishment && !saved.hasRelinquishmentSchedule));
+    saved.timedRelinquishment && !saved.hasRelinquishmentSchedule;
   const copyActualTimes = () => {
     if (!useActualTimes()) return;
     form.elements.rosteredStart.value = form.elements.actualStart.value;
@@ -570,6 +579,12 @@ function wireEditor() {
     const leave = !relinquished && LEAVE_STATUSES.includes(status);
     form.elements.status.value = status;
     copyActualTimes();
+    const claim = rosterTimeClaim({
+      ...entry, status, rosteredStart: clock(form.elements.rosteredStart.value),
+      rosteredFinish: clock(form.elements.rosteredFinish.value),
+    });
+    $("time-claim").hidden = !claim;
+    $("time-claim").textContent = claim ? `${claim.label}: ${claim.minutes} min included` : "";
     $("job-field").hidden = !work && !relinquished && !["cancelled", "unknown"].includes(status);
     rosteredFields.hidden = useActualTimes() || (relinquished && !saved.hasRelinquishmentSchedule) ||
       !["work", "cancelled", ...LEAVE_STATUSES].includes(status);
@@ -590,8 +605,17 @@ function wireEditor() {
     if (!rosteredFields.hidden && form.elements.status.value !== "work") rosteredFields.open = true;
   });
   updateFields();
-  for (const name of ["actualStart", "actualFinish"])
+  for (const name of ["actualStart", "actualFinish", "rosteredStart", "rosteredFinish"])
     form.elements[name].addEventListener("input", updateFields);
+  form.elements.jobNumber.addEventListener("change", () => {
+    if (form.elements.status.value !== "work" || saved.timedRelinquishment) return;
+    const ref = jobChanged() ? editedJobReference(state.masterForReview, saved, form.elements.jobNumber.value.trim()) :
+      { start: saved.rosteredStart, finish: saved.rosteredFinish };
+    form.elements.rosteredStart.value = displayClock(ref?.start);
+    form.elements.rosteredFinish.value = displayClock(ref?.finish);
+    rosteredFields.open = true;
+    updateFields();
+  });
   $("cancel-shift").onclick = () => closeEditor();
   $("reset-shift").onclick = () => {
     const index = state.editor;
@@ -604,14 +628,25 @@ function wireEditor() {
     copyActualTimes();
     const index = state.editor;
     const row = { ...state.rows[index] };
+    let needsJobTimes = false;
     for (const key of ["status", "jobNumber"])
       row[key] = form.elements[key].value.trim();
-    if (row.jobNumber !== state.rows[index].jobNumber) delete row.rosteredKm;
-    if (useActualTimes()) row.jobLabel = row.jobNumber;
+    if (row.status === "work" && jobChanged() && !row.timedRelinquishment) {
+      const ref = editedJobReference(state.masterForReview, saved, row.jobNumber);
+      row.rosteredKm = ref?.rosteredKm;
+      row.originalStart = ref?.start || "";
+      row.originalFinish = ref?.finish || "";
+      row.changeType = ref ? "changed_job" : "custom_duty";
+      row.jobLabel = row.jobNumber;
+      if (row.workSwap) row.workSwap = { ...row.workSwap, assignedLine: ref?.assignedLine || null };
+      needsJobTimes = !ref && Boolean(state.masterForReview) && /^\d+$/.test(normaliseJob(row.jobNumber)) &&
+        !form.elements.rosteredStart.value && !form.elements.rosteredFinish.value;
+    }
+    if (row.changeType === "custom_duty") row.jobLabel = row.jobNumber;
     for (const key of ["extraKm", "picnicClaim"])
       row[key] = row.status === "work" ? form.elements[key]?.value.trim() || "" : "";
     // Removed manual controls must not leave invisible pay overrides behind.
-    for (const key of ["amendment", "intercityKm", "unassociatedMinutes", "departureGap",
+    for (const key of ["intercityKm", "unassociatedMinutes", "departureGap",
       "arrivalGap", "sickRemainderHours", "ordinaryMinutes", "travelMinutes"])
       row[key] = "";
     row.leaveHours = LEAVE_STATUSES.includes(row.status) ? form.elements.leaveHours.value : "";
@@ -630,6 +665,8 @@ function wireEditor() {
     for (const key of ["ph", "accruePh"])
       row[key] = form.elements[key].checked;
     row.status = relinquishmentStatus(row);
+    if (row.changeType === "custom_duty")
+      row.manualRosterTimes = row.status === "work" && Boolean(row.rosteredStart && row.rosteredFinish);
     if (row.status === "work" && !row.rosteredStart && !row.rosteredFinish) {
       row.rosteredStart = row.actualStart;
       row.rosteredFinish = row.actualFinish;
@@ -640,6 +677,7 @@ function wireEditor() {
     }
     row.wobod = row.status === "work" && form.elements.wobod.checked;
     const errors = validateShift(row);
+    if (needsJobTimes) errors.push(`No unique schedule for job ${row.jobNumber}. Enter its rostered start and finish.`);
     if (errors.length) {
       error.textContent = errors.join(" ");
       error.hidden = false;
@@ -647,7 +685,7 @@ function wireEditor() {
       return;
     }
     Object.assign(row, { edited: true, reviewed: true });
-    state.rows[index] = row;
+    state.rows[index] = withAutomaticTimeClaim(row);
     state.result = null;
     closeEditor();
   };

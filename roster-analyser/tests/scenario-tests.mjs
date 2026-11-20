@@ -7,6 +7,8 @@ import { calculateScenarioLine, maximiseOptions } from "../scenario-model.mjs";
 import { buildRosterJobReference, matchingRosterJob } from "../roster-job-reference.mjs";
 import { claimMinutes, timesheetEntries } from "../scenario-timesheet.mjs";
 import { scenarioTimesheetCsv } from "../scenario-export.mjs";
+import { scenarioKilometres } from "../scenario-kilometres.mjs";
+import { readFileSync } from "node:fs";
 
 const engine = createRequire(import.meta.url)("../pay-calculator.js");
 const job = (number, start = "06:00", finish = "14:00") => ({ job: String(number), start, finish });
@@ -288,6 +290,85 @@ assert.equal(freelanceDay.wobod, true);
 assert.deepEqual(freelanceDay.wobodSources, ["Defunct master"]);
 console.log("PASS Freelance swaps use same-job references only, retain current WOBOD and ignore swapped defunct book-off days");
 
+const reviewRoadsKm = scenarioKilometres({ status: "work", jobNumber: "RR", extraKm: 0 }, null, null, "driver");
+assert.equal(reviewRoadsKm.currentKm, 0);
+assert.equal(reviewRoadsKm.defunctKm, 0);
+assert.equal(reviewRoadsKm.assumedActualKm, 0);
+assert.equal(reviewRoadsKm.defunctKilometresStatus, "known");
+assert.equal(scenarioKilometres({ status: "work", jobNumber: "RR", extraKm: 10 }, null, null, "driver").assumedActualKm, 10);
+const standbyKm = scenarioKilometres({ status: "work", jobNumber: "SBY", extraKm: 0 }, null, null, "driver");
+assert.equal(standbyKm.currentKm, 0);
+assert.equal(standbyKm.defunctKm, 0);
+assert.equal(standbyKm.assumedActualKm, 0);
+assert.equal(standbyKm.defunctKilometresStatus, "known");
+assert.equal(scenarioKilometres({ status: "work", jobNumber: "SBY", extraKm: 10 }, null, null, "driver").assumedActualKm, 10);
+const auburnStandbyKm = scenarioKilometres({ status: "work", jobNumber: "SBYASY", extraKm: 0 }, null, null, "driver");
+assert.equal(auburnStandbyKm.currentKm, 0);
+assert.equal(auburnStandbyKm.defunctKm, 0);
+assert.equal(auburnStandbyKm.assumedActualKm, 0);
+
+const kilometreFixture = fixture();
+kilometreFixture.master.diagramData["1"].rosteredKm = 100;
+kilometreFixture.defunct.diagramData["1"] = { dayPattern: "Sun-Sat", signOn: "06:00", offDuty: "14:00", rosteredHrs: 8, rosteredKm: 80, kilometresStatus: "known" };
+kilometreFixture.defunct.lines.get(10).cells[1] = parseCell("06:00 - 14:00 1", 1);
+const distanceResult = calculateScenarioLine(kilometreFixture);
+const distanceDay = distanceResult.dates[1];
+assert.equal(distanceDay.kilometres.currentKm, 100);
+assert.equal(distanceDay.kilometres.assumedActualKm, 100);
+assert.equal(distanceDay.kilometres.defunctKm, 80);
+assert.equal(distanceDay.kilometres.claimedExtraKm, 20);
+assert.equal(distanceDay.kilometres.additionalPay, 75);
+assert.equal(distanceDay.separateTimeClaims.length, 0);
+assert.ok(timesheetEntries(distanceResult)[1].claims.some(note => note.includes("20 km MR - Defunct 1 (80 km)")));
+const extraDistance = calculateScenarioLine({ ...kilometreFixture, extraKilometres: { "2026-11-16": 10 } }).dates[1];
+assert.equal(extraDistance.kilometres.enteredExtraKm, 10);
+assert.equal(extraDistance.kilometres.assumedActualKm, 110);
+assert.equal(extraDistance.kilometres.claimedExtraKm, 30);
+assert.equal(extraDistance.kilometres.additionalPay, 37.5);
+for (const day of distanceResult.dates) {
+  const worked = day.workedOnlyClaims.reduce((sum, claim) => sum + Math.round(engine.lineAmount(claim) * 100), 0);
+  const time = day.separateTimeClaims.reduce((sum, claim) => sum + Math.round(claim.amount * 100), 0);
+  assert.equal(worked + time + Math.round((day.kilometres?.additionalPay || 0) * 100), Math.round(day.scenarioPay * 100));
+}
+const guardDistance = calculateScenarioLine({ ...kilometreFixture, role: "guard" }).dates[1];
+assert.equal(guardDistance.kilometres, null);
+delete kilometreFixture.master.diagramData["1"].rosteredKm;
+const unknownDistance = calculateScenarioLine(kilometreFixture).dates[1];
+assert.equal(unknownDistance.kilometres.assumedActualKm, null);
+assert.equal(unknownDistance.kilometres.claimedExtraKm, 0);
+kilometreFixture.master.diagramData["1"].rosteredKm = 100;
+kilometreFixture.defunct.diagramData["1"].kilometresStatus = "not-counted";
+assert.equal(calculateScenarioLine(kilometreFixture).dates[1].kilometres.defunctKm, null);
+assert.throws(() => calculateScenarioLine({ ...kilometreFixture, extraKilometres: { "2026-11-16": -1 } }), /extra kilometres/);
+console.log("PASS driver distance assumes current diagram plus entered extras, compares same-job defunct km, separates pay and never invents missing distances");
+
+const sourceCatalogue = JSON.parse(readFileSync(new URL("../data/scenarios/index.json", import.meta.url)));
+assert.equal(sourceCatalogue.masters.length, 24);
+for (const entry of sourceCatalogue.masters) {
+  const value = JSON.parse(readFileSync(new URL(`../data/scenarios/${entry.path}`, import.meta.url)));
+  const master = hydrateReferenceMaster(value);
+  assert.ok(master.lines.size > 0);
+  assert.ok(value.provenance.retrievedAt);
+  assert.ok(value.diagramCoverage.status);
+  for (const diagram of Object.values(value.diagramData)) {
+    assert.ok(/^\d{2}:\d{2}$/.test(diagram.signOn));
+    assert.ok(/^\d{2}:\d{2}$/.test(diagram.offDuty));
+    if (diagram.kilometresStatus !== "known") assert.equal(diagram.rosteredKm, undefined);
+  }
+  if (value.depot === "auburn") {
+    const original = JSON.parse(readFileSync(new URL(`../../archive/defunct-reference-before-import/${entry.path}`, import.meta.url)));
+    assert.deepEqual(value.masterRoster, original.masterRoster);
+  }
+  if (value.depot === "penrith" && value.role === "guard") assert.equal(master.lines.get(229).sourceLine, 301);
+}
+const importedDriver = hydrateReferenceMaster(JSON.parse(readFileSync(new URL("../data/scenarios/auburn-driver-defunct.json", import.meta.url))));
+assert.equal(importedDriver.diagramData["1"].rosteredKm, 90.227);
+assert.equal(importedDriver.diagramData["14"].rosteredKm, 100.337);
+assert.equal(importedDriver.diagramData["2015"].rosteredKm, 127.711);
+assert.equal(importedDriver.diagramCoverage.status, "partial");
+assert.equal(importedDriver.diagramData["5"].kilometresStatus, "not-counted");
+console.log("PASS imported master catalogues validate, preserve supplied Auburn cells, expose real diagram kilometres and retain partial-coverage flags");
+
 const weekdayMaster = {
   fileName: "example.pdf", rows: [{ line: 1, cells: [
     parseCell("06:00 - 14:00 0007", 1), parseCell("07:00 - 15:00 7", 2),
@@ -326,7 +407,7 @@ const dated = engine.buildPayObject(toEngineTable(rows, 50, "short"));
 assert.ok(dated[0].lines.some(claim => claim.label === "Lay-back included in shift pay" && claim.minutes === 780));
 assert.ok(dated[0].lines.every(claim => claim.label !== "Lift-up included in shift pay"));
 delete rows[0].creditAlignment;
-const legacy = engine.buildPayObject(toEngineTable(rows, 50, "short"));
+const legacy = engine.buildPayObject(toEngineTable(rows, 50, "short", { scenarioComparison: true }));
 assert.ok(legacy[0].lines.some(claim => claim.label === "Lift-up included in shift pay"));
 console.log("PASS explicit scenario dates prevent the early-standby next-day alignment error");
 

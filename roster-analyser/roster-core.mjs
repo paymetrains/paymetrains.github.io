@@ -1,4 +1,24 @@
 import { NSW_PUBLIC_HOLIDAYS } from "./public-holidays.js";
+import * as claimModule from "./shift-claims.js";
+const shiftClaims = claimModule.default || globalThis.RosterShiftClaims;
+
+export function rosterTimeClaim(row) {
+  const { credit } = shiftClaims.compare(row);
+  return credit && { label: credit.label, minutes: credit.before + credit.after };
+}
+
+export function rosterShiftMinutes(row) {
+  const { workedMinutes, credit } = row.status && row.status !== "work"
+    ? { workedMinutes: 0, credit: null } : shiftClaims.compare(row);
+  const minutes = credit ? credit.before + credit.after : 0;
+  const payableMinutes = workedMinutes + minutes;
+  return {
+    workedMinutes, payableMinutes, overtimeMinutes: Math.max(0, payableMinutes - 480),
+    liftUpMinutes: credit?.label === "Lift-up" ? minutes : 0,
+    laybackMinutes: credit?.label === "Lay-back" ? minutes : 0,
+    buildupMinutes: credit?.label === "Build-up" ? minutes : 0,
+  };
+}
 
 const RELINQUISHMENT_MINUTES = 240;
 const SICK_LEAVE_CODES = ["SL", "SL_REL", "REL", "SIF", "INJ"];
@@ -259,14 +279,17 @@ function extractLeaveCodes(upperText) {
   return codes;
 }
 
+export const normaliseJob = job => String(job || "").trim().replace(/\(i\)$/i, "").replace(/^0+(?=\d+$)/, "").toUpperCase();
+
 function buildJobDictionary(rows) {
-  const jobs = {};
+  const jobs = Object.create(null);
   const conflicts = [];
 
   for (const row of rows) {
     for (const cell of row.cells) {
       if (!cell.jobNumber || !cell.start || !cell.finish) continue;
-      const existing = jobs[cell.jobNumber];
+      const key = normaliseJob(cell.jobNumber);
+      const existing = jobs[key];
       const occurrence = {
         line: row.line,
         dayIndex: cell.dayIndex,
@@ -278,7 +301,7 @@ function buildJobDictionary(rows) {
       };
 
       if (!existing) {
-        jobs[cell.jobNumber] = {
+        jobs[key] = {
           jobNumber: cell.jobNumber,
           start: cell.start,
           finish: cell.finish,
@@ -396,7 +419,7 @@ function analyseRosters(master, fortnight, selectedRows = fortnight.rows) {
     assumptions: [
       "Fortnight line number is compared with master line number.",
       "A WS marker uses the referenced line's original times when the job matches. Other jobs use the diagram data or master job dictionary where available.",
-      "Non-4-digit jobs use actual start/finish as rostered start/finish.",
+      "Numbered jobs use the matching assignment, diagram or unique master times. Custom duties with no schedule use their worked times.",
       "OFF, ADO and NTA export as blank pay-app rows.",
       "SL and SL REL export as SICK only when the baseline has work.",
       "AL exports as HOL when the baseline has work.",
@@ -521,6 +544,21 @@ function shiftSnapshot(cell) {
   };
 }
 
+function assignedSwapPartner(line, job, partners) {
+  const matches = job ? partners.filter(p => p.line !== line && isWorkCell(p.original) &&
+    normaliseJob(p.original.jobNumber) === normaliseJob(job)) : [];
+  return matches.length === 1 ? matches[0] : null;
+}
+
+export function editedJobReference(master, row, job) {
+  if (!master || !job) return null;
+  const cell = { jobNumber: normaliseJob(job), swapLines: row.swapLines, status: "WORK" };
+  const assigned = assignedSwapPartner(row.line, job, row.workSwap?.partners || []);
+  const baseline = getBaseline(cell, master.lines.get(Number(row.line))?.cells[row.dayIndex] || {},
+    master.jobDictionary.jobs[normaliseJob(job)], [], master.diagramData, row.dayIndex, true, assigned?.original);
+  return baseline.start && baseline.finish ? { ...baseline, assignedLine: baseline.source === "swap_master_line" ? assigned?.line : null } : null;
+}
+
 function compareCell({
   employeeName,
   line,
@@ -543,12 +581,9 @@ function compareCell({
   const sick = SICK_LEAVE_CODES.some(code => leaveCodes.has(code)) && !partialSick;
   const timedDuty = actualCell.status === "WORK" && !actualCell.crossedOut && (!sick || timedRelinquishment) &&
     !["AL", "JURY", "SEC", "PH", "LSL", "LWOP"].some(code => leaveCodes.has(code));
-  const matchingPartners = timedDuty && actualCell.jobNumber
-    ? swapPartners.filter(partner => partner.line !== line && isWorkCell(partner.original) &&
-        partner.original.jobNumber === actualCell.jobNumber)
-    : [];
-  const assignedPartner = matchingPartners.length === 1 ? matchingPartners[0] : null;
-  const dictionaryJob = Object.hasOwn(jobDictionary.jobs, actualCell.jobNumber) ? jobDictionary.jobs[actualCell.jobNumber] : null;
+  const assignedPartner = timedDuty ? assignedSwapPartner(line, actualCell.jobNumber, swapPartners) : null;
+  const jobKey = normaliseJob(actualCell.jobNumber);
+  const dictionaryJob = Object.hasOwn(jobDictionary.jobs, jobKey) ? jobDictionary.jobs[jobKey] : null;
   const baseline = getBaseline(actualCell, masterCell, dictionaryJob, flags, diagramData, dayIndex, timedDuty, assignedPartner?.original);
   const swapAssignment = baseline.source === "swap_master_line" ? assignedPartner : null;
   const scheduledCell = swapAssignment?.original || masterCell;
@@ -636,12 +671,12 @@ function compareCell({
       flags.push("missing_baseline_used_actual_times");
     }
 
-    const calc = calculatePayableMinutes(rosteredStart, rosteredFinish, actualStart, actualFinish);
+    const calc = rosterShiftMinutes({ rosteredStart, rosteredFinish, actualStart, actualFinish, timedRelinquishment });
     workedMinutes = calc.workedMinutes;
-    liftUpMinutes = partialSick ? 0 : calc.liftUpMinutes;
-    laybackMinutes = partialSick ? 0 : calc.laybackMinutes;
-    buildupMinutes = partialSick ? 0 : calc.buildupMinutes;
-    payableMinutes = partialSick ? workedMinutes : calc.payableMinutes;
+    liftUpMinutes = calc.liftUpMinutes;
+    laybackMinutes = calc.laybackMinutes;
+    buildupMinutes = calc.buildupMinutes;
+    payableMinutes = calc.payableMinutes;
     timeWorked = minutesToHHMM(workedMinutes);
     changeType = customDuty ? "custom_duty" : partialSick ? "partial_sick" : classifyWorkChange(actualCell, scheduledCell, baseline, calc);
   } else if (baselineHasWork && ph) {
@@ -722,7 +757,7 @@ function compareCell({
 const DIAGRAM_DAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
 function findDiagram(diagramData, job) {
-  const key = job.replace(/^0+(?=\d+$)/, "").toUpperCase();
+  const key = normaliseJob(job);
   return [job, key].map(id => Object.hasOwn(diagramData, id) ? diagramData[id] : null).find(Boolean);
 }
 
@@ -748,18 +783,22 @@ function referenceDiagram(diagram, job, dayIndex) {
 function getBaseline(actualCell, masterCell, dictionaryJob, flags, diagramData, dayIndex, timedDuty, swapMasterCell) {
   const jobNumber = actualCell.jobNumber || masterCell.jobNumber;
   const publishedDiagram = diagramData && actualCell.jobNumber && findDiagram(diagramData, actualCell.jobNumber);
-  const standbyAssignment = swapMasterCell || masterCell;
-  if (timedDuty && ["SBY", "FREELANCE"].includes(actualCell.jobNumber) && isWorkCell(standbyAssignment) &&
-      (!actualCell.swapLines?.length || standbyAssignment.jobNumber === actualCell.jobNumber)) {
+  const assignment = swapMasterCell || masterCell;
+  const sameAssignment = isWorkCell(assignment) && normaliseJob(jobNumber) === normaliseJob(assignment.jobNumber);
+  const timedStandby = ["SBY", "FREELANCE"].includes(normaliseJob(actualCell.jobNumber));
+  if (timedDuty && timedStandby && isWorkCell(assignment) &&
+      (!actualCell.swapLines?.length || swapMasterCell)) {
     return {
       source: swapMasterCell ? "swap_master_line" : "master_line_day",
       jobNumber: actualCell.jobNumber,
-      start: standbyAssignment.start,
-      finish: standbyAssignment.finish,
-      duration: standbyAssignment.duration,
+      start: assignment.start,
+      finish: assignment.finish,
+      duration: assignment.duration,
     };
   }
-  if (timedDuty && !(diagramData ? publishedDiagram : dictionaryJob)) {
+  const numbered = /^\d+$/.test(actualCell.jobNumber);
+  const knownDuty = actualCell.jobNumber && (sameAssignment || publishedDiagram || dictionaryJob);
+  if (timedDuty && (timedStandby || (!numbered && !knownDuty))) {
     return {
       source: "custom_duty",
       jobNumber: actualCell.jobNumber,
@@ -768,32 +807,32 @@ function getBaseline(actualCell, masterCell, dictionaryJob, flags, diagramData, 
       duration: actualCell.duration,
     };
   }
-  if (diagramData || swapMasterCell) {
-    const diagramEntry = actualCell.jobNumber ? publishedDiagram : diagramData && jobNumber && findDiagram(diagramData, jobNumber);
-    const diagram = referenceDiagram(diagramEntry, jobNumber, dayIndex);
-    const assignment = swapMasterCell || masterCell;
-    if (isWorkCell(assignment) && jobNumber === assignment.jobNumber) {
-      return {
-        source: swapMasterCell ? "swap_master_line" : "master_line_day",
-        jobNumber,
-        start: assignment.start,
-        finish: assignment.finish,
-        duration: assignment.duration,
-        rosteredKm: diagram?.start === assignment.start && diagram.finish === assignment.finish
-          ? diagram.rosteredKm : undefined,
-      };
-    }
-    if (diagram && actualCell.jobNumber) return diagram;
+  const diagramEntry = actualCell.jobNumber ? publishedDiagram : diagramData && jobNumber && findDiagram(diagramData, jobNumber);
+  const diagram = referenceDiagram(diagramEntry, jobNumber, dayIndex);
+  if (sameAssignment) {
+    return {
+      source: swapMasterCell ? "swap_master_line" : "master_line_day",
+      jobNumber,
+      start: assignment.start,
+      finish: assignment.finish,
+      duration: assignment.duration,
+      rosteredKm: diagram?.start === assignment.start && diagram.finish === assignment.finish
+        ? diagram.rosteredKm : undefined,
+    };
   }
+  if (diagram && actualCell.jobNumber) return diagram;
   if (actualCell.jobNumber) {
     const job = dictionaryJob;
-    if (job && !job.conflict) {
+    const weekday = job?.conflict ? job.occurrences.filter(item => item.dayIndex % 7 === dayIndex % 7) : [];
+    const weekdayMatch = weekday.length && weekday.every(item => item.start === weekday[0].start && item.finish === weekday[0].finish);
+    const matched = job && !job.conflict ? job : weekdayMatch ? weekday[0] : null;
+    if (matched) {
       return {
         source: "job_dictionary",
         jobNumber: job.jobNumber,
-        start: job.start,
-        finish: job.finish,
-        duration: job.duration,
+        start: matched.start,
+        finish: matched.finish,
+        duration: matched.duration,
       };
     }
     if (job?.conflict) {
@@ -839,55 +878,9 @@ function getBaseline(actualCell, masterCell, dictionaryJob, flags, diagramData, 
   };
 }
 
-function calculatePayableMinutes(rosteredStart, rosteredFinish, actualStart, actualFinish) {
-  const rosteredStartMinutes = parseHHMM(rosteredStart);
-  const rosteredFinishMinutes = finishAfterStart(
-    parseHHMM(rosteredFinish),
-    rosteredStartMinutes
-  );
-  const actualStartMinutes = alignToReference(parseHHMM(actualStart), rosteredStartMinutes);
-  const actualFinishMinutes = finishAfterStart(parseHHMM(actualFinish), actualStartMinutes);
-  const workedMinutes = actualFinishMinutes - actualStartMinutes;
-
-  let liftUpMinutes = 0;
-  let laybackMinutes = 0;
-  let buildupMinutes = 0;
-
-  if (
-    actualStartMinutes < rosteredStartMinutes &&
-    actualFinishMinutes < rosteredFinishMinutes
-  ) {
-    liftUpMinutes = rosteredFinishMinutes - actualFinishMinutes;
-  } else if (
-    actualStartMinutes > rosteredStartMinutes &&
-    actualFinishMinutes > rosteredFinishMinutes
-  ) {
-    laybackMinutes = actualStartMinutes - rosteredStartMinutes;
-  } else if (
-    actualStartMinutes >= rosteredStartMinutes &&
-    actualFinishMinutes <= rosteredFinishMinutes &&
-    (actualStartMinutes !== rosteredStartMinutes ||
-      actualFinishMinutes !== rosteredFinishMinutes)
-  ) {
-    buildupMinutes =
-      actualStartMinutes -
-      rosteredStartMinutes +
-      (rosteredFinishMinutes - actualFinishMinutes);
-  }
-
-  return {
-    workedMinutes,
-    liftUpMinutes,
-    laybackMinutes,
-    buildupMinutes,
-    payableMinutes:
-      workedMinutes + liftUpMinutes + laybackMinutes + buildupMinutes,
-  };
-}
-
 function classifyWorkChange(actualCell, masterCell, baseline, calc) {
   if (!isWorkCell(masterCell)) return "added_shift";
-  if (actualCell.jobNumber && masterCell.jobNumber && actualCell.jobNumber !== masterCell.jobNumber) {
+  if (actualCell.jobNumber && masterCell.jobNumber && normaliseJob(actualCell.jobNumber) !== normaliseJob(masterCell.jobNumber)) {
     if (calc.liftUpMinutes || calc.laybackMinutes || calc.buildupMinutes) {
       return "swapped_job_changed_time";
     }
@@ -1017,21 +1010,6 @@ function shiftDurationMinutes(start, finish) {
   const clock = /^(?:[01]\d|2[0-3])[0-5]\d$/;
   if (!clock.test(start || "") || !clock.test(finish || "") || start === finish) return null;
   return (parseHHMM(finish) - parseHHMM(start) + 1440) % 1440;
-}
-
-function finishAfterStart(finishMinutes, startMinutes) {
-  let result = finishMinutes;
-  while (result <= startMinutes) result += 1440;
-  return result;
-}
-
-function alignToReference(minutes, referenceMinutes) {
-  const candidates = [minutes - 1440, minutes, minutes + 1440];
-  return candidates.reduce((best, candidate) =>
-    Math.abs(candidate - referenceMinutes) < Math.abs(best - referenceMinutes)
-      ? candidate
-      : best
-  );
 }
 
 function minutesToHHMM(minutes) {

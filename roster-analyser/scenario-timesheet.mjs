@@ -1,4 +1,5 @@
 import { STATUS_LABELS } from "./fortnight-model.mjs";
+import { kilometreClaimText } from "./scenario-kilometres.mjs";
 
 const clock = value => value ? `${value.slice(0, 2)}:${value.slice(2)}` : "";
 
@@ -22,6 +23,8 @@ export function timesheetClaims(day) {
     const claimText = `${label}${claim.minutes ? ` ${claimMinutes(claim.minutes)}` : ""}`;
     notes.push(defunct ? `${claimText} MR - Defunct ${comparison.job || "Custom"} ${clock(comparison.start)}–${clock(comparison.finish)}` : claimText);
   }
+  const kilometres = kilometreClaimText(day);
+  if (kilometres) notes.push(kilometres);
   return notes;
 }
 

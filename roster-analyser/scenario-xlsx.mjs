@@ -2,6 +2,7 @@ import { STATUS_LABELS } from "./fortnight-model.mjs";
 import { shiftDurationMinutes } from "./roster-core.mjs";
 import { timeClaimReference } from "./scenario-export.mjs";
 import { timesheetEntries } from "./scenario-timesheet.mjs";
+import { kilometreClaimText } from "./scenario-kilometres.mjs";
 
 const moneyFormat = '"$"#,##0.00;[Red]("$"#,##0.00)';
 const money = value => Number(value).toLocaleString("en-AU", { style: "currency", currency: "AUD" });
@@ -176,6 +177,7 @@ export async function scenarioWorkbook(report, lines, period, lineAmount, view =
           { text: `${claim.label} claim${claim.minutes ? ` (${duration(claim.minutes)})` : ""}: ${money(claim.amount)}`, colour: colour.green, bold: true },
           { text: `Against ${timeClaimReference(claim, day.comparison)}`, size: 9, colour: colour.muted },
         ]));
+        if (day.kilometres?.claimedExtraKm) claims.push({ text: `${kilometreClaimText(day)} Additional comparison pay: ${money(day.kilometres.additionalPay)}`, colour: colour.green });
         if (!claims.length) claims.push({ text: "No paid claim", colour: colour.muted });
         if (day.wobod) claims.push({ text: `WOBOD: ${day.wobodSources.join(" and ")} OFF/ADO`, size: 9, colour: colour.muted });
         const details = mergedCell(sheet, first + 3, column, column + 1);

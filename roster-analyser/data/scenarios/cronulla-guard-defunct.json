@@ -1,0 +1,1537 @@
+{
+  "schemaVersion": 1,
+  "source": "bundled",
+  "depot": "cronulla",
+  "role": "guard",
+  "label": "Cronulla defunct guard master",
+  "fileName": "Cronulla defunct guard master (imported reference)",
+  "provenance": {
+    "source": "https://wobod.me",
+    "masterUrl": "https://wobod.me/defunct/cronulla/guard.json",
+    "diagramEndpoint": "https://wobod.me/api/defunct/diagrams",
+    "retrievedAt": "2026-11-20T20:10:57.884Z"
+  },
+  "diagramCoverage": {
+    "status": "not-downloaded",
+    "requestedJobs": null,
+    "queriedJobs": 0,
+    "diagramTimes": 0,
+    "kilometreEntries": 0,
+    "notCountedEntries": 0
+  },
+  "masterRoster": {
+    "1": [
+      {
+        "job": "OFF"
+      },
+      {
+        "job": "5432",
+        "start": "02:48",
+        "finish": "10:43"
+      },
+      {
+        "job": "5431",
+        "start": "01:48",
+        "finish": "09:59"
+      },
+      {
+        "job": "5433",
+        "start": "02:56",
+        "finish": "10:26"
+      },
+      {
+        "job": "5431",
+        "start": "01:48",
+        "finish": "09:59"
+      },
+      {
+        "job": "OFF"
+      },
+      {
+        "job": "OFF"
+      },
+      {
+        "job": "8432",
+        "start": "03:03",
+        "finish": "10:45"
+      },
+      {
+        "job": "5435",
+        "start": "03:02",
+        "finish": "10:43"
+      },
+      {
+        "job": "5435",
+        "start": "03:02",
+        "finish": "10:43"
+      },
+      {
+        "job": "5434",
+        "start": "02:58",
+        "finish": "10:59"
+      },
+      {
+        "job": "5433",
+        "start": "02:56",
+        "finish": "10:26"
+      },
+      {
+        "job": "6435",
+        "start": "03:28",
+        "finish": "11:58"
+      },
+      {
+        "job": "OFF"
+      }
+    ],
+    "2": [
+      {
+        "job": "OFF"
+      },
+      {
+        "job": "5433",
+        "start": "02:56",
+        "finish": "10:26"
+      },
+      {
+        "job": "5433",
+        "start": "02:56",
+        "finish": "10:26"
+      },
+      {
+        "job": "5434",
+        "start": "02:58",
+        "finish": "10:59"
+      },
+      {
+        "job": "5432",
+        "start": "02:48",
+        "finish": "10:43"
+      },
+      {
+        "job": "6432",
+        "start": "02:56",
+        "finish": "10:26"
+      },
+      {
+        "job": "7434",
+        "start": "03:27",
+        "finish": "11:45"
+      },
+      {
+        "job": "OFF"
+      },
+      {
+        "job": "OFF"
+      },
+      {
+        "job": "5431",
+        "start": "01:48",
+        "finish": "09:59"
+      },
+      {
+        "job": "5431",
+        "start": "01:48",
+        "finish": "09:59"
+      },
+      {
+        "job": "5432",
+        "start": "02:48",
+        "finish": "10:43"
+      },
+      {
+        "job": "ADO"
+      },
+      {
+        "job": "OFF"
+      }
+    ],
+    "3": [
+      {
+        "job": "8435",
+        "start": "16:46",
+        "finish": "01:07"
+      },
+      {
+        "job": "5440",
+        "start": "14:14",
+        "finish": "22:42"
+      },
+      {
+        "job": "5441(i)",
+        "start": "15:47",
+        "finish": "00:42"
+      },
+      {
+        "job": "SBGCRO1",
+        "start": "14:00",
+        "finish": "22:00"
+      },
+      {
+        "job": "5439",
+        "start": "13:07",
+        "finish": "22:12"
+      },
+      {
+        "job": "OFF"
+      },
+      {
+        "job": "OFF"
+      },
+      {
+        "job": "OFF"
+      },
+      {
+        "job": "OFF"
+      },
+      {
+        "job": "01RR",
+        "start": "13:00",
+        "finish": "21:00"
+      },
+      {
+        "job": "5438(i)",
+        "start": "12:59",
+        "finish": "20:57"
+      },
+      {
+        "job": "5442",
+        "start": "17:01",
+        "finish": "01:44"
+      },
+      {
+        "job": "6441",
+        "start": "18:08",
+        "finish": "03:10"
+      },
+      {
+        "job": "7437",
+        "start": "18:16",
+        "finish": "02:06"
+      }
+    ],
+    "4": [
+      {
+        "job": "OFF"
+      },
+      {
+        "job": "OFF"
+      },
+      {
+        "job": "5443",
+        "start": "18:00",
+        "finish": "02:21"
+      },
+      {
+        "job": "5442",
+        "start": "17:01",
+        "finish": "01:44"
+      },
+      {
+        "job": "5443",
+        "start": "18:00",
+        "finish": "02:21"
+      },
+      {
+        "job": "6441",
+        "start": "18:08",
+        "finish": "03:10"
+      },
+      {
+        "job": "7438",
+        "start": "18:46",
+        "finish": "03:13"
+      },
+      {
+        "job": "8438",
+        "start": "18:46",
+        "finish": "02:24"
+      },
+      {
+        "job": "5443",
+        "start": "18:00",
+        "finish": "02:21"
+      },
+      {
+        "job": "5442",
+        "start": "17:01",
+        "finish": "01:44"
+      },
+      {
+        "job": "5443",
+        "start": "18:00",
+        "finish": "02:21"
+      },
+      {
+        "job": "ADO"
+      },
+      {
+        "job": "OFF"
+      },
+      {
+        "job": "OFF"
+      }
+    ],
+    "5": [
+      {
+        "job": "8432",
+        "start": "03:03",
+        "finish": "10:45"
+      },
+      {
+        "job": "5434",
+        "start": "02:58",
+        "finish": "10:59"
+      },
+      {
+        "job": "5432",
+        "start": "02:48",
+        "finish": "10:43"
+      },
+      {
+        "job": "5432",
+        "start": "02:48",
+        "finish": "10:43"
+      },
+      {
+        "job": "5433",
+        "start": "02:56",
+        "finish": "10:26"
+      },
+      {
+        "job": "6436",
+        "start": "04:22",
+        "finish": "11:58"
+      },
+      {
+        "job": "OFF"
+      },
+      {
+        "job": "OFF"
+      },
+      {
+        "job": "5432",
+        "start": "02:48",
+        "finish": "10:43"
+      },
+      {
+        "job": "5436",
+        "start": "03:44",
+        "finish": "11:29"
+      },
+      {
+        "job": "OFF"
+      },
+      {
+        "job": "OFF"
+      },
+      {
+        "job": "6436",
+        "start": "04:22",
+        "finish": "11:58"
+      },
+      {
+        "job": "7432",
+        "start": "03:03",
+        "finish": "10:45"
+      }
+    ],
+    "6": [
+      {
+        "job": "8433",
+        "start": "03:19",
+        "finish": "11:45"
+      },
+      {
+        "job": "5436",
+        "start": "03:44",
+        "finish": "11:29"
+      },
+      {
+        "job": "5436",
+        "start": "03:44",
+        "finish": "11:29"
+      },
+      {
+        "job": "5436",
+        "start": "03:44",
+        "finish": "11:29"
+      },
+      {
+        "job": "OFF"
+      },
+      {
+        "job": "OFF"
+      },
+      {
+        "job": "7431",
+        "start": "02:45",
+        "finish": "11:15"
+      },
+      {
+        "job": "8431",
+        "start": "02:45",
+        "finish": "11:15"
+      },
+      {
+        "job": "5431",
+        "start": "01:48",
+        "finish": "09:59"
+      },
+      {
+        "job": "5434",
+        "start": "02:58",
+        "finish": "10:59"
+      },
+      {
+        "job": "5432",
+        "start": "02:48",
+        "finish": "10:43"
+      },
+      {
+        "job": "ADO"
+      },
+      {
+        "job": "OFF"
+      },
+      {
+        "job": "OFF"
+      }
+    ],
+    "7": [
+      {
+        "job": "8438",
+        "start": "18:46",
+        "finish": "02:24"
+      },
+      {
+        "job": "5443",
+        "start": "18:00",
+        "finish": "02:21"
+      },
+      {
+        "job": "5442",
+        "start": "17:01",
+        "finish": "01:44"
+      },
+      {
+        "job": "5441(i)",
+        "start": "15:47",
+        "finish": "00:42"
+      },
+      {
+        "job": "5442",
+        "start": "17:01",
+        "finish": "01:44"
+      },
+      {
+        "job": "6440",
+        "start": "18:00",
+        "finish": "02:44"
+      },
+      {
+        "job": "OFF"
+      },
+      {
+        "job": "OFF"
+      },
+      {
+        "job": "OFF"
+      },
+      {
+        "job": "OFF"
+      },
+      {
+        "job": "02RR",
+        "start": "07:00",
+        "finish": "15:00"
+      },
+      {
+        "job": "5437(i)",
+        "start": "04:44",
+        "finish": "12:58"
+      },
+      {
+        "job": "6437",
+        "start": "13:44",
+        "finish": "22:27"
+      },
+      {
+        "job": "7435",
+        "start": "17:16",
+        "finish": "01:37"
+      }
+    ],
+    "8": [
+      {
+        "job": "OFF"
+      },
+      {
+        "job": "OFF"
+      },
+      {
+        "job": "01RR",
+        "start": "13:00",
+        "finish": "21:00"
+      },
+      {
+        "job": "5440",
+        "start": "14:14",
+        "finish": "22:42"
+      },
+      {
+        "job": "5441(i)",
+        "start": "15:47",
+        "finish": "00:42"
+      },
+      {
+        "job": "6439",
+        "start": "16:01",
+        "finish": "01:01"
+      },
+      {
+        "job": "7437",
+        "start": "18:16",
+        "finish": "02:06"
+      },
+      {
+        "job": "8436",
+        "start": "17:46",
+        "finish": "02:06"
+      },
+      {
+        "job": "5440",
+        "start": "14:14",
+        "finish": "22:42"
+      },
+      {
+        "job": "5440",
+        "start": "14:14",
+        "finish": "22:42"
+      },
+      {
+        "job": "5439",
+        "start": "13:07",
+        "finish": "22:12"
+      },
+      {
+        "job": "ADO"
+      },
+      {
+        "job": "OFF"
+      },
+      {
+        "job": "OFF"
+      }
+    ],
+    "9": [
+      {
+        "job": "8431",
+        "start": "02:45",
+        "finish": "11:15"
+      },
+      {
+        "job": "5431",
+        "start": "01:48",
+        "finish": "09:59"
+      },
+      {
+        "job": "5434",
+        "start": "02:58",
+        "finish": "10:59"
+      },
+      {
+        "job": "OFF"
+      },
+      {
+        "job": "OFF"
+      },
+      {
+        "job": "6433",
+        "start": "02:58",
+        "finish": "10:59"
+      },
+      {
+        "job": "7433",
+        "start": "03:10",
+        "finish": "11:15"
+      },
+      {
+        "job": "8433",
+        "start": "03:19",
+        "finish": "11:45"
+      },
+      {
+        "job": "5434",
+        "start": "02:58",
+        "finish": "10:59"
+      },
+      {
+        "job": "OFF"
+      },
+      {
+        "job": "OFF"
+      },
+      {
+        "job": "5431",
+        "start": "01:48",
+        "finish": "09:59"
+      },
+      {
+        "job": "6433",
+        "start": "02:58",
+        "finish": "10:59"
+      },
+      {
+        "job": "7434",
+        "start": "03:27",
+        "finish": "11:45"
+      }
+    ],
+    "10": [
+      {
+        "job": "8434",
+        "start": "03:27",
+        "finish": "11:45"
+      },
+      {
+        "job": "5435",
+        "start": "03:02",
+        "finish": "10:43"
+      },
+      {
+        "job": "ADO"
+      },
+      {
+        "job": "OFF"
+      },
+      {
+        "job": "5436",
+        "start": "03:44",
+        "finish": "11:29"
+      },
+      {
+        "job": "6434",
+        "start": "03:02",
+        "finish": "10:43"
+      },
+      {
+        "job": "OFF"
+      },
+      {
+        "job": "OFF"
+      },
+      {
+        "job": "5436",
+        "start": "03:44",
+        "finish": "11:29"
+      },
+      {
+        "job": "5432",
+        "start": "02:48",
+        "finish": "10:43"
+      },
+      {
+        "job": "5435",
+        "start": "03:02",
+        "finish": "10:43"
+      },
+      {
+        "job": "5436",
+        "start": "03:44",
+        "finish": "11:29"
+      },
+      {
+        "job": "6434",
+        "start": "03:02",
+        "finish": "10:43"
+      },
+      {
+        "job": "OFF"
+      }
+    ],
+    "11": [
+      {
+        "job": "OFF"
+      },
+      {
+        "job": "5439",
+        "start": "13:07",
+        "finish": "22:12"
+      },
+      {
+        "job": "5439",
+        "start": "13:07",
+        "finish": "22:12"
+      },
+      {
+        "job": "5439",
+        "start": "13:07",
+        "finish": "22:12"
+      },
+      {
+        "job": "5440",
+        "start": "14:14",
+        "finish": "22:42"
+      },
+      {
+        "job": "6438",
+        "start": "14:14",
+        "finish": "22:27"
+      },
+      {
+        "job": "7436",
+        "start": "17:46",
+        "finish": "01:16"
+      },
+      {
+        "job": "8435",
+        "start": "16:46",
+        "finish": "01:07"
+      },
+      {
+        "job": "OFF"
+      },
+      {
+        "job": "OFF"
+      },
+      {
+        "job": "OFF"
+      },
+      {
+        "job": "5439",
+        "start": "13:07",
+        "finish": "22:12"
+      },
+      {
+        "job": "6438",
+        "start": "14:14",
+        "finish": "22:27"
+      },
+      {
+        "job": "7436",
+        "start": "17:46",
+        "finish": "01:16"
+      }
+    ],
+    "12": [
+      {
+        "job": "8436",
+        "start": "17:46",
+        "finish": "02:06"
+      },
+      {
+        "job": "5441(i)",
+        "start": "15:47",
+        "finish": "00:42"
+      },
+      {
+        "job": "5440",
+        "start": "14:14",
+        "finish": "22:42"
+      },
+      {
+        "job": "5438(i)",
+        "start": "12:59",
+        "finish": "20:57"
+      },
+      {
+        "job": "ADO"
+      },
+      {
+        "job": "OFF"
+      },
+      {
+        "job": "OFF"
+      },
+      {
+        "job": "OFF"
+      },
+      {
+        "job": "5441(i)",
+        "start": "15:47",
+        "finish": "00:42"
+      },
+      {
+        "job": "5441(i)",
+        "start": "15:47",
+        "finish": "00:42"
+      },
+      {
+        "job": "5441(i)",
+        "start": "15:47",
+        "finish": "00:42"
+      },
+      {
+        "job": "5443",
+        "start": "18:00",
+        "finish": "02:21"
+      },
+      {
+        "job": "6440",
+        "start": "18:00",
+        "finish": "02:44"
+      },
+      {
+        "job": "OFF"
+      }
+    ],
+    "13": [
+      {
+        "job": "OFF"
+      },
+      {
+        "job": "OFF"
+      },
+      {
+        "job": "5435",
+        "start": "03:02",
+        "finish": "10:43"
+      },
+      {
+        "job": "5435",
+        "start": "03:02",
+        "finish": "10:43"
+      },
+      {
+        "job": "5435",
+        "start": "03:02",
+        "finish": "10:43"
+      },
+      {
+        "job": "6431",
+        "start": "02:48",
+        "finish": "10:18"
+      },
+      {
+        "job": "7432",
+        "start": "03:03",
+        "finish": "10:45"
+      },
+      {
+        "job": "8434",
+        "start": "03:27",
+        "finish": "11:45"
+      },
+      {
+        "job": "OFF"
+      },
+      {
+        "job": "OFF"
+      },
+      {
+        "job": "5436",
+        "start": "03:44",
+        "finish": "11:29"
+      },
+      {
+        "job": "5434",
+        "start": "02:58",
+        "finish": "10:59"
+      },
+      {
+        "job": "6431",
+        "start": "02:48",
+        "finish": "10:18"
+      },
+      {
+        "job": "7431",
+        "start": "02:45",
+        "finish": "11:15"
+      }
+    ],
+    "14": [
+      {
+        "job": "OFF"
+      },
+      {
+        "job": "OFF"
+      },
+      {
+        "job": "ADO"
+      },
+      {
+        "job": "5431",
+        "start": "01:48",
+        "finish": "09:59"
+      },
+      {
+        "job": "5434",
+        "start": "02:58",
+        "finish": "10:59"
+      },
+      {
+        "job": "6435",
+        "start": "03:28",
+        "finish": "11:58"
+      },
+      {
+        "job": "OFF"
+      },
+      {
+        "job": "OFF"
+      },
+      {
+        "job": "5433",
+        "start": "02:56",
+        "finish": "10:26"
+      },
+      {
+        "job": "5433",
+        "start": "02:56",
+        "finish": "10:26"
+      },
+      {
+        "job": "5433",
+        "start": "02:56",
+        "finish": "10:26"
+      },
+      {
+        "job": "5435",
+        "start": "03:02",
+        "finish": "10:43"
+      },
+      {
+        "job": "6432",
+        "start": "02:56",
+        "finish": "10:26"
+      },
+      {
+        "job": "7433",
+        "start": "03:10",
+        "finish": "11:15"
+      }
+    ],
+    "15": [
+      {
+        "job": "8437",
+        "start": "18:46",
+        "finish": "02:16"
+      },
+      {
+        "job": "5442",
+        "start": "17:01",
+        "finish": "01:44"
+      },
+      {
+        "job": "SBGCRO2",
+        "start": "17:00",
+        "finish": "01:00"
+      },
+      {
+        "job": "5443",
+        "start": "18:00",
+        "finish": "02:21"
+      },
+      {
+        "job": "OFF"
+      },
+      {
+        "job": "OFF"
+      },
+      {
+        "job": "OFF"
+      },
+      {
+        "job": "OFF"
+      },
+      {
+        "job": "5439",
+        "start": "13:07",
+        "finish": "22:12"
+      },
+      {
+        "job": "5439",
+        "start": "13:07",
+        "finish": "22:12"
+      },
+      {
+        "job": "5440",
+        "start": "14:14",
+        "finish": "22:42"
+      },
+      {
+        "job": "5440",
+        "start": "14:14",
+        "finish": "22:42"
+      },
+      {
+        "job": "6439",
+        "start": "16:01",
+        "finish": "01:01"
+      },
+      {
+        "job": "7438",
+        "start": "18:46",
+        "finish": "03:13"
+      }
+    ],
+    "16": [
+      {
+        "job": "OFF"
+      },
+      {
+        "job": "OFF"
+      },
+      {
+        "job": "ADO"
+      },
+      {
+        "job": "02RR",
+        "start": "07:00",
+        "finish": "15:00"
+      },
+      {
+        "job": "5437(i)",
+        "start": "04:44",
+        "finish": "12:58"
+      },
+      {
+        "job": "6437",
+        "start": "13:44",
+        "finish": "22:27"
+      },
+      {
+        "job": "7435",
+        "start": "17:16",
+        "finish": "01:37"
+      },
+      {
+        "job": "8437",
+        "start": "18:46",
+        "finish": "02:16"
+      },
+      {
+        "job": "5442",
+        "start": "17:01",
+        "finish": "01:44"
+      },
+      {
+        "job": "5443",
+        "start": "18:00",
+        "finish": "02:21"
+      },
+      {
+        "job": "5442",
+        "start": "17:01",
+        "finish": "01:44"
+      },
+      {
+        "job": "5441(i)",
+        "start": "15:47",
+        "finish": "00:42"
+      },
+      {
+        "job": "OFF"
+      },
+      {
+        "job": "OFF"
+      }
+    ],
+    "201": [
+      {
+        "job": "SBY",
+        "start": "04:00",
+        "finish": "12:00"
+      },
+      {
+        "job": "SBY",
+        "start": "04:00",
+        "finish": "12:00"
+      },
+      {
+        "job": "SBY",
+        "start": "04:00",
+        "finish": "12:00"
+      },
+      {
+        "job": "SBY",
+        "start": "04:00",
+        "finish": "12:00"
+      },
+      {
+        "job": "SBY",
+        "start": "04:00",
+        "finish": "12:00"
+      },
+      {
+        "job": "SBY",
+        "start": "04:00",
+        "finish": "12:00"
+      },
+      {
+        "job": "OFF"
+      },
+      {
+        "job": "OFF"
+      },
+      {
+        "job": "OFF"
+      },
+      {
+        "job": "OFF"
+      },
+      {
+        "job": "SBY",
+        "start": "04:00",
+        "finish": "12:00"
+      },
+      {
+        "job": "SBY",
+        "start": "04:00",
+        "finish": "12:00"
+      },
+      {
+        "job": "SBY",
+        "start": "04:00",
+        "finish": "12:00"
+      },
+      {
+        "job": "SBY",
+        "start": "04:00",
+        "finish": "12:00"
+      }
+    ],
+    "202": [
+      {
+        "job": "SBY",
+        "start": "05:00",
+        "finish": "13:00"
+      },
+      {
+        "job": "SBY",
+        "start": "05:00",
+        "finish": "13:00"
+      },
+      {
+        "job": "SBY",
+        "start": "05:00",
+        "finish": "13:00"
+      },
+      {
+        "job": "SBY",
+        "start": "05:00",
+        "finish": "13:00"
+      },
+      {
+        "job": "SBY",
+        "start": "05:00",
+        "finish": "13:00"
+      },
+      {
+        "job": "SBY",
+        "start": "05:00",
+        "finish": "13:00"
+      },
+      {
+        "job": "OFF"
+      },
+      {
+        "job": "OFF"
+      },
+      {
+        "job": "ADO"
+      },
+      {
+        "job": "OFF"
+      },
+      {
+        "job": "OFF"
+      },
+      {
+        "job": "SBY",
+        "start": "05:00",
+        "finish": "13:00"
+      },
+      {
+        "job": "SBY",
+        "start": "05:00",
+        "finish": "13:00"
+      },
+      {
+        "job": "SBY",
+        "start": "05:00",
+        "finish": "13:00"
+      }
+    ],
+    "203": [
+      {
+        "job": "SBY",
+        "start": "16:00",
+        "finish": "00:00"
+      },
+      {
+        "job": "SBY",
+        "start": "16:00",
+        "finish": "00:00"
+      },
+      {
+        "job": "SBY",
+        "start": "16:00",
+        "finish": "00:00"
+      },
+      {
+        "job": "SBY",
+        "start": "16:00",
+        "finish": "00:00"
+      },
+      {
+        "job": "SBY",
+        "start": "16:00",
+        "finish": "00:00"
+      },
+      {
+        "job": "SBY",
+        "start": "16:00",
+        "finish": "00:00"
+      },
+      {
+        "job": "OFF"
+      },
+      {
+        "job": "OFF"
+      },
+      {
+        "job": "OFF"
+      },
+      {
+        "job": "OFF"
+      },
+      {
+        "job": "SBY",
+        "start": "16:00",
+        "finish": "00:00"
+      },
+      {
+        "job": "SBY",
+        "start": "16:00",
+        "finish": "00:00"
+      },
+      {
+        "job": "SBY",
+        "start": "16:00",
+        "finish": "00:00"
+      },
+      {
+        "job": "SBY",
+        "start": "16:00",
+        "finish": "00:00"
+      }
+    ],
+    "204": [
+      {
+        "job": "SBY",
+        "start": "16:00",
+        "finish": "00:00"
+      },
+      {
+        "job": "SBY",
+        "start": "16:00",
+        "finish": "00:00"
+      },
+      {
+        "job": "SBY",
+        "start": "16:00",
+        "finish": "00:00"
+      },
+      {
+        "job": "OFF"
+      },
+      {
+        "job": "OFF"
+      },
+      {
+        "job": "ADO"
+      },
+      {
+        "job": "OFF"
+      },
+      {
+        "job": "OFF"
+      },
+      {
+        "job": "SBY",
+        "start": "16:00",
+        "finish": "00:00"
+      },
+      {
+        "job": "SBY",
+        "start": "16:00",
+        "finish": "00:00"
+      },
+      {
+        "job": "SBY",
+        "start": "16:00",
+        "finish": "00:00"
+      },
+      {
+        "job": "SBY",
+        "start": "16:00",
+        "finish": "00:00"
+      },
+      {
+        "job": "SBY",
+        "start": "16:00",
+        "finish": "00:00"
+      },
+      {
+        "job": "SBY",
+        "start": "16:00",
+        "finish": "00:00"
+      }
+    ],
+    "205": [
+      {
+        "job": "OFF"
+      },
+      {
+        "job": "OFF"
+      },
+      {
+        "job": "OFF"
+      },
+      {
+        "job": "SBY",
+        "start": "04:00",
+        "finish": "12:00"
+      },
+      {
+        "job": "SBY",
+        "start": "04:00",
+        "finish": "12:00"
+      },
+      {
+        "job": "SBY",
+        "start": "04:00",
+        "finish": "12:00"
+      },
+      {
+        "job": "SBY",
+        "start": "04:00",
+        "finish": "12:00"
+      },
+      {
+        "job": "SBY",
+        "start": "04:00",
+        "finish": "12:00"
+      },
+      {
+        "job": "SBY",
+        "start": "04:00",
+        "finish": "12:00"
+      },
+      {
+        "job": "SBY",
+        "start": "05:00",
+        "finish": "13:00"
+      },
+      {
+        "job": "SBY",
+        "start": "05:00",
+        "finish": "13:00"
+      },
+      {
+        "job": "SBY",
+        "start": "05:00",
+        "finish": "13:00"
+      },
+      {
+        "job": "SBY",
+        "start": "04:00",
+        "finish": "12:00"
+      },
+      {
+        "job": "OFF"
+      }
+    ],
+    "206": [
+      {
+        "job": "OFF"
+      },
+      {
+        "job": "SBY",
+        "start": "04:00",
+        "finish": "12:00"
+      },
+      {
+        "job": "SBY",
+        "start": "04:00",
+        "finish": "12:00"
+      },
+      {
+        "job": "SBY",
+        "start": "04:00",
+        "finish": "12:00"
+      },
+      {
+        "job": "SBY",
+        "start": "04:00",
+        "finish": "12:00"
+      },
+      {
+        "job": "SBY",
+        "start": "04:00",
+        "finish": "12:00"
+      },
+      {
+        "job": "SBY",
+        "start": "05:00",
+        "finish": "13:00"
+      },
+      {
+        "job": "SBY",
+        "start": "05:00",
+        "finish": "13:00"
+      },
+      {
+        "job": "SBY",
+        "start": "05:00",
+        "finish": "13:00"
+      },
+      {
+        "job": "SBY",
+        "start": "05:00",
+        "finish": "13:00"
+      },
+      {
+        "job": "OFF"
+      },
+      {
+        "job": "ADO"
+      },
+      {
+        "job": "OFF"
+      },
+      {
+        "job": "OFF"
+      }
+    ],
+    "207": [
+      {
+        "job": "OFF"
+      },
+      {
+        "job": "OFF"
+      },
+      {
+        "job": "OFF"
+      },
+      {
+        "job": "SBY",
+        "start": "16:00",
+        "finish": "00:00"
+      },
+      {
+        "job": "SBY",
+        "start": "16:00",
+        "finish": "00:00"
+      },
+      {
+        "job": "SBY",
+        "start": "16:00",
+        "finish": "00:00"
+      },
+      {
+        "job": "SBY",
+        "start": "16:00",
+        "finish": "00:00"
+      },
+      {
+        "job": "SBY",
+        "start": "16:00",
+        "finish": "00:00"
+      },
+      {
+        "job": "SBY",
+        "start": "16:00",
+        "finish": "00:00"
+      },
+      {
+        "job": "SBY",
+        "start": "16:00",
+        "finish": "00:00"
+      },
+      {
+        "job": "SBY",
+        "start": "16:00",
+        "finish": "00:00"
+      },
+      {
+        "job": "SBY",
+        "start": "16:00",
+        "finish": "00:00"
+      },
+      {
+        "job": "SBY",
+        "start": "16:00",
+        "finish": "00:00"
+      },
+      {
+        "job": "OFF"
+      }
+    ],
+    "208": [
+      {
+        "job": "OFF"
+      },
+      {
+        "job": "SBY",
+        "start": "16:00",
+        "finish": "00:00"
+      },
+      {
+        "job": "SBY",
+        "start": "16:00",
+        "finish": "00:00"
+      },
+      {
+        "job": "SBY",
+        "start": "16:00",
+        "finish": "00:00"
+      },
+      {
+        "job": "SBY",
+        "start": "16:00",
+        "finish": "00:00"
+      },
+      {
+        "job": "SBY",
+        "start": "16:00",
+        "finish": "00:00"
+      },
+      {
+        "job": "SBY",
+        "start": "16:00",
+        "finish": "00:00"
+      },
+      {
+        "job": "SBY",
+        "start": "16:00",
+        "finish": "00:00"
+      },
+      {
+        "job": "SBY",
+        "start": "16:00",
+        "finish": "00:00"
+      },
+      {
+        "job": "SBY",
+        "start": "16:00",
+        "finish": "00:00"
+      },
+      {
+        "job": "OFF"
+      },
+      {
+        "job": "OFF"
+      },
+      {
+        "job": "ADO"
+      },
+      {
+        "job": "OFF"
+      }
+    ]
+  },
+  "diagramData": {}
+}

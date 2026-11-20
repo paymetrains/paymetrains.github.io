@@ -33,4 +33,7 @@ h1 { font-size: 15pt; margin: 0 0 5px; }
 .timesheet-claims p { margin: 0 0 7px; }
 .print-timesheet .timesheet-summary th, .print-timesheet .timesheet-summary td { padding-block: 4px; }
 .print-timesheet > .print-context:last-child { display: none; }
+.print-timesheet.print-with-kilometres .timesheet-summary th, .print-timesheet.print-with-kilometres .timesheet-summary td { padding-block: 2px; font-size: 7.5pt; line-height: 1.2; }
+.print-timesheet.print-with-kilometres .timesheet-claims p { margin-bottom: 3px; line-height: 1.15; }
+.scenario-kilometre-editor { display: none; }
 * { print-color-adjust: exact; -webkit-print-color-adjust: exact; }

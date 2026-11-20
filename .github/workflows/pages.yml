@@ -25,10 +25,13 @@ jobs:
       - uses: actions/configure-pages@v5
       - name: Check calculator and parser
         run: npm test --prefix roster-analyser
+      - name: Prepare root site with versioned assets
+        id: site
+        run: node roster-analyser/scripts/build-site.mjs >> "$GITHUB_OUTPUT"
       - name: Upload active app only
         uses: actions/upload-pages-artifact@v4
         with:
-          path: roster-analyser
+          path: ${{ steps.site.outputs.directory }}
       - name: Deploy
         id: deployment
         uses: actions/deploy-pages@v4

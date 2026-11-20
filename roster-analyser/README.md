@@ -12,7 +12,19 @@ GitHub Pages uses `.github/workflows/pages.yml` to deploy only this directory at
 
 Legacy calculator interfaces, the original analyser UI, and old OCR/conversion work are preserved in `../archive/legacy-apps/`, outside this server's document root. Publish only this `roster-analyser/` directory; do not publish the workspace root, archive, attachments, backups, or generated reports. Shared calculation and parser modules remain here because both active apps use them.
 
+## Normal roster time claims
+
+The normal calculator applies the same time comparison to guards and drivers. Both starts use the listed roster date; each finish rolls into the next day if needed. Lift-up adds the missed finish minutes after work when both ends move earlier. Lay-back adds the missed start minutes before work when both ends move later. Build-up fills the missing time at either end when the worked shift fits inside the rostered shift. A shift covering its full rostered span gets no time credit. Credits count once towards payable hours and overtime, not towards actual worked minutes or the WOBOD bonus.
+
+Comparisons use the worked job, not the job given away in a swap. A numbered job with no unique master or diagram times is flagged for review. Custom duties default to their own times unless separate rostered times are supplied. Leave and timed sick relief do not generate an additional time claim. This is a time-based estimate; the PDF does not establish why an amendment was made or when it was posted.
+
 ## Master roster scenario
+
+Defunct references are indexed in `data/scenarios/index.json`. The current snapshot includes 24 depot/role master rosters. Auburn's owner-supplied guard and driver master assignments are preserved; imported data supplement their job references. Other included depots use imported defunct master assignments. Waterfall driver/guard masters remain unavailable in this snapshot and require a temporary upload.
+
+The imported ASY driver lookup contains 140 diagram time pairs and 132 kilometre values. It is explicitly partial: source lookup limits stopped the remaining records. Other depots currently use times inferred from their master rosters, without imported diagram kilometre values. Unknown distance is never treated as zero. Each data file retains provenance, retrieval time, coverage, source flags and standby/not-counted markers. `scripts/import-defunct-data.mjs <download-directory>` validates and normalises locally downloaded JSON; it does not log in or make remote requests. No sign-on credentials are saved with the app.
+
+Imported defunct diagram times take priority over inferred same-job reference times, while the master line's job and times remain separate comparison candidates. Driver actual distance is assumed to be the current worked job's diagram kilometres plus driver-entered extra kilometres. Each time candidate can also be tested against the same job's defunct kilometre reference; the higher daily amount is selected. Driver extras can be edited in each line's Extra kilometres driven disclosure. Kilometre gains are shown separately from time claims, including in timesheet, CSV, Excel and PDF exports. Guard kilometre pay is unaffected.
 
 Open **http://127.0.0.1:4173/Defunct-master-scenario.html** to compare every named crew line in a fortnight PDF with the existing and defunct masters. Auburn's supplied final-draft guard and driver masters are bundled under `data/scenarios/`. Temporary PDF overrides are available for either master.
 

@@ -109,7 +109,14 @@ export function hydrateReferenceMaster(value) {
     return { line: Number(line), cells };
   });
   if (!rows.length) throw new Error("The Bundled reference has no roster lines.");
-  return buildMaster(value, rows);
+  const master = buildMaster(value, rows);
+  for (const [line, sourceLine] of Object.entries(value.lineAliases || {})) {
+    if (!/^[1-9]\d*$/.test(line) || !/^[1-9]\d*$/.test(String(sourceLine))) throw new Error("Invalid defunct line alias.");
+    const source = master.lines.get(Number(sourceLine));
+    if (!source || master.lines.has(Number(line))) throw new Error("Ambiguous or missing defunct line alias.");
+    master.lines.set(Number(line), { ...source, line: Number(line), sourceLine: Number(sourceLine) });
+  }
+  return master;
 }
 
 function buildMaster(value, savedRows) {

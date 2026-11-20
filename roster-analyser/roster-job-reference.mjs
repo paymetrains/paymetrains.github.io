@@ -1,5 +1,4 @@
 const WEEKDAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-const normaliseJob = job => String(job || "").replace(/\(i\)$/i, "").replace(/^0+(?=\d+$)/, "").toUpperCase();
 
 export function buildRosterJobReference(master) {
   const jobs = {};
@@ -44,5 +43,5 @@ export function matchingRosterJob(reference, job, dayIndex) {
   if (!variant) return null;
   return { jobNumber: entry.job, start: variant.start, finish: variant.finish, occurrences: variant.occurrences };
 }
-import { shiftDurationMinutes } from "./roster-core.mjs";
+import { normaliseJob, shiftDurationMinutes } from "./roster-core.mjs";
 

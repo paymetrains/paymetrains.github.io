@@ -1,4 +1,4 @@
-import { analyseRosters, toIsoDate, shiftDurationMinutes, RELINQUISHMENT_MINUTES } from "./roster-core.mjs";
+import { analyseRosters, toIsoDate, rosterShiftMinutes, shiftDurationMinutes, RELINQUISHMENT_MINUTES } from "./roster-core.mjs";
 import { NSW_PUBLIC_HOLIDAYS } from "./public-holidays.js";
 import { isIsoDate } from "./master-store.mjs";
 
@@ -83,7 +83,9 @@ export function importLine(master, current, line) {
     if (unknown) status = "unknown";
     const flags = pay.flags
       .filter(flag => flag !== "part_day_sick_relief" || !pay.hasRelinquishmentSchedule)
-      .map((flag) => REVIEW_MESSAGES[flag] || flag);
+      .map((flag) => /^(?:diagram_times_unverified|job_conflict):/.test(flag)
+        ? `No unique rostered times for job ${cell.jobNumber}. Check its rostered start and finish.`
+        : REVIEW_MESSAGES[flag] || flag);
     if (unknown)
       flags.push(
         "Unrecognised roster entry. Choose its status and confirm its times.",
@@ -286,7 +288,7 @@ export function toEngineTable(rows, payrate, rosterType, settings = {}) {
       throw new Error(
         `${row.date}: ${errors[0] || "Review this shift before calculating."}`,
       );
-    const item = { ...row, day: DAYS[index % 7] };
+    const item = { ...(settings.scenarioComparison ? row : withAutomaticTimeClaim(row)), day: DAYS[index % 7] };
     item.RDO = ["off", "ado", "nta", "blank"].includes(row.status);
     item.sick = row.status === "sick";
     item.hol = row.status === "hol";
@@ -307,4 +309,14 @@ export function toEngineTable(rows, payrate, rosterType, settings = {}) {
     table[index] = item;
   });
   return table;
+}
+
+export function withAutomaticTimeClaim(row) {
+  const times = rosterShiftMinutes(row);
+  let changeType = row.changeType;
+  if (row.status === "work" && ["same", "changed_time", "lift_up", "layback", "buildup"].includes(changeType))
+    changeType = times.liftUpMinutes ? "lift_up" : times.laybackMinutes ? "layback" : times.buildupMinutes ? "buildup" :
+      row.rosteredStart === row.actualStart && row.rosteredFinish === row.actualFinish ? "same" : "changed_time";
+  return { ...row, ...times, changeType, creditAlignment: "same-date",
+    amendment: times.payableMinutes > times.workedMinutes ? "credit" : "" };
 }
