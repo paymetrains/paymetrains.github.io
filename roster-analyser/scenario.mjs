@@ -8,6 +8,7 @@ import { scenarioCsv, scenarioTimesheetCsv, timeClaimReference } from "./scenari
 import { scenarioWorkbook } from "./scenario-xlsx.mjs";
 import { timesheetEntries } from "./scenario-timesheet.mjs";
 import { kilometreClaimText } from "./scenario-kilometres.mjs";
+import { timesheetPdf } from "./scenario-pdf.mjs";
 
 const $ = id => document.getElementById(id);
 const money = value => Number(value).toLocaleString("en-AU", { style: "currency", currency: "AUD" });
@@ -425,8 +426,31 @@ $("scenario-csv").onclick = () => {
   link.click();
   setTimeout(() => URL.revokeObjectURL(url), 1000);
 };
-$("scenario-pdf").onclick = () => {
+$("scenario-pdf").onclick = async () => {
   if (!report || !filteredLines().length) return;
+  if (resultView === "timesheet") {
+    const button = $("scenario-pdf");
+    button.disabled = true;
+    $("scenario-export-status").textContent = "Preparing landscape timesheet PDF…";
+    try {
+      const source = report;
+      const lines = filteredLines();
+      const period = resultPeriod;
+      const blob = await timesheetPdf(source, lines, period);
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `timesheet-scenario-${source.role}-${source.dates[0]}-${period}.pdf`;
+      link.click();
+      setTimeout(() => URL.revokeObjectURL(url), 60000);
+      $("scenario-export-status").textContent = `Landscape timesheet PDF exported · ${lines.length} lines.`;
+    } catch (error) {
+      $("scenario-export-status").textContent = error.message;
+    } finally {
+      button.disabled = false;
+    }
+    return;
+  }
   const sections = filteredLines().flatMap(line => {
     if (line.error) return [`<section class="print-line"><h1>Line ${line.line}</h1><p>${escape(line.error)}</p></section>`];
     const periods = resultView === "timesheet" && resultPeriod === "full"

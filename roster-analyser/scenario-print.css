@@ -24,12 +24,13 @@ h1 { font-size: 15pt; margin: 0 0 5px; }
 .roster-grid td.daily-breakdown > .scenario-pay-total { position: absolute; bottom: 6px; left: 6px; right: 6px; margin: 0; }
 .roster-grid td.comparison-higher { background: #e6f2e8; box-shadow: inset 0 0 0 1px #21673d; }
 .swap-label { color: #1759ad; }
-.timesheet-summary { width: 100%; font-size: 8pt; }
+.timesheet-summary { width: 100%; max-width: 100%; font-size: 8pt; }
 .timesheet-summary th, .timesheet-summary td { width: auto; padding: 7px; font-size: 8pt; border-right: 1.5pt solid #46524a; border-bottom: 1.5pt solid #46524a; }
 .timesheet-summary tr > :first-child { position: static; width: 23mm; border-left: 1.5pt solid #46524a; }
 .timesheet-summary thead th { position: static; border-top: 1.5pt solid #46524a; }
 .timesheet-summary th:nth-child(7) { width: 80mm; }
 .timesheet-summary tr { break-inside: avoid; }
+.timesheet-summary td { overflow-wrap: anywhere; }
 .timesheet-claims p { margin: 0 0 7px; }
 .print-timesheet .timesheet-summary th, .print-timesheet .timesheet-summary td { padding-block: 4px; }
 .print-timesheet > .print-context:last-child { display: none; }

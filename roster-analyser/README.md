@@ -20,6 +20,8 @@ Comparisons use the worked job, not the job given away in a swap. A numbered job
 
 ## Master roster scenario
 
+Timesheet PDF export generates A4 landscape pages directly, with a 277 mm table spanning the printable width, wrapped comments and a reserved job-length column. It uses locally bundled jsPDF 4.2.1 and AutoTable 5.0.9, so no external PDF service is involved. The full-fortnight view keeps 14 days together with adaptive text sizing. Roster comparison exports continue to use the browser print dialog.
+
 Defunct references are indexed in `data/scenarios/index.json`. The current snapshot includes 24 depot/role master rosters. Auburn's owner-supplied guard and driver master assignments are preserved; imported data supplement their job references. Other included depots use imported defunct master assignments. Waterfall driver/guard masters remain unavailable in this snapshot and require a temporary upload.
 
 The imported ASY driver lookup contains 140 diagram time pairs and 132 kilometre values. It is explicitly partial: source lookup limits stopped the remaining records. Other depots currently use times inferred from their master rosters, without imported diagram kilometre values. Unknown distance is never treated as zero. Each data file retains provenance, retrieval time, coverage, source flags and standby/not-counted markers. `scripts/import-defunct-data.mjs <download-directory>` validates and normalises locally downloaded JSON; it does not log in or make remote requests. No sign-on credentials are saved with the app.
