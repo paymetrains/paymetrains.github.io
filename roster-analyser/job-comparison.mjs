@@ -26,7 +26,7 @@ function changeRole() {
   updateGrades(role);
   $("job-grade").value = role === "driver" ? "Driver Thereafter" : "Guard Thereafter";
   $("job-grade").dispatchEvent(new Event("change"));
-  $("job-sort").value = role === "driver" ? "km" : "pay";
+  $("job-sort").value = "number";
   $("job-search").value = "";
   $("job-day").value = "all";
   $("job-sort").querySelector('option[value="km"]').disabled = role !== "driver";
