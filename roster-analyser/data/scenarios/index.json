@@ -12,10 +12,16 @@
         "status": "partial",
         "requestedJobs": 152,
         "queriedJobs": 140,
-        "diagramTimes": 140,
-        "kilometreEntries": 143,
+        "diagramTimes": 149,
+        "kilometreEntries": 150,
         "manualKilometreEntries": 11,
-        "notCountedEntries": 8
+        "photoDiagrams": 145,
+        "numericJobs": 149,
+        "missingNumericKilometres": [],
+        "numericKilometresComplete": true,
+        "importedDiagramTimes": 140,
+        "sourceNotCountedEntries": 8,
+        "notCountedEntries": 0
       }
     },
     {

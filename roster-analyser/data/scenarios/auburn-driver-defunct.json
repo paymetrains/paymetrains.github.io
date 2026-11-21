@@ -10,6 +10,17 @@
     "masterUrl": "https://wobod.me/defunct/auburn/driver.json",
     "diagramEndpoint": "https://wobod.me/api/defunct/diagrams",
     "retrievedAt": "2026-11-20T20:10:57.884Z",
+    "diagramPhotos": {
+      "reference": "Sydney Drivers Defunct Nov2026 extraction report",
+      "providedOn": "2026-11-22",
+      "files": [
+        "1000024141.jpg",
+        "1000024142.jpg",
+        "1000024143.jpg",
+        "1000024144.jpg",
+        "1000024140.jpg"
+      ]
+    },
     "masterReference": {
       "source": "owner-supplied",
       "fileName": "Auburn Drivers Final Draft Master Roster_261116_025148.pdf"
@@ -19,10 +30,16 @@
     "status": "partial",
     "requestedJobs": 152,
     "queriedJobs": 140,
-    "diagramTimes": 140,
-    "kilometreEntries": 143,
+    "diagramTimes": 149,
+    "kilometreEntries": 150,
     "manualKilometreEntries": 11,
-    "notCountedEntries": 8
+    "photoDiagrams": 145,
+    "numericJobs": 149,
+    "missingNumericKilometres": [],
+    "numericKilometresComplete": true,
+    "importedDiagramTimes": 140,
+    "sourceNotCountedEntries": 8,
+    "notCountedEntries": 0
   },
   "masterRoster": {
     "1": [
@@ -6652,8 +6669,8 @@
   },
   "diagramData": {
     "1": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Mon-Thu",
+      "dayPatternSource": "owner-photo",
       "signOn": "01:24",
       "offDuty": "09:14",
       "rosteredHrs": 7.833333333333333,
@@ -6661,11 +6678,17 @@
       "kilometresStatus": "known",
       "sourceFlag": null,
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 0,
+      "sourcePhoto": "1000024141.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "1:24",
+      "printedSignOff": "9:14",
+      "printedDuration": "7:50"
     },
     "2": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Mon-Thu",
+      "dayPatternSource": "owner-photo",
       "signOn": "01:32",
       "offDuty": "09:29",
       "rosteredHrs": 7.95,
@@ -6673,11 +6696,17 @@
       "kilometresStatus": "known",
       "sourceFlag": null,
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 0,
+      "sourcePhoto": "1000024141.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "1:32",
+      "printedSignOff": "9:29",
+      "printedDuration": "7:57"
     },
     "3": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Mon-Thu",
+      "dayPatternSource": "owner-photo",
       "signOn": "01:34",
       "offDuty": "09:19",
       "rosteredHrs": 7.75,
@@ -6685,11 +6714,17 @@
       "kilometresStatus": "known",
       "sourceFlag": null,
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 0,
+      "sourcePhoto": "1000024141.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "1:34",
+      "printedSignOff": "9:19",
+      "printedDuration": "7:45"
     },
     "4": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Mon-Thu",
+      "dayPatternSource": "owner-photo",
       "signOn": "01:47",
       "offDuty": "09:32",
       "rosteredHrs": 7.75,
@@ -6697,23 +6732,35 @@
       "kilometresStatus": "known",
       "sourceFlag": null,
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 0,
+      "sourcePhoto": "1000024141.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "1:47",
+      "printedSignOff": "9:32",
+      "printedDuration": "7:45"
     },
     "5": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Mon-Thu",
+      "dayPatternSource": "owner-photo",
       "signOn": "02:01",
       "offDuty": "09:01",
       "rosteredHrs": 7,
-      "kilometresStatus": "not-counted",
-      "kilometresReason": "standby",
+      "kilometresStatus": "known",
       "sourceFlag": null,
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 0,
+      "rosteredKm": 15.741,
+      "sourcePhoto": "1000024141.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "2:01",
+      "printedSignOff": "9:01",
+      "printedDuration": "7:00"
     },
     "6": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Mon-Thu",
+      "dayPatternSource": "owner-photo",
       "signOn": "02:01",
       "offDuty": "09:44",
       "rosteredHrs": 7.716666666666667,
@@ -6721,11 +6768,17 @@
       "kilometresStatus": "known",
       "sourceFlag": null,
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 0,
+      "sourcePhoto": "1000024141.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "2:01",
+      "printedSignOff": "9:44",
+      "printedDuration": "7:43"
     },
     "7": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Mon-Thu",
+      "dayPatternSource": "owner-photo",
       "signOn": "02:02",
       "offDuty": "10:17",
       "rosteredHrs": 8.25,
@@ -6733,11 +6786,17 @@
       "kilometresStatus": "known",
       "sourceFlag": null,
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 0,
+      "sourcePhoto": "1000024141.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "2:02",
+      "printedSignOff": "10:17",
+      "printedDuration": "8:15"
     },
     "8": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Mon-Thu",
+      "dayPatternSource": "owner-photo",
       "signOn": "02:09",
       "offDuty": "10:05",
       "rosteredHrs": 7.933333333333334,
@@ -6745,11 +6804,17 @@
       "kilometresStatus": "known",
       "sourceFlag": null,
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 0,
+      "sourcePhoto": "1000024141.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "2:09",
+      "printedSignOff": "10:05",
+      "printedDuration": "7:56"
     },
     "9": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Mon-Thu",
+      "dayPatternSource": "owner-photo",
       "signOn": "02:12",
       "offDuty": "09:29",
       "rosteredHrs": 7.283333333333333,
@@ -6757,11 +6822,17 @@
       "kilometresStatus": "known",
       "sourceFlag": null,
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 0,
+      "sourcePhoto": "1000024141.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "2:12",
+      "printedSignOff": "9:29",
+      "printedDuration": "7:17"
     },
     "10": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Mon-Thu",
+      "dayPatternSource": "owner-photo",
       "signOn": "02:18",
       "offDuty": "09:49",
       "rosteredHrs": 7.516666666666667,
@@ -6769,23 +6840,35 @@
       "kilometresStatus": "known",
       "sourceFlag": null,
       "rosteredStandby": true,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 0,
+      "sourcePhoto": "1000024141.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "2:18",
+      "printedSignOff": "9:49",
+      "printedDuration": "7:31"
     },
     "11": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Mon-Thu",
+      "dayPatternSource": "owner-photo",
       "signOn": "02:30",
       "offDuty": "10:30",
       "rosteredHrs": 8,
-      "kilometresStatus": "not-counted",
-      "kilometresReason": "standby",
+      "kilometresStatus": "known",
       "sourceFlag": null,
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 0,
+      "rosteredKm": 0,
+      "sourcePhoto": "1000024141.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "2:30",
+      "printedSignOff": "10:30",
+      "printedDuration": "8:00"
     },
     "12": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Mon-Thu",
+      "dayPatternSource": "owner-photo",
       "signOn": "02:39",
       "offDuty": "10:24",
       "rosteredHrs": 7.75,
@@ -6793,11 +6876,17 @@
       "kilometresStatus": "known",
       "sourceFlag": null,
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 0,
+      "sourcePhoto": "1000024141.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "2:39",
+      "printedSignOff": "10:24",
+      "printedDuration": "7:45"
     },
     "13": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Mon-Thu",
+      "dayPatternSource": "owner-photo",
       "signOn": "02:51",
       "offDuty": "10:39",
       "rosteredHrs": 7.8,
@@ -6805,11 +6894,17 @@
       "kilometresStatus": "known",
       "sourceFlag": null,
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 0,
+      "sourcePhoto": "1000024141.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "2:51",
+      "printedSignOff": "10:39",
+      "printedDuration": "7:48"
     },
     "14": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Mon-Thu",
+      "dayPatternSource": "owner-photo",
       "signOn": "03:00",
       "offDuty": "10:59",
       "rosteredHrs": 7.983333333333333,
@@ -6817,11 +6912,17 @@
       "kilometresStatus": "known",
       "sourceFlag": null,
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 0,
+      "sourcePhoto": "1000024141.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "3:00",
+      "printedSignOff": "10:59",
+      "printedDuration": "7:59"
     },
     "15": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Mon-Thu",
+      "dayPatternSource": "owner-photo",
       "signOn": "03:15",
       "offDuty": "10:52",
       "rosteredHrs": 7.616666666666666,
@@ -6829,11 +6930,17 @@
       "kilometresStatus": "known",
       "sourceFlag": null,
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 0,
+      "sourcePhoto": "1000024141.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "3:15",
+      "printedSignOff": "10:52",
+      "printedDuration": "7:37"
     },
     "16": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Mon-Thu",
+      "dayPatternSource": "owner-photo",
       "signOn": "03:19",
       "offDuty": "11:17",
       "rosteredHrs": 7.966666666666667,
@@ -6841,11 +6948,17 @@
       "kilometresStatus": "known",
       "sourceFlag": null,
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 0,
+      "sourcePhoto": "1000024141.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "3:19",
+      "printedSignOff": "11:17",
+      "printedDuration": "7:58"
     },
     "17": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Mon-Thu",
+      "dayPatternSource": "owner-photo",
       "signOn": "03:22",
       "offDuty": "10:59",
       "rosteredHrs": 7.616666666666666,
@@ -6853,11 +6966,17 @@
       "kilometresStatus": "known",
       "sourceFlag": null,
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 0,
+      "sourcePhoto": "1000024141.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "3:22",
+      "printedSignOff": "10:59",
+      "printedDuration": "7:37"
     },
     "18": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Mon-Thu",
+      "dayPatternSource": "owner-photo",
       "signOn": "03:24",
       "offDuty": "11:14",
       "rosteredHrs": 7.833333333333333,
@@ -6865,11 +6984,17 @@
       "kilometresStatus": "known",
       "sourceFlag": null,
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 0,
+      "sourcePhoto": "1000024141.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "3:24",
+      "printedSignOff": "11:14",
+      "printedDuration": "7:50"
     },
     "19": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Mon-Thu",
+      "dayPatternSource": "owner-photo",
       "signOn": "03:25",
       "offDuty": "11:17",
       "rosteredHrs": 7.866666666666666,
@@ -6877,11 +7002,17 @@
       "kilometresStatus": "known",
       "sourceFlag": null,
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 0,
+      "sourcePhoto": "1000024141.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "3:25",
+      "printedSignOff": "11:17",
+      "printedDuration": "7:52"
     },
     "20": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Mon-Thu",
+      "dayPatternSource": "owner-photo",
       "signOn": "03:29",
       "offDuty": "11:17",
       "rosteredHrs": 7.8,
@@ -6889,11 +7020,17 @@
       "kilometresStatus": "known",
       "sourceFlag": null,
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 0,
+      "sourcePhoto": "1000024141.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "3:29",
+      "printedSignOff": "11:17",
+      "printedDuration": "7:48"
     },
     "21": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Mon-Thu",
+      "dayPatternSource": "owner-photo",
       "signOn": "03:53",
       "offDuty": "11:31",
       "rosteredHrs": 7.633333333333334,
@@ -6901,11 +7038,17 @@
       "kilometresStatus": "known",
       "sourceFlag": null,
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 0,
+      "sourcePhoto": "1000024141.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "3:53",
+      "printedSignOff": "11:31",
+      "printedDuration": "7:38"
     },
     "22": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Mon-Thu",
+      "dayPatternSource": "owner-photo",
       "signOn": "04:02",
       "offDuty": "11:59",
       "rosteredHrs": 7.95,
@@ -6913,11 +7056,17 @@
       "kilometresStatus": "known",
       "sourceFlag": null,
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 0,
+      "sourcePhoto": "1000024141.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "4:02",
+      "printedSignOff": "11:59",
+      "printedDuration": "7:57"
     },
     "23": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Mon,Wed",
+      "dayPatternSource": "owner-photo",
       "signOn": "04:54",
       "offDuty": "12:49",
       "rosteredHrs": 7.916666666666667,
@@ -6925,11 +7074,17 @@
       "kilometresStatus": "known",
       "sourceFlag": null,
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 0,
+      "sourcePhoto": "1000024141.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "4:54",
+      "printedSignOff": "12:49",
+      "printedDuration": "7:55"
     },
     "24": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Tue,Thu",
+      "dayPatternSource": "owner-photo",
       "signOn": "05:59",
       "offDuty": "13:44",
       "rosteredHrs": 7.75,
@@ -6937,11 +7092,17 @@
       "kilometresStatus": "known",
       "sourceFlag": null,
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 0,
+      "sourcePhoto": "1000024141.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "5:59",
+      "printedSignOff": "13:44",
+      "printedDuration": "7:45"
     },
     "25": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Mon-Thu",
+      "dayPatternSource": "owner-photo",
       "signOn": "06:00",
       "offDuty": "14:30",
       "rosteredHrs": 8.5,
@@ -6949,11 +7110,17 @@
       "kilometresStatus": "known",
       "sourceFlag": "shed",
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 0,
+      "sourcePhoto": "1000024141.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "6:00",
+      "printedSignOff": "14:30",
+      "printedDuration": "8:30"
     },
     "26": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Mon-Thu",
+      "dayPatternSource": "owner-photo",
       "signOn": "11:13",
       "offDuty": "19:30",
       "rosteredHrs": 8.283333333333333,
@@ -6961,11 +7128,17 @@
       "kilometresStatus": "known",
       "sourceFlag": null,
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 0,
+      "sourcePhoto": "1000024141.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "11:13",
+      "printedSignOff": "19:30",
+      "printedDuration": "8:17"
     },
     "27": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Mon-Thu",
+      "dayPatternSource": "owner-photo",
       "signOn": "11:43",
       "offDuty": "20:09",
       "rosteredHrs": 8.433333333333334,
@@ -6973,11 +7146,17 @@
       "kilometresStatus": "known",
       "sourceFlag": null,
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 0,
+      "sourcePhoto": "1000024141.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "11:43",
+      "printedSignOff": "20:09",
+      "printedDuration": "8:26"
     },
     "28": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Mon-Thu",
+      "dayPatternSource": "owner-photo",
       "signOn": "12:26",
       "offDuty": "20:55",
       "rosteredHrs": 8.483333333333333,
@@ -6985,11 +7164,17 @@
       "kilometresStatus": "known",
       "sourceFlag": null,
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 0,
+      "sourcePhoto": "1000024141.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "12:26",
+      "printedSignOff": "20:55",
+      "printedDuration": "8:29"
     },
     "29": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Mon-Thu",
+      "dayPatternSource": "owner-photo",
       "signOn": "12:28",
       "offDuty": "20:57",
       "rosteredHrs": 8.483333333333333,
@@ -6997,11 +7182,17 @@
       "kilometresStatus": "known",
       "sourceFlag": null,
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 0,
+      "sourcePhoto": "1000024141.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "12:28",
+      "printedSignOff": "20:57",
+      "printedDuration": "8:29"
     },
     "30": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Mon-Thu",
+      "dayPatternSource": "owner-photo",
       "signOn": "13:33",
       "offDuty": "21:43",
       "rosteredHrs": 8.166666666666666,
@@ -7009,11 +7200,17 @@
       "kilometresStatus": "known",
       "sourceFlag": null,
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 0,
+      "sourcePhoto": "1000024141.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "13:33",
+      "printedSignOff": "21:43",
+      "printedDuration": "8:10"
     },
     "31": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Mon-Thu",
+      "dayPatternSource": "owner-photo",
       "signOn": "13:41",
       "offDuty": "22:13",
       "rosteredHrs": 8.533333333333333,
@@ -7021,23 +7218,35 @@
       "kilometresStatus": "known",
       "sourceFlag": null,
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 0,
+      "sourcePhoto": "1000024141.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "13:41",
+      "printedSignOff": "22:13",
+      "printedDuration": "8:32"
     },
     "32": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Mon-Thu",
+      "dayPatternSource": "owner-photo",
       "signOn": "13:58",
       "offDuty": "22:05",
       "rosteredHrs": 8.116666666666667,
-      "kilometresStatus": "not-counted",
-      "kilometresReason": "standby",
+      "kilometresStatus": "known",
       "sourceFlag": null,
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 0,
+      "rosteredKm": 29.764,
+      "sourcePhoto": "1000024141.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "13:58",
+      "printedSignOff": "22:05",
+      "printedDuration": "8:07"
     },
     "33": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Mon-Thu",
+      "dayPatternSource": "owner-photo",
       "signOn": "14:00",
       "offDuty": "22:30",
       "rosteredHrs": 8.5,
@@ -7045,11 +7254,17 @@
       "kilometresStatus": "known",
       "sourceFlag": "shed",
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 0,
+      "sourcePhoto": "1000024141.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "14:00",
+      "printedSignOff": "22:30",
+      "printedDuration": "8:30"
     },
     "34": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Mon,Wed",
+      "dayPatternSource": "owner-photo",
       "signOn": "15:41",
       "offDuty": "23:28",
       "rosteredHrs": 7.783333333333333,
@@ -7057,23 +7272,35 @@
       "kilometresStatus": "known",
       "sourceFlag": null,
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 0,
+      "sourcePhoto": "1000024141.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "15:41",
+      "printedSignOff": "23:28",
+      "printedDuration": "7:47"
     },
     "35": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Mon-Thu",
+      "dayPatternSource": "owner-photo",
       "signOn": "16:00",
       "offDuty": "00:00",
       "rosteredHrs": 8,
-      "kilometresStatus": "not-counted",
-      "kilometresReason": "standby",
+      "kilometresStatus": "known",
       "sourceFlag": null,
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 1,
+      "rosteredKm": 0,
+      "sourcePhoto": "1000024141.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "16:00",
+      "printedSignOff": "24:00",
+      "printedDuration": "8:00"
     },
     "36": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Tue,Thu",
+      "dayPatternSource": "owner-photo",
       "signOn": "16:01",
       "offDuty": "23:57",
       "rosteredHrs": 7.933333333333334,
@@ -7081,11 +7308,17 @@
       "kilometresStatus": "known",
       "sourceFlag": null,
       "rosteredStandby": true,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 0,
+      "sourcePhoto": "1000024141.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "16:01",
+      "printedSignOff": "23:57",
+      "printedDuration": "7:56"
     },
     "37": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Mon-Thu",
+      "dayPatternSource": "owner-photo",
       "signOn": "17:10",
       "offDuty": "00:58",
       "rosteredHrs": 7.8,
@@ -7093,11 +7326,17 @@
       "kilometresStatus": "known",
       "sourceFlag": null,
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 1,
+      "sourcePhoto": "1000024141.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "17:10",
+      "printedSignOff": "24:58",
+      "printedDuration": "7:48"
     },
     "38": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Mon-Thu",
+      "dayPatternSource": "owner-photo",
       "signOn": "17:12",
       "offDuty": "01:39",
       "rosteredHrs": 8.45,
@@ -7105,11 +7344,17 @@
       "kilometresStatus": "known",
       "sourceFlag": null,
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 1,
+      "sourcePhoto": "1000024141.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "17:12",
+      "printedSignOff": "25:39",
+      "printedDuration": "8:27"
     },
     "39": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Mon-Thu",
+      "dayPatternSource": "owner-photo",
       "signOn": "17:27",
       "offDuty": "00:27",
       "rosteredHrs": 7,
@@ -7117,11 +7362,17 @@
       "kilometresStatus": "known",
       "sourceFlag": null,
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 1,
+      "sourcePhoto": "1000024142.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "17:27",
+      "printedSignOff": "24:27",
+      "printedDuration": "7:00"
     },
     "40": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Mon-Thu",
+      "dayPatternSource": "owner-photo",
       "signOn": "17:27",
       "offDuty": "00:27",
       "rosteredHrs": 7,
@@ -7129,11 +7380,17 @@
       "kilometresStatus": "known",
       "sourceFlag": null,
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 1,
+      "sourcePhoto": "1000024142.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "17:27",
+      "printedSignOff": "24:27",
+      "printedDuration": "7:00"
     },
     "41": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Mon-Thu",
+      "dayPatternSource": "owner-photo",
       "signOn": "17:27",
       "offDuty": "00:27",
       "rosteredHrs": 7,
@@ -7141,11 +7398,17 @@
       "kilometresStatus": "known",
       "sourceFlag": null,
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 1,
+      "sourcePhoto": "1000024142.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "17:27",
+      "printedSignOff": "24:27",
+      "printedDuration": "7:00"
     },
     "42": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Mon-Thu",
+      "dayPatternSource": "owner-photo",
       "signOn": "17:54",
       "offDuty": "00:54",
       "rosteredHrs": 7,
@@ -7153,11 +7416,17 @@
       "kilometresStatus": "known",
       "sourceFlag": null,
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 1,
+      "sourcePhoto": "1000024142.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "17:54",
+      "printedSignOff": "24:54",
+      "printedDuration": "7:00"
     },
     "43": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Mon-Thu",
+      "dayPatternSource": "owner-photo",
       "signOn": "18:27",
       "offDuty": "01:28",
       "rosteredHrs": 7.016666666666667,
@@ -7165,11 +7434,17 @@
       "kilometresStatus": "known",
       "sourceFlag": null,
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 1,
+      "sourcePhoto": "1000024142.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "18:27",
+      "printedSignOff": "25:28",
+      "printedDuration": "7:01"
     },
     "44": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Mon-Thu",
+      "dayPatternSource": "owner-photo",
       "signOn": "19:00",
       "offDuty": "03:00",
       "rosteredHrs": 8,
@@ -7177,11 +7452,17 @@
       "kilometresStatus": "known",
       "sourceFlag": "shed",
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 1,
+      "sourcePhoto": "1000024142.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "19:00",
+      "printedSignOff": "27:00",
+      "printedDuration": "8:00"
     },
     "45": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Mon-Thu",
+      "dayPatternSource": "owner-photo",
       "signOn": "19:00",
       "offDuty": "03:30",
       "rosteredHrs": 8.5,
@@ -7189,11 +7470,17 @@
       "kilometresStatus": "known",
       "sourceFlag": "shed",
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 1,
+      "sourcePhoto": "1000024142.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "19:00",
+      "printedSignOff": "27:30",
+      "printedDuration": "8:30"
     },
     "46": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Mon-Thu",
+      "dayPatternSource": "owner-photo",
       "signOn": "21:00",
       "offDuty": "05:00",
       "rosteredHrs": 8,
@@ -7201,11 +7488,17 @@
       "kilometresStatus": "known",
       "sourceFlag": "shed",
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 1,
+      "sourcePhoto": "1000024142.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "21:00",
+      "printedSignOff": "29:00",
+      "printedDuration": "8:00"
     },
     "47": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Mon-Thu",
+      "dayPatternSource": "owner-photo",
       "signOn": "22:00",
       "offDuty": "06:30",
       "rosteredHrs": 8.5,
@@ -7213,11 +7506,17 @@
       "kilometresStatus": "known",
       "sourceFlag": "shed",
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 1,
+      "sourcePhoto": "1000024142.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "22:00",
+      "printedSignOff": "30:30",
+      "printedDuration": "8:30"
     },
     "2001": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Fri",
+      "dayPatternSource": "owner-photo",
       "signOn": "01:24",
       "offDuty": "09:14",
       "rosteredHrs": 7.833333333333333,
@@ -7225,11 +7524,17 @@
       "kilometresStatus": "known",
       "sourceFlag": null,
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 0,
+      "sourcePhoto": "1000024142.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "1:24",
+      "printedSignOff": "9:14",
+      "printedDuration": "7:50"
     },
     "2002": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Fri",
+      "dayPatternSource": "owner-photo",
       "signOn": "01:34",
       "offDuty": "08:59",
       "rosteredHrs": 7.416666666666667,
@@ -7237,11 +7542,17 @@
       "kilometresStatus": "known",
       "sourceFlag": null,
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 0,
+      "sourcePhoto": "1000024142.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "1:34",
+      "printedSignOff": "8:59",
+      "printedDuration": "7:25"
     },
     "2003": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Fri",
+      "dayPatternSource": "owner-photo",
       "signOn": "01:34",
       "offDuty": "09:19",
       "rosteredHrs": 7.75,
@@ -7249,11 +7560,17 @@
       "kilometresStatus": "known",
       "sourceFlag": null,
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 0,
+      "sourcePhoto": "1000024142.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "1:34",
+      "printedSignOff": "9:19",
+      "printedDuration": "7:45"
     },
     "2004": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Fri",
+      "dayPatternSource": "owner-photo",
       "signOn": "01:47",
       "offDuty": "09:32",
       "rosteredHrs": 7.75,
@@ -7261,23 +7578,35 @@
       "kilometresStatus": "known",
       "sourceFlag": null,
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 0,
+      "sourcePhoto": "1000024142.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "1:47",
+      "printedSignOff": "9:32",
+      "printedDuration": "7:45"
     },
     "2005": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Fri",
+      "dayPatternSource": "owner-photo",
       "signOn": "02:01",
       "offDuty": "09:01",
       "rosteredHrs": 7,
-      "kilometresStatus": "not-counted",
-      "kilometresReason": "standby",
+      "kilometresStatus": "known",
       "sourceFlag": null,
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 0,
+      "rosteredKm": 15.741,
+      "sourcePhoto": "1000024142.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "2:01",
+      "printedSignOff": "9:01",
+      "printedDuration": "7:00"
     },
     "2006": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Fri",
+      "dayPatternSource": "owner-photo",
       "signOn": "02:01",
       "offDuty": "09:44",
       "rosteredHrs": 7.716666666666667,
@@ -7285,23 +7614,35 @@
       "kilometresStatus": "known",
       "sourceFlag": null,
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 0,
+      "sourcePhoto": "1000024142.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "2:01",
+      "printedSignOff": "9:44",
+      "printedDuration": "7:43"
     },
     "2007": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Fri",
+      "dayPatternSource": "owner-photo",
       "signOn": "02:09",
-      "offDuty": "10:05",
-      "rosteredHrs": 7.933333333333334,
+      "offDuty": "09:52",
+      "rosteredHrs": 7.716666666666667,
       "rosteredKm": 98.188,
       "kilometresStatus": "known",
       "sourceFlag": null,
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 0,
+      "sourcePhoto": "1000024142.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "2:09",
+      "printedSignOff": "9:52",
+      "printedDuration": "7:43"
     },
     "2008": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Fri",
+      "dayPatternSource": "owner-photo",
       "signOn": "02:12",
       "offDuty": "10:02",
       "rosteredHrs": 7.833333333333333,
@@ -7309,11 +7650,17 @@
       "kilometresStatus": "known",
       "sourceFlag": null,
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 0,
+      "sourcePhoto": "1000024142.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "2:12",
+      "printedSignOff": "10:02",
+      "printedDuration": "7:50"
     },
     "2009": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Fri",
+      "dayPatternSource": "owner-photo",
       "signOn": "02:18",
       "offDuty": "10:17",
       "rosteredHrs": 7.983333333333333,
@@ -7321,11 +7668,17 @@
       "kilometresStatus": "known",
       "sourceFlag": null,
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 0,
+      "sourcePhoto": "1000024142.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "2:18",
+      "printedSignOff": "10:17",
+      "printedDuration": "7:59"
     },
     "2010": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Fri",
+      "dayPatternSource": "owner-photo",
       "signOn": "02:24",
       "offDuty": "09:24",
       "rosteredHrs": 7,
@@ -7333,23 +7686,35 @@
       "kilometresStatus": "known",
       "sourceFlag": null,
       "rosteredStandby": true,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 0,
+      "sourcePhoto": "1000024142.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "2:24",
+      "printedSignOff": "9:24",
+      "printedDuration": "7:00"
     },
     "2011": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Fri",
+      "dayPatternSource": "owner-photo",
       "signOn": "02:30",
       "offDuty": "10:30",
       "rosteredHrs": 8,
-      "kilometresStatus": "not-counted",
-      "kilometresReason": "standby",
+      "kilometresStatus": "known",
       "sourceFlag": null,
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 0,
+      "rosteredKm": 0,
+      "sourcePhoto": "1000024142.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "2:30",
+      "printedSignOff": "10:30",
+      "printedDuration": "8:00"
     },
     "2012": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Fri",
+      "dayPatternSource": "owner-photo",
       "signOn": "02:39",
       "offDuty": "10:24",
       "rosteredHrs": 7.75,
@@ -7357,11 +7722,17 @@
       "kilometresStatus": "known",
       "sourceFlag": null,
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 0,
+      "sourcePhoto": "1000024142.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "2:39",
+      "printedSignOff": "10:24",
+      "printedDuration": "7:45"
     },
     "2013": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Fri",
+      "dayPatternSource": "owner-photo",
       "signOn": "02:51",
       "offDuty": "10:39",
       "rosteredHrs": 7.8,
@@ -7369,11 +7740,17 @@
       "kilometresStatus": "known",
       "sourceFlag": null,
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 0,
+      "sourcePhoto": "1000024142.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "2:51",
+      "printedSignOff": "10:39",
+      "printedDuration": "7:48"
     },
     "2014": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Fri",
+      "dayPatternSource": "owner-photo",
       "signOn": "02:52",
       "offDuty": "10:32",
       "rosteredHrs": 7.666666666666667,
@@ -7381,11 +7758,17 @@
       "kilometresStatus": "known",
       "sourceFlag": null,
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 0,
+      "sourcePhoto": "1000024142.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "2:52",
+      "printedSignOff": "10:32",
+      "printedDuration": "7:40"
     },
     "2015": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Fri",
+      "dayPatternSource": "owner-photo",
       "signOn": "03:00",
       "offDuty": "10:52",
       "rosteredHrs": 7.866666666666666,
@@ -7393,11 +7776,17 @@
       "kilometresStatus": "known",
       "sourceFlag": null,
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 0,
+      "sourcePhoto": "1000024142.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "3:00",
+      "printedSignOff": "10:52",
+      "printedDuration": "7:52"
     },
     "2016": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Fri",
+      "dayPatternSource": "owner-photo",
       "signOn": "03:00",
       "offDuty": "10:59",
       "rosteredHrs": 7.983333333333333,
@@ -7405,11 +7794,17 @@
       "kilometresStatus": "known",
       "sourceFlag": null,
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 0,
+      "sourcePhoto": "1000024142.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "3:00",
+      "printedSignOff": "10:59",
+      "printedDuration": "7:59"
     },
     "2017": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Fri",
+      "dayPatternSource": "owner-photo",
       "signOn": "03:19",
       "offDuty": "11:17",
       "rosteredHrs": 7.966666666666667,
@@ -7417,11 +7812,17 @@
       "kilometresStatus": "known",
       "sourceFlag": null,
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 0,
+      "sourcePhoto": "1000024142.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "3:19",
+      "printedSignOff": "11:17",
+      "printedDuration": "7:58"
     },
     "2018": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Fri",
+      "dayPatternSource": "owner-photo",
       "signOn": "03:24",
       "offDuty": "11:14",
       "rosteredHrs": 7.833333333333333,
@@ -7429,11 +7830,17 @@
       "kilometresStatus": "known",
       "sourceFlag": null,
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 0,
+      "sourcePhoto": "1000024142.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "3:24",
+      "printedSignOff": "11:14",
+      "printedDuration": "7:50"
     },
     "2019": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Fri",
+      "dayPatternSource": "owner-photo",
       "signOn": "03:25",
       "offDuty": "11:17",
       "rosteredHrs": 7.866666666666666,
@@ -7441,11 +7848,17 @@
       "kilometresStatus": "known",
       "sourceFlag": null,
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 0,
+      "sourcePhoto": "1000024142.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "3:25",
+      "printedSignOff": "11:17",
+      "printedDuration": "7:52"
     },
     "2020": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Fri",
+      "dayPatternSource": "owner-photo",
       "signOn": "03:29",
       "offDuty": "11:29",
       "rosteredHrs": 8,
@@ -7453,11 +7866,17 @@
       "kilometresStatus": "known",
       "sourceFlag": null,
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 0,
+      "sourcePhoto": "1000024142.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "3:29",
+      "printedSignOff": "11:29",
+      "printedDuration": "8:00"
     },
     "2021": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Fri",
+      "dayPatternSource": "owner-photo",
       "signOn": "03:53",
       "offDuty": "11:31",
       "rosteredHrs": 7.633333333333334,
@@ -7465,11 +7884,17 @@
       "kilometresStatus": "known",
       "sourceFlag": null,
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 0,
+      "sourcePhoto": "1000024142.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "3:53",
+      "printedSignOff": "11:31",
+      "printedDuration": "7:38"
     },
     "2022": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Fri",
+      "dayPatternSource": "owner-photo",
       "signOn": "04:02",
       "offDuty": "12:01",
       "rosteredHrs": 7.983333333333333,
@@ -7477,11 +7902,17 @@
       "kilometresStatus": "known",
       "sourceFlag": null,
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 0,
+      "sourcePhoto": "1000024142.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "4:02",
+      "printedSignOff": "12:01",
+      "printedDuration": "7:59"
     },
     "2023": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Fri",
+      "dayPatternSource": "owner-photo",
       "signOn": "06:00",
       "offDuty": "14:30",
       "rosteredHrs": 8.5,
@@ -7489,11 +7920,17 @@
       "kilometresStatus": "known",
       "sourceFlag": "shed",
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 0,
+      "sourcePhoto": "1000024142.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "6:00",
+      "printedSignOff": "14:30",
+      "printedDuration": "8:30"
     },
     "2024": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Fri",
+      "dayPatternSource": "owner-photo",
       "signOn": "11:13",
       "offDuty": "19:30",
       "rosteredHrs": 8.283333333333333,
@@ -7501,11 +7938,17 @@
       "kilometresStatus": "known",
       "sourceFlag": null,
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 0,
+      "sourcePhoto": "1000024142.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "11:13",
+      "printedSignOff": "19:30",
+      "printedDuration": "8:17"
     },
     "2025": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Fri",
+      "dayPatternSource": "owner-photo",
       "signOn": "11:28",
       "offDuty": "19:58",
       "rosteredHrs": 8.5,
@@ -7513,11 +7956,17 @@
       "kilometresStatus": "known",
       "sourceFlag": null,
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 0,
+      "sourcePhoto": "1000024142.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "11:28",
+      "printedSignOff": "19:58",
+      "printedDuration": "8:30"
     },
     "2026": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Fri",
+      "dayPatternSource": "owner-photo",
       "signOn": "11:43",
       "offDuty": "20:09",
       "rosteredHrs": 8.433333333333334,
@@ -7525,11 +7974,17 @@
       "kilometresStatus": "known",
       "sourceFlag": null,
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 0,
+      "sourcePhoto": "1000024142.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "11:43",
+      "printedSignOff": "20:09",
+      "printedDuration": "8:26"
     },
     "2027": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Fri",
+      "dayPatternSource": "owner-photo",
       "signOn": "12:28",
       "offDuty": "20:57",
       "rosteredHrs": 8.483333333333333,
@@ -7537,11 +7992,17 @@
       "kilometresStatus": "known",
       "sourceFlag": null,
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 0,
+      "sourcePhoto": "1000024142.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "12:28",
+      "printedSignOff": "20:57",
+      "printedDuration": "8:29"
     },
     "2028": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Fri",
+      "dayPatternSource": "owner-photo",
       "signOn": "13:33",
       "offDuty": "21:43",
       "rosteredHrs": 8.166666666666666,
@@ -7549,11 +8010,17 @@
       "kilometresStatus": "known",
       "sourceFlag": null,
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 0,
+      "sourcePhoto": "1000024142.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "13:33",
+      "printedSignOff": "21:43",
+      "printedDuration": "8:10"
     },
     "2029": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Fri",
+      "dayPatternSource": "owner-photo",
       "signOn": "13:41",
       "offDuty": "22:13",
       "rosteredHrs": 8.533333333333333,
@@ -7561,11 +8028,17 @@
       "kilometresStatus": "known",
       "sourceFlag": null,
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 0,
+      "sourcePhoto": "1000024143.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "13:41",
+      "printedSignOff": "22:13",
+      "printedDuration": "8:32"
     },
     "2030": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Fri",
+      "dayPatternSource": "owner-photo",
       "signOn": "13:55",
       "offDuty": "22:17",
       "rosteredHrs": 8.366666666666667,
@@ -7573,23 +8046,35 @@
       "kilometresStatus": "known",
       "sourceFlag": null,
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 0,
+      "sourcePhoto": "1000024143.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "13:55",
+      "printedSignOff": "22:17",
+      "printedDuration": "8:22"
     },
     "2031": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Fri",
+      "dayPatternSource": "owner-photo",
       "signOn": "13:58",
       "offDuty": "22:05",
       "rosteredHrs": 8.116666666666667,
-      "kilometresStatus": "not-counted",
-      "kilometresReason": "standby",
+      "kilometresStatus": "known",
       "sourceFlag": null,
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 0,
+      "rosteredKm": 29.764,
+      "sourcePhoto": "1000024143.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "13:58",
+      "printedSignOff": "22:05",
+      "printedDuration": "8:07"
     },
     "2032": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Fri",
+      "dayPatternSource": "owner-photo",
       "signOn": "14:00",
       "offDuty": "22:30",
       "rosteredHrs": 8.5,
@@ -7597,23 +8082,35 @@
       "kilometresStatus": "known",
       "sourceFlag": "shed",
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 0,
+      "sourcePhoto": "1000024143.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "14:00",
+      "printedSignOff": "22:30",
+      "printedDuration": "8:30"
     },
     "2033": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Fri",
+      "dayPatternSource": "owner-photo",
       "signOn": "16:00",
       "offDuty": "00:00",
       "rosteredHrs": 8,
-      "kilometresStatus": "not-counted",
-      "kilometresReason": "standby",
+      "kilometresStatus": "known",
       "sourceFlag": null,
       "rosteredStandby": true,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 1,
+      "rosteredKm": 0,
+      "sourcePhoto": "1000024143.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "16:00",
+      "printedSignOff": "24:00",
+      "printedDuration": "8:00"
     },
     "2034": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Fri",
+      "dayPatternSource": "owner-photo",
       "signOn": "17:12",
       "offDuty": "00:12",
       "rosteredHrs": 7,
@@ -7621,11 +8118,17 @@
       "kilometresStatus": "known",
       "sourceFlag": null,
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 1,
+      "sourcePhoto": "1000024144.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "17:12",
+      "printedSignOff": "24:12",
+      "printedDuration": "7:00"
     },
     "2035": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Fri",
+      "dayPatternSource": "owner-photo",
       "signOn": "17:12",
       "offDuty": "01:09",
       "rosteredHrs": 7.95,
@@ -7633,11 +8136,17 @@
       "kilometresStatus": "known",
       "sourceFlag": null,
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 1,
+      "sourcePhoto": "1000024144.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "17:12",
+      "printedSignOff": "25:09",
+      "printedDuration": "7:57"
     },
     "2036": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Fri",
+      "dayPatternSource": "owner-photo",
       "signOn": "17:12",
       "offDuty": "01:44",
       "rosteredHrs": 8.533333333333333,
@@ -7645,11 +8154,17 @@
       "kilometresStatus": "known",
       "sourceFlag": null,
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 1,
+      "sourcePhoto": "1000024144.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "17:12",
+      "printedSignOff": "25:44",
+      "printedDuration": "8:32"
     },
     "2037": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Fri",
+      "dayPatternSource": "owner-photo",
       "signOn": "17:24",
       "offDuty": "00:24",
       "rosteredHrs": 7,
@@ -7657,11 +8172,17 @@
       "kilometresStatus": "known",
       "sourceFlag": null,
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 1,
+      "sourcePhoto": "1000024144.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "17:24",
+      "printedSignOff": "24:24",
+      "printedDuration": "7:00"
     },
     "2038": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Fri",
+      "dayPatternSource": "owner-photo",
       "signOn": "17:27",
       "offDuty": "01:39",
       "rosteredHrs": 8.2,
@@ -7669,11 +8190,17 @@
       "kilometresStatus": "known",
       "sourceFlag": null,
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 1,
+      "sourcePhoto": "1000024144.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "17:27",
+      "printedSignOff": "25:39",
+      "printedDuration": "8:12"
     },
     "2039": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Fri",
+      "dayPatternSource": "owner-photo",
       "signOn": "17:54",
       "offDuty": "02:09",
       "rosteredHrs": 8.25,
@@ -7681,11 +8208,17 @@
       "kilometresStatus": "known",
       "sourceFlag": null,
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 1,
+      "sourcePhoto": "1000024144.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "17:54",
+      "printedSignOff": "26:09",
+      "printedDuration": "8:15"
     },
     "2040": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Fri",
+      "dayPatternSource": "owner-photo",
       "signOn": "17:57",
       "offDuty": "02:02",
       "rosteredHrs": 8.083333333333334,
@@ -7693,11 +8226,17 @@
       "kilometresStatus": "known",
       "sourceFlag": null,
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 1,
+      "sourcePhoto": "1000024144.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "17:57",
+      "printedSignOff": "26:02",
+      "printedDuration": "8:05"
     },
     "2041": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Fri",
+      "dayPatternSource": "owner-photo",
       "signOn": "18:27",
       "offDuty": "01:27",
       "rosteredHrs": 7,
@@ -7705,11 +8244,17 @@
       "kilometresStatus": "known",
       "sourceFlag": null,
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 1,
+      "sourcePhoto": "1000024144.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "18:27",
+      "printedSignOff": "25:27",
+      "printedDuration": "7:00"
     },
     "2042": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Fri",
+      "dayPatternSource": "owner-photo",
       "signOn": "18:42",
       "offDuty": "03:02",
       "rosteredHrs": 8.333333333333334,
@@ -7717,11 +8262,17 @@
       "kilometresStatus": "known",
       "sourceFlag": null,
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 1,
+      "sourcePhoto": "1000024144.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "18:42",
+      "printedSignOff": "27:02",
+      "printedDuration": "8:20"
     },
     "2043": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Fri",
+      "dayPatternSource": "owner-photo",
       "signOn": "19:00",
       "offDuty": "03:00",
       "rosteredHrs": 8,
@@ -7729,11 +8280,17 @@
       "kilometresStatus": "known",
       "sourceFlag": "shed",
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 1,
+      "sourcePhoto": "1000024144.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "19:00",
+      "printedSignOff": "27:00",
+      "printedDuration": "8:00"
     },
     "2044": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Fri",
+      "dayPatternSource": "owner-photo",
       "signOn": "19:00",
       "offDuty": "03:30",
       "rosteredHrs": 8.5,
@@ -7741,11 +8298,17 @@
       "kilometresStatus": "known",
       "sourceFlag": "shed",
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 1,
+      "sourcePhoto": "1000024144.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "19:00",
+      "printedSignOff": "27:30",
+      "printedDuration": "8:30"
     },
     "2045": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Fri",
+      "dayPatternSource": "owner-photo",
       "signOn": "21:00",
       "offDuty": "05:00",
       "rosteredHrs": 8,
@@ -7753,11 +8316,17 @@
       "kilometresStatus": "known",
       "sourceFlag": "shed",
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 1,
+      "sourcePhoto": "1000024144.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "21:00",
+      "printedSignOff": "29:00",
+      "printedDuration": "8:00"
     },
     "2046": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Fri",
+      "dayPatternSource": "owner-photo",
       "signOn": "22:00",
       "offDuty": "06:30",
       "rosteredHrs": 8.5,
@@ -7765,11 +8334,17 @@
       "kilometresStatus": "known",
       "sourceFlag": "shed",
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 1,
+      "sourcePhoto": "1000024144.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "22:00",
+      "printedSignOff": "30:30",
+      "printedDuration": "8:30"
     },
     "3001": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Sat",
+      "dayPatternSource": "owner-photo",
       "signOn": "01:24",
       "offDuty": "09:56",
       "rosteredHrs": 8.533333333333333,
@@ -7777,11 +8352,17 @@
       "kilometresStatus": "known",
       "sourceFlag": null,
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 0,
+      "sourcePhoto": "1000024144.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "1:24",
+      "printedSignOff": "9:56",
+      "printedDuration": "8:32"
     },
     "3002": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Sat",
+      "dayPatternSource": "owner-photo",
       "signOn": "01:32",
       "offDuty": "09:56",
       "rosteredHrs": 8.4,
@@ -7789,11 +8370,17 @@
       "kilometresStatus": "known",
       "sourceFlag": null,
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 0,
+      "sourcePhoto": "1000024144.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "1:32",
+      "printedSignOff": "9:56",
+      "printedDuration": "8:24"
     },
     "3003": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Sat",
+      "dayPatternSource": "owner-photo",
       "signOn": "01:47",
       "offDuty": "10:07",
       "rosteredHrs": 8.333333333333334,
@@ -7801,11 +8388,17 @@
       "kilometresStatus": "known",
       "sourceFlag": null,
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 0,
+      "sourcePhoto": "1000024144.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "1:47",
+      "printedSignOff": "10:07",
+      "printedDuration": "8:20"
     },
     "3004": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Sat",
+      "dayPatternSource": "owner-photo",
       "signOn": "01:49",
       "offDuty": "10:22",
       "rosteredHrs": 8.55,
@@ -7813,11 +8406,17 @@
       "kilometresStatus": "known",
       "sourceFlag": null,
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 0,
+      "sourcePhoto": "1000024144.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "1:49",
+      "printedSignOff": "10:22",
+      "printedDuration": "8:33"
     },
     "3005": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Sat",
+      "dayPatternSource": "owner-photo",
       "signOn": "02:22",
       "offDuty": "10:52",
       "rosteredHrs": 8.5,
@@ -7825,11 +8424,17 @@
       "kilometresStatus": "known",
       "sourceFlag": null,
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 0,
+      "sourcePhoto": "1000024144.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "2:22",
+      "printedSignOff": "10:52",
+      "printedDuration": "8:30"
     },
     "3006": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Sat",
+      "dayPatternSource": "owner-photo",
       "signOn": "02:30",
       "offDuty": "10:37",
       "rosteredHrs": 8.116666666666667,
@@ -7837,11 +8442,17 @@
       "kilometresStatus": "known",
       "sourceFlag": null,
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 0,
+      "sourcePhoto": "1000024144.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "2:30",
+      "printedSignOff": "10:37",
+      "printedDuration": "8:07"
     },
     "3007": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Sat",
+      "dayPatternSource": "owner-photo",
       "signOn": "02:35",
       "offDuty": "11:07",
       "rosteredHrs": 8.533333333333333,
@@ -7849,11 +8460,17 @@
       "kilometresStatus": "known",
       "sourceFlag": null,
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 0,
+      "sourcePhoto": "1000024144.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "2:35",
+      "printedSignOff": "11:07",
+      "printedDuration": "8:32"
     },
     "3008": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Sat",
+      "dayPatternSource": "owner-photo",
       "signOn": "02:59",
       "offDuty": "11:22",
       "rosteredHrs": 8.383333333333333,
@@ -7861,11 +8478,17 @@
       "kilometresStatus": "known",
       "sourceFlag": null,
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 0,
+      "sourcePhoto": "1000024144.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "2:59",
+      "printedSignOff": "11:22",
+      "printedDuration": "8:23"
     },
     "3009": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Sat",
+      "dayPatternSource": "owner-photo",
       "signOn": "03:34",
       "offDuty": "12:07",
       "rosteredHrs": 8.55,
@@ -7873,11 +8496,17 @@
       "kilometresStatus": "known",
       "sourceFlag": null,
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 0,
+      "sourcePhoto": "1000024144.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "3:34",
+      "printedSignOff": "12:07",
+      "printedDuration": "8:33"
     },
     "3010": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Sat",
+      "dayPatternSource": "owner-photo",
       "signOn": "03:50",
       "offDuty": "12:11",
       "rosteredHrs": 8.35,
@@ -7885,11 +8514,17 @@
       "kilometresStatus": "known",
       "sourceFlag": null,
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 0,
+      "sourcePhoto": "1000024144.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "3:50",
+      "printedSignOff": "12:11",
+      "printedDuration": "8:21"
     },
     "3011": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Sat",
+      "dayPatternSource": "owner-photo",
       "signOn": "04:50",
       "offDuty": "13:22",
       "rosteredHrs": 8.533333333333333,
@@ -7897,11 +8532,17 @@
       "kilometresStatus": "known",
       "sourceFlag": null,
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 0,
+      "sourcePhoto": "1000024144.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "4:50",
+      "printedSignOff": "13:22",
+      "printedDuration": "8:32"
     },
     "3012": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Sat",
+      "dayPatternSource": "owner-photo",
       "signOn": "05:04",
       "offDuty": "13:22",
       "rosteredHrs": 8.3,
@@ -7909,11 +8550,17 @@
       "kilometresStatus": "known",
       "sourceFlag": null,
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 0,
+      "sourcePhoto": "1000024144.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "5:04",
+      "printedSignOff": "13:22",
+      "printedDuration": "8:18"
     },
     "3013": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Sat",
+      "dayPatternSource": "owner-photo",
       "signOn": "05:30",
       "offDuty": "14:00",
       "rosteredHrs": 8.5,
@@ -7921,11 +8568,17 @@
       "kilometresStatus": "known",
       "sourceFlag": "shed",
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 0,
+      "sourcePhoto": "1000024144.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "5:30",
+      "printedSignOff": "14:00",
+      "printedDuration": "8:30"
     },
     "3014": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Sat",
+      "dayPatternSource": "owner-photo",
       "signOn": "05:50",
       "offDuty": "14:22",
       "rosteredHrs": 8.533333333333333,
@@ -7933,11 +8586,17 @@
       "kilometresStatus": "known",
       "sourceFlag": null,
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 0,
+      "sourcePhoto": "1000024144.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "5:50",
+      "printedSignOff": "14:22",
+      "printedDuration": "8:32"
     },
     "3015": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Sat",
+      "dayPatternSource": "owner-photo",
       "signOn": "14:00",
       "offDuty": "22:30",
       "rosteredHrs": 8.5,
@@ -7945,11 +8604,17 @@
       "kilometresStatus": "known",
       "sourceFlag": "shed",
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 0,
+      "sourcePhoto": "1000024144.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "14:00",
+      "printedSignOff": "22:30",
+      "printedDuration": "8:30"
     },
     "3016": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Sat",
+      "dayPatternSource": "owner-photo",
       "signOn": "14:35",
       "offDuty": "22:58",
       "rosteredHrs": 8.383333333333333,
@@ -7957,11 +8622,17 @@
       "kilometresStatus": "known",
       "sourceFlag": null,
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 0,
+      "sourcePhoto": "1000024144.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "14:35",
+      "printedSignOff": "22:58",
+      "printedDuration": "8:23"
     },
     "3017": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Sat",
+      "dayPatternSource": "owner-photo",
       "signOn": "15:05",
       "offDuty": "23:37",
       "rosteredHrs": 8.533333333333333,
@@ -7969,11 +8640,18 @@
       "kilometresStatus": "known",
       "sourceFlag": null,
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 0,
+      "sourcePhoto": "1000024144.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "15:05",
+      "printedSignOff": "23:37",
+      "printedDuration": "8:32",
+      "sourceMarker": "M"
     },
     "3018": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Sat",
+      "dayPatternSource": "owner-photo",
       "signOn": "15:16",
       "offDuty": "23:25",
       "rosteredHrs": 8.15,
@@ -7981,11 +8659,17 @@
       "kilometresStatus": "known",
       "sourceFlag": null,
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 0,
+      "sourcePhoto": "1000024144.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "15:16",
+      "printedSignOff": "23:25",
+      "printedDuration": "8:09"
     },
     "3019": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Sat",
+      "dayPatternSource": "owner-photo",
       "signOn": "15:31",
       "offDuty": "23:45",
       "rosteredHrs": 8.233333333333333,
@@ -7993,11 +8677,17 @@
       "kilometresStatus": "known",
       "sourceFlag": null,
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 0,
+      "sourcePhoto": "1000024144.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "15:31",
+      "printedSignOff": "23:45",
+      "printedDuration": "8:14"
     },
     "3020": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Sat",
+      "dayPatternSource": "owner-photo",
       "signOn": "15:35",
       "offDuty": "23:57",
       "rosteredHrs": 8.366666666666667,
@@ -8005,11 +8695,18 @@
       "kilometresStatus": "known",
       "sourceFlag": null,
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 0,
+      "sourcePhoto": "1000024144.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "15:35",
+      "printedSignOff": "23:57",
+      "printedDuration": "8:22",
+      "sourceMarker": "M"
     },
     "3021": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Sat",
+      "dayPatternSource": "owner-photo",
       "signOn": "15:50",
       "offDuty": "23:53",
       "rosteredHrs": 8.05,
@@ -8017,11 +8714,17 @@
       "kilometresStatus": "known",
       "sourceFlag": null,
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 0,
+      "sourcePhoto": "1000024144.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "15:50",
+      "printedSignOff": "23:53",
+      "printedDuration": "8:03"
     },
     "3022": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Sat",
+      "dayPatternSource": "owner-photo",
       "signOn": "16:43",
       "offDuty": "01:06",
       "rosteredHrs": 8.383333333333333,
@@ -8029,11 +8732,17 @@
       "kilometresStatus": "known",
       "sourceFlag": null,
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 1,
+      "sourcePhoto": "1000024144.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "16:43",
+      "printedSignOff": "25:06",
+      "printedDuration": "8:23"
     },
     "3023": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Sat",
+      "dayPatternSource": "owner-photo",
       "signOn": "17:04",
       "offDuty": "00:53",
       "rosteredHrs": 7.816666666666666,
@@ -8041,11 +8750,17 @@
       "kilometresStatus": "known",
       "sourceFlag": null,
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 1,
+      "sourcePhoto": "1000024144.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "17:04",
+      "printedSignOff": "24:53",
+      "printedDuration": "7:49"
     },
     "3024": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Sat",
+      "dayPatternSource": "owner-photo",
       "signOn": "17:28",
       "offDuty": "02:01",
       "rosteredHrs": 8.55,
@@ -8053,7 +8768,13 @@
       "kilometresStatus": "known",
       "sourceFlag": null,
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 1,
+      "sourcePhoto": "1000024144.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "17:28",
+      "printedSignOff": "26:01",
+      "printedDuration": "8:33"
     },
     "3025": {
       "dayPattern": "Sun-Sat",
@@ -8104,8 +8825,8 @@
       "referenceSource": "imported-defunct-diagram"
     },
     "4001": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Sun",
+      "dayPatternSource": "owner-photo",
       "signOn": "01:23",
       "offDuty": "09:56",
       "rosteredHrs": 8.55,
@@ -8113,11 +8834,17 @@
       "kilometresStatus": "known",
       "sourceFlag": null,
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 0,
+      "sourcePhoto": "1000024140.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "1:23",
+      "printedSignOff": "9:56",
+      "printedDuration": "8:33"
     },
     "4002": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Sun",
+      "dayPatternSource": "owner-photo",
       "signOn": "01:24",
       "offDuty": "09:56",
       "rosteredHrs": 8.533333333333333,
@@ -8125,11 +8852,17 @@
       "kilometresStatus": "known",
       "sourceFlag": null,
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 0,
+      "sourcePhoto": "1000024140.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "1:24",
+      "printedSignOff": "9:56",
+      "printedDuration": "8:32"
     },
     "4003": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Sun",
+      "dayPatternSource": "owner-photo",
       "signOn": "01:32",
       "offDuty": "09:56",
       "rosteredHrs": 8.4,
@@ -8137,11 +8870,17 @@
       "kilometresStatus": "known",
       "sourceFlag": null,
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 0,
+      "sourcePhoto": "1000024140.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "1:32",
+      "printedSignOff": "9:56",
+      "printedDuration": "8:24"
     },
     "4004": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Sun",
+      "dayPatternSource": "owner-photo",
       "signOn": "01:47",
       "offDuty": "10:07",
       "rosteredHrs": 8.333333333333334,
@@ -8149,11 +8888,17 @@
       "kilometresStatus": "known",
       "sourceFlag": null,
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 0,
+      "sourcePhoto": "1000024140.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "1:47",
+      "printedSignOff": "10:07",
+      "printedDuration": "8:20"
     },
     "4005": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Sun",
+      "dayPatternSource": "owner-photo",
       "signOn": "02:22",
       "offDuty": "10:52",
       "rosteredHrs": 8.5,
@@ -8161,11 +8906,17 @@
       "kilometresStatus": "known",
       "sourceFlag": null,
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 0,
+      "sourcePhoto": "1000024140.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "2:22",
+      "printedSignOff": "10:52",
+      "printedDuration": "8:30"
     },
     "4006": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Sun",
+      "dayPatternSource": "owner-photo",
       "signOn": "02:30",
       "offDuty": "10:52",
       "rosteredHrs": 8.366666666666667,
@@ -8173,11 +8924,17 @@
       "kilometresStatus": "known",
       "sourceFlag": null,
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 0,
+      "sourcePhoto": "1000024140.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "2:30",
+      "printedSignOff": "10:52",
+      "printedDuration": "8:22"
     },
     "4007": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Sun",
+      "dayPatternSource": "owner-photo",
       "signOn": "02:35",
       "offDuty": "11:07",
       "rosteredHrs": 8.533333333333333,
@@ -8185,11 +8942,17 @@
       "kilometresStatus": "known",
       "sourceFlag": null,
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 0,
+      "sourcePhoto": "1000024140.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "2:35",
+      "printedSignOff": "11:07",
+      "printedDuration": "8:32"
     },
     "4008": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Sun",
+      "dayPatternSource": "owner-photo",
       "signOn": "02:59",
       "offDuty": "11:22",
       "rosteredHrs": 8.383333333333333,
@@ -8197,11 +8960,17 @@
       "kilometresStatus": "known",
       "sourceFlag": null,
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 0,
+      "sourcePhoto": "1000024140.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "2:59",
+      "printedSignOff": "11:22",
+      "printedDuration": "8:23"
     },
     "4009": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Sun",
+      "dayPatternSource": "owner-photo",
       "signOn": "03:50",
       "offDuty": "12:22",
       "rosteredHrs": 8.533333333333333,
@@ -8209,11 +8978,17 @@
       "kilometresStatus": "known",
       "sourceFlag": null,
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 0,
+      "sourcePhoto": "1000024140.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "3:50",
+      "printedSignOff": "12:22",
+      "printedDuration": "8:32"
     },
     "4010": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Sun",
+      "dayPatternSource": "owner-photo",
       "signOn": "03:50",
       "offDuty": "12:22",
       "rosteredHrs": 8.533333333333333,
@@ -8221,11 +8996,17 @@
       "kilometresStatus": "known",
       "sourceFlag": null,
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 0,
+      "sourcePhoto": "1000024140.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "3:50",
+      "printedSignOff": "12:22",
+      "printedDuration": "8:32"
     },
     "4011": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Sun",
+      "dayPatternSource": "owner-photo",
       "signOn": "04:04",
       "offDuty": "12:37",
       "rosteredHrs": 8.55,
@@ -8233,11 +9014,17 @@
       "kilometresStatus": "known",
       "sourceFlag": null,
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 0,
+      "sourcePhoto": "1000024140.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "4:04",
+      "printedSignOff": "12:37",
+      "printedDuration": "8:33"
     },
     "4012": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Sun",
+      "dayPatternSource": "owner-photo",
       "signOn": "05:04",
       "offDuty": "13:37",
       "rosteredHrs": 8.55,
@@ -8245,11 +9032,17 @@
       "kilometresStatus": "known",
       "sourceFlag": null,
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 0,
+      "sourcePhoto": "1000024140.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "5:04",
+      "printedSignOff": "13:37",
+      "printedDuration": "8:33"
     },
     "4013": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Sun",
+      "dayPatternSource": "owner-photo",
       "signOn": "05:30",
       "offDuty": "14:00",
       "rosteredHrs": 8.5,
@@ -8257,11 +9050,17 @@
       "kilometresStatus": "known",
       "sourceFlag": "shed",
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 0,
+      "sourcePhoto": "1000024140.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "5:30",
+      "printedSignOff": "14:00",
+      "printedDuration": "8:30"
     },
     "4014": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Sun",
+      "dayPatternSource": "owner-photo",
       "signOn": "05:50",
       "offDuty": "14:22",
       "rosteredHrs": 8.533333333333333,
@@ -8269,11 +9068,17 @@
       "kilometresStatus": "known",
       "sourceFlag": null,
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 0,
+      "sourcePhoto": "1000024140.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "5:50",
+      "printedSignOff": "14:22",
+      "printedDuration": "8:32"
     },
     "4015": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Sun",
+      "dayPatternSource": "owner-photo",
       "signOn": "11:20",
       "offDuty": "19:53",
       "rosteredHrs": 8.55,
@@ -8281,11 +9086,17 @@
       "kilometresStatus": "known",
       "sourceFlag": null,
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 0,
+      "sourcePhoto": "1000024140.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "11:20",
+      "printedSignOff": "19:53",
+      "printedDuration": "8:33"
     },
     "4016": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Sun",
+      "dayPatternSource": "owner-photo",
       "signOn": "12:35",
       "offDuty": "21:05",
       "rosteredHrs": 8.5,
@@ -8293,11 +9104,17 @@
       "kilometresStatus": "known",
       "sourceFlag": null,
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 0,
+      "sourcePhoto": "1000024140.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "12:35",
+      "printedSignOff": "21:05",
+      "printedDuration": "8:30"
     },
     "4017": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Sun",
+      "dayPatternSource": "owner-photo",
       "signOn": "13:05",
       "offDuty": "21:35",
       "rosteredHrs": 8.5,
@@ -8305,11 +9122,18 @@
       "kilometresStatus": "known",
       "sourceFlag": null,
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 0,
+      "sourcePhoto": "1000024140.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "13:05",
+      "printedSignOff": "21:35",
+      "printedDuration": "8:30",
+      "sourceMarker": "M"
     },
     "4018": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Sun",
+      "dayPatternSource": "owner-photo",
       "signOn": "14:00",
       "offDuty": "22:30",
       "rosteredHrs": 8.5,
@@ -8317,11 +9141,17 @@
       "kilometresStatus": "known",
       "sourceFlag": "shed",
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 0,
+      "sourcePhoto": "1000024140.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "14:00",
+      "printedSignOff": "22:30",
+      "printedDuration": "8:30"
     },
     "4019": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Sun",
+      "dayPatternSource": "owner-photo",
       "signOn": "15:05",
       "offDuty": "23:31",
       "rosteredHrs": 8.433333333333334,
@@ -8329,69 +9159,1175 @@
       "kilometresStatus": "known",
       "sourceFlag": null,
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 0,
+      "sourcePhoto": "1000024140.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "15:05",
+      "printedSignOff": "23:31",
+      "printedDuration": "8:26"
+    },
+    "4020": {
+      "dayPattern": "Sun",
+      "dayPatternSource": "owner-photo",
+      "signOn": "16:43",
+      "offDuty": "01:15",
+      "offDutyDayOffset": 1,
+      "rosteredHrs": 8.533333333333333,
+      "rosteredKm": 187.091,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "sourcePhoto": "1000024140.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "16:43",
+      "printedSignOff": "25:15",
+      "printedDuration": "8:32"
+    },
+    "4021": {
+      "dayPattern": "Sun",
+      "dayPatternSource": "owner-photo",
+      "signOn": "16:55",
+      "offDuty": "01:17",
+      "offDutyDayOffset": 1,
+      "rosteredHrs": 8.366666666666667,
+      "rosteredKm": 92.7,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "sourcePhoto": "1000024140.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "16:55",
+      "printedSignOff": "25:17",
+      "printedDuration": "8:22"
+    },
+    "4022": {
+      "dayPattern": "Sun",
+      "dayPatternSource": "owner-photo",
+      "signOn": "17:04",
+      "offDuty": "01:08",
+      "offDutyDayOffset": 1,
+      "rosteredHrs": 8.066666666666666,
+      "rosteredKm": 164.777,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "sourcePhoto": "1000024140.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "17:04",
+      "printedSignOff": "25:08",
+      "printedDuration": "8:04"
+    },
+    "4023": {
+      "dayPattern": "Sun",
+      "dayPatternSource": "owner-photo",
+      "signOn": "17:05",
+      "offDuty": "01:36",
+      "offDutyDayOffset": 1,
+      "rosteredHrs": 8.516666666666667,
+      "rosteredKm": 175.539,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "sourcePhoto": "1000024140.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "17:05",
+      "printedSignOff": "25:36",
+      "printedDuration": "8:31"
+    },
+    "4024": {
+      "dayPattern": "Sun",
+      "dayPatternSource": "owner-photo",
+      "signOn": "17:19",
+      "offDuty": "01:38",
+      "offDutyDayOffset": 1,
+      "rosteredHrs": 8.316666666666666,
+      "rosteredKm": 137.619,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "sourcePhoto": "1000024140.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "17:19",
+      "printedSignOff": "25:38",
+      "printedDuration": "8:19"
+    },
+    "4025": {
+      "dayPattern": "Sun",
+      "dayPatternSource": "owner-photo",
+      "signOn": "17:58",
+      "offDuty": "02:29",
+      "offDutyDayOffset": 1,
+      "rosteredHrs": 8.516666666666667,
+      "rosteredKm": 151.087,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "sourcePhoto": "1000024140.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "17:58",
+      "printedSignOff": "26:29",
+      "printedDuration": "8:31"
+    },
+    "4026": {
+      "dayPattern": "Sun",
+      "dayPatternSource": "owner-photo",
+      "signOn": "18:04",
+      "offDuty": "02:37",
+      "offDutyDayOffset": 1,
+      "rosteredHrs": 8.55,
+      "rosteredKm": 208.235,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "sourcePhoto": "1000024140.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "18:04",
+      "printedSignOff": "26:37",
+      "printedDuration": "8:33",
+      "sourceMarker": "M"
+    },
+    "4027": {
+      "dayPattern": "Sun",
+      "dayPatternSource": "owner-photo",
+      "signOn": "19:00",
+      "offDuty": "03:30",
+      "offDutyDayOffset": 1,
+      "rosteredHrs": 8.5,
+      "rosteredKm": 0,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "sourcePhoto": "1000024140.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "19:00",
+      "printedSignOff": "27:30",
+      "printedDuration": "8:30"
+    },
+    "4028": {
+      "dayPattern": "Sun",
+      "dayPatternSource": "owner-photo",
+      "signOn": "22:00",
+      "offDuty": "06:30",
+      "offDutyDayOffset": 1,
+      "rosteredHrs": 8.5,
+      "rosteredKm": 0,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "sourcePhoto": "1000024140.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "22:00",
+      "printedSignOff": "30:30",
+      "printedDuration": "8:30"
     }
   },
   "kilometreData": {
+    "1": {
+      "rosteredKm": 90.227,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024141.jpg"
+    },
+    "2": {
+      "rosteredKm": 131.272,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024141.jpg"
+    },
+    "3": {
+      "rosteredKm": 31.117,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024141.jpg"
+    },
+    "4": {
+      "rosteredKm": 106.346,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024141.jpg"
+    },
+    "5": {
+      "rosteredKm": 15.741,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024141.jpg"
+    },
+    "6": {
+      "rosteredKm": 100.479,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024141.jpg"
+    },
+    "7": {
+      "rosteredKm": 71.781,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024141.jpg"
+    },
+    "8": {
+      "rosteredKm": 98.188,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024141.jpg"
+    },
+    "9": {
+      "rosteredKm": 101.214,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024141.jpg"
+    },
+    "10": {
+      "rosteredKm": 94.913,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024141.jpg"
+    },
     "11": {
       "rosteredKm": 0,
       "kilometresStatus": "known",
-      "referenceSource": "owner-supplied",
-      "providedOn": "2026-11-21"
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024141.jpg"
+    },
+    "12": {
+      "rosteredKm": 107.133,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024141.jpg"
+    },
+    "13": {
+      "rosteredKm": 106.028,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024141.jpg"
+    },
+    "14": {
+      "rosteredKm": 100.337,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024141.jpg"
+    },
+    "15": {
+      "rosteredKm": 99.922,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024141.jpg"
+    },
+    "16": {
+      "rosteredKm": 149.279,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024141.jpg"
+    },
+    "17": {
+      "rosteredKm": 102.619,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024141.jpg"
+    },
+    "18": {
+      "rosteredKm": 66.65,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024141.jpg"
+    },
+    "19": {
+      "rosteredKm": 105.42,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024141.jpg"
+    },
+    "20": {
+      "rosteredKm": 152.763,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024141.jpg"
+    },
+    "21": {
+      "rosteredKm": 100.053,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024141.jpg"
+    },
+    "22": {
+      "rosteredKm": 61.277,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024141.jpg"
+    },
+    "23": {
+      "rosteredKm": 147.402,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024141.jpg"
+    },
+    "24": {
+      "rosteredKm": 126.494,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024141.jpg"
+    },
+    "25": {
+      "rosteredKm": 0,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024141.jpg"
+    },
+    "26": {
+      "rosteredKm": 94.759,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024141.jpg"
+    },
+    "27": {
+      "rosteredKm": 123.778,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024141.jpg"
+    },
+    "28": {
+      "rosteredKm": 147.974,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024141.jpg"
+    },
+    "29": {
+      "rosteredKm": 147.529,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024141.jpg"
+    },
+    "30": {
+      "rosteredKm": 126.197,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024141.jpg"
+    },
+    "31": {
+      "rosteredKm": 108.197,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024141.jpg"
+    },
+    "32": {
+      "rosteredKm": 29.764,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024141.jpg"
+    },
+    "33": {
+      "rosteredKm": 0,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024141.jpg"
+    },
+    "34": {
+      "rosteredKm": 126.494,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024141.jpg"
+    },
+    "35": {
+      "rosteredKm": 0,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024141.jpg"
+    },
+    "36": {
+      "rosteredKm": 147.402,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024141.jpg"
+    },
+    "37": {
+      "rosteredKm": 118.959,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024141.jpg"
+    },
+    "38": {
+      "rosteredKm": 142.8,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024141.jpg"
+    },
+    "39": {
+      "rosteredKm": 103.427,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024142.jpg"
+    },
+    "40": {
+      "rosteredKm": 100.101,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024142.jpg"
+    },
+    "41": {
+      "rosteredKm": 50.746,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024142.jpg"
+    },
+    "42": {
+      "rosteredKm": 77.421,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024142.jpg"
+    },
+    "43": {
+      "rosteredKm": 51.484,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024142.jpg"
+    },
+    "44": {
+      "rosteredKm": 0,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024142.jpg"
+    },
+    "45": {
+      "rosteredKm": 0,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024142.jpg"
+    },
+    "46": {
+      "rosteredKm": 0,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024142.jpg"
+    },
+    "47": {
+      "rosteredKm": 0,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024142.jpg"
+    },
+    "2001": {
+      "rosteredKm": 90.227,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024142.jpg"
+    },
+    "2002": {
+      "rosteredKm": 82.615,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024142.jpg"
+    },
+    "2003": {
+      "rosteredKm": 31.117,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024142.jpg"
+    },
+    "2004": {
+      "rosteredKm": 106.346,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024142.jpg"
+    },
+    "2005": {
+      "rosteredKm": 15.741,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024142.jpg"
+    },
+    "2006": {
+      "rosteredKm": 100.479,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024142.jpg"
+    },
+    "2007": {
+      "rosteredKm": 98.188,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024142.jpg"
+    },
+    "2008": {
+      "rosteredKm": 150.934,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024142.jpg"
+    },
+    "2009": {
+      "rosteredKm": 71.886,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024142.jpg"
+    },
+    "2010": {
+      "rosteredKm": 46.153,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024142.jpg"
+    },
+    "2011": {
+      "rosteredKm": 0,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024142.jpg"
+    },
+    "2012": {
+      "rosteredKm": 107.133,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024142.jpg"
+    },
+    "2013": {
+      "rosteredKm": 106.028,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024142.jpg"
+    },
+    "2014": {
+      "rosteredKm": 94.84,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024142.jpg"
+    },
+    "2015": {
+      "rosteredKm": 127.711,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024142.jpg"
+    },
+    "2016": {
+      "rosteredKm": 60.484,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024142.jpg"
+    },
+    "2017": {
+      "rosteredKm": 125.057,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024142.jpg"
+    },
+    "2018": {
+      "rosteredKm": 101.109,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024142.jpg"
+    },
+    "2019": {
+      "rosteredKm": 109.244,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024142.jpg"
+    },
+    "2020": {
+      "rosteredKm": 108.148,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024142.jpg"
+    },
+    "2021": {
+      "rosteredKm": 100.053,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024142.jpg"
+    },
+    "2022": {
+      "rosteredKm": 95.249,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024142.jpg"
+    },
+    "2023": {
+      "rosteredKm": 0,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024142.jpg"
+    },
+    "2024": {
+      "rosteredKm": 94.759,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024142.jpg"
+    },
+    "2025": {
+      "rosteredKm": 121.167,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024142.jpg"
+    },
+    "2026": {
+      "rosteredKm": 127.366,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024142.jpg"
+    },
+    "2027": {
+      "rosteredKm": 147.529,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024142.jpg"
+    },
+    "2028": {
+      "rosteredKm": 130.235,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024142.jpg"
+    },
+    "2029": {
+      "rosteredKm": 108.197,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024143.jpg"
+    },
+    "2030": {
+      "rosteredKm": 130.082,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024143.jpg"
+    },
+    "2031": {
+      "rosteredKm": 29.764,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024143.jpg"
+    },
+    "2032": {
+      "rosteredKm": 0,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024143.jpg"
+    },
+    "2033": {
+      "rosteredKm": 0,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024143.jpg"
+    },
+    "2034": {
+      "rosteredKm": 69.512,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024144.jpg"
+    },
+    "2035": {
+      "rosteredKm": 107.893,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024144.jpg"
+    },
+    "2036": {
+      "rosteredKm": 122.547,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024144.jpg"
+    },
+    "2037": {
+      "rosteredKm": 47.158,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024144.jpg"
+    },
+    "2038": {
+      "rosteredKm": 163.978,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024144.jpg"
+    },
+    "2039": {
+      "rosteredKm": 95.399,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024144.jpg"
+    },
+    "2040": {
+      "rosteredKm": 100.624,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024144.jpg"
+    },
+    "2041": {
+      "rosteredKm": 48.78,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024144.jpg"
+    },
+    "2042": {
+      "rosteredKm": 61.221,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024144.jpg"
+    },
+    "2043": {
+      "rosteredKm": 0,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024144.jpg"
+    },
+    "2044": {
+      "rosteredKm": 0,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024144.jpg"
+    },
+    "2045": {
+      "rosteredKm": 0,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024144.jpg"
+    },
+    "2046": {
+      "rosteredKm": 0,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024144.jpg"
+    },
+    "3001": {
+      "rosteredKm": 161.636,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024144.jpg"
+    },
+    "3002": {
+      "rosteredKm": 89.632,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024144.jpg"
+    },
+    "3003": {
+      "rosteredKm": 153.754,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024144.jpg"
+    },
+    "3004": {
+      "rosteredKm": 100.5,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024144.jpg"
+    },
+    "3005": {
+      "rosteredKm": 166.791,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024144.jpg"
+    },
+    "3006": {
+      "rosteredKm": 176.858,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024144.jpg"
+    },
+    "3007": {
+      "rosteredKm": 136.041,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024144.jpg"
+    },
+    "3008": {
+      "rosteredKm": 130.347,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024144.jpg"
+    },
+    "3009": {
+      "rosteredKm": 140.951,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024144.jpg"
+    },
+    "3010": {
+      "rosteredKm": 133.056,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024144.jpg"
+    },
+    "3011": {
+      "rosteredKm": 161.061,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024144.jpg"
+    },
+    "3012": {
+      "rosteredKm": 129.308,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024144.jpg"
+    },
+    "3013": {
+      "rosteredKm": 0,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024144.jpg"
+    },
+    "3014": {
+      "rosteredKm": 160.549,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024144.jpg"
+    },
+    "3015": {
+      "rosteredKm": 0,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024144.jpg"
+    },
+    "3016": {
+      "rosteredKm": 156.185,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024144.jpg"
+    },
+    "3017": {
+      "rosteredKm": 195.34,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024144.jpg"
+    },
+    "3018": {
+      "rosteredKm": 153.064,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024144.jpg"
+    },
+    "3019": {
+      "rosteredKm": 152.014,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024144.jpg"
+    },
+    "3020": {
+      "rosteredKm": 203.222,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024144.jpg"
+    },
+    "3021": {
+      "rosteredKm": 138.256,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024144.jpg"
+    },
+    "3022": {
+      "rosteredKm": 169.517,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024144.jpg"
+    },
+    "3023": {
+      "rosteredKm": 100.077,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024144.jpg"
+    },
+    "3024": {
+      "rosteredKm": 133.293,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024144.jpg"
+    },
+    "4001": {
+      "rosteredKm": 102.425,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024140.jpg"
+    },
+    "4002": {
+      "rosteredKm": 161.636,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024140.jpg"
+    },
+    "4003": {
+      "rosteredKm": 89.632,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024140.jpg"
+    },
+    "4004": {
+      "rosteredKm": 119.859,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024140.jpg"
+    },
+    "4005": {
+      "rosteredKm": 166.791,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024140.jpg"
+    },
+    "4006": {
+      "rosteredKm": 179.934,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024140.jpg"
+    },
+    "4007": {
+      "rosteredKm": 117.835,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024140.jpg"
+    },
+    "4008": {
+      "rosteredKm": 160.967,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024140.jpg"
+    },
+    "4009": {
+      "rosteredKm": 143.237,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024140.jpg"
+    },
+    "4010": {
+      "rosteredKm": 128.204,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024140.jpg"
+    },
+    "4011": {
+      "rosteredKm": 157.967,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024140.jpg"
+    },
+    "4012": {
+      "rosteredKm": 131.432,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024140.jpg"
+    },
+    "4013": {
+      "rosteredKm": 0,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024140.jpg"
+    },
+    "4014": {
+      "rosteredKm": 160.549,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024140.jpg"
+    },
+    "4015": {
+      "rosteredKm": 165.219,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024140.jpg"
+    },
+    "4016": {
+      "rosteredKm": 182.465,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024140.jpg"
+    },
+    "4017": {
+      "rosteredKm": 204.057,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024140.jpg"
+    },
+    "4018": {
+      "rosteredKm": 0,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024140.jpg"
+    },
+    "4019": {
+      "rosteredKm": 125.044,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024140.jpg"
     },
     "4020": {
       "rosteredKm": 187.091,
       "kilometresStatus": "known",
-      "referenceSource": "owner-supplied",
-      "providedOn": "2026-11-21"
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024140.jpg"
     },
     "4021": {
       "rosteredKm": 92.7,
       "kilometresStatus": "known",
-      "referenceSource": "owner-supplied",
-      "providedOn": "2026-11-21"
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024140.jpg"
     },
     "4022": {
       "rosteredKm": 164.777,
       "kilometresStatus": "known",
-      "referenceSource": "owner-supplied",
-      "providedOn": "2026-11-21"
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024140.jpg"
     },
     "4023": {
       "rosteredKm": 175.539,
       "kilometresStatus": "known",
-      "referenceSource": "owner-supplied",
-      "providedOn": "2026-11-21"
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024140.jpg"
     },
     "4024": {
       "rosteredKm": 137.619,
       "kilometresStatus": "known",
-      "referenceSource": "owner-supplied",
-      "providedOn": "2026-11-21"
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024140.jpg"
     },
     "4025": {
       "rosteredKm": 151.087,
       "kilometresStatus": "known",
-      "referenceSource": "owner-supplied",
-      "providedOn": "2026-11-21"
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024140.jpg"
     },
     "4026": {
       "rosteredKm": 208.235,
       "kilometresStatus": "known",
-      "referenceSource": "owner-supplied",
-      "providedOn": "2026-11-21"
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024140.jpg"
     },
     "4027": {
       "rosteredKm": 0,
       "kilometresStatus": "known",
-      "referenceSource": "owner-supplied",
-      "providedOn": "2026-11-21"
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024140.jpg"
     },
     "4028": {
       "rosteredKm": 0,
       "kilometresStatus": "known",
-      "referenceSource": "owner-supplied",
-      "providedOn": "2026-11-21"
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024140.jpg"
     },
     "SBDASY1": {
       "rosteredKm": 0,

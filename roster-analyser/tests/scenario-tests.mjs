@@ -463,13 +463,33 @@ assert.equal(importedDriver.diagramData["1"].rosteredKm, 90.227);
 assert.equal(importedDriver.diagramData["14"].rosteredKm, 100.337);
 assert.equal(importedDriver.diagramData["2015"].rosteredKm, 127.711);
 assert.equal(importedDriver.diagramCoverage.status, "partial");
-assert.equal(importedDriver.diagramData["5"].kilometresStatus, "not-counted");
+assert.equal(importedDriver.diagramData["5"].kilometresStatus, "known");
+assert.equal(importedDriver.diagramData["5"].rosteredKm, 15.741);
 const manualDriverKm = JSON.parse(readFileSync(new URL("../data/scenarios/auburn-driver-manual-kilometres.json", import.meta.url)));
 for (const [job, km] of Object.entries(manualDriverKm.kilometres)) {
   assert.equal(matchingKilometres(importedDriver, job, 0).rosteredKm, km);
 }
-assert.equal(matchingDiagram(importedDriver, "4026", 0), null);
-assert.equal(matchingKilometres(importedDriver, "4026", 0).start, undefined);
+assert.equal(matchingDiagram(importedDriver, "4026", 0).start, "1804");
+assert.equal(matchingKilometres(importedDriver, "4026", 0).finish, "0237");
+assert.equal(importedDriver.diagramData["4026"].printedSignOff, "26:37");
+assert.equal(importedDriver.diagramData["4026"].offDutyDayOffset, 1);
+assert.equal(importedDriver.diagramData["4026"].sourceMarker, "M");
+assert.equal(importedDriver.diagramData["2007"].offDuty, "09:52");
+assert.equal(importedDriver.diagramData["23"].dayPattern, "Mon,Wed");
+assert.equal(importedDriver.diagramData["24"].dayPattern, "Tue,Thu");
+assert.equal(matchingDiagram(importedDriver, "23", 2), null);
+assert.equal(importedDriver.diagramCoverage.numericKilometresComplete, true);
+assert.deepEqual(importedDriver.diagramCoverage.missingNumericKilometres, []);
+const photographedJobs = JSON.parse(readFileSync(new URL("../data/scenarios/auburn-driver-photo-diagrams.json", import.meta.url)));
+assert.equal(Object.keys(photographedJobs.diagrams).length, 145);
+for (const [job, photo] of Object.entries(photographedJobs.diagrams)) {
+  const diagram = importedDriver.diagramData[job];
+  assert.equal(diagram.rosteredKm, photo.rosteredKm);
+  assert.equal(diagram.dayPattern, photo.days);
+  assert.equal(diagram.sourcePhoto, photo.sourcePhoto);
+  assert.equal(diagram.referenceSource, "owner-supplied-photo");
+}
+assert.equal(importedDriver.diagramData["3028"].referenceSource, "imported-defunct-diagram");
 assert.equal(matchingKilometres(importedDriver, "4027", 0).rosteredKm, 0);
 const inferredDriverJobs = buildRosterJobReference(importedDriver);
 assert.equal(matchingRosterJob(inferredDriverJobs, "4020", 0).start, "1643");

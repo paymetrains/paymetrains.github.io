@@ -26,6 +26,12 @@ let defunctCatalogue;
 let calculationContext = null;
 let kilometresByLine = {};
 
+function kilometreCoverage(coverage = {}) {
+  return coverage.numericKilometresComplete
+    ? `All ${coverage.numericJobs} numbered defunct jobs have kilometre data. Generic standby times use the master line.`
+    : `${coverage.kilometreEntries || 0} defunct kilometre records available; coverage is ${coverage.status || "unknown"}.`;
+}
+
 function visibleDates(dates) {
   return resultPeriod === "full" ? dates : resultPeriod === "week1" ? dates.slice(0, 7) : dates.slice(7, 14);
 }
@@ -43,7 +49,7 @@ function updateSelection() {
   $("scenario-grade").dispatchEvent(new Event("change"));
   const selected = defunctCatalogue?.masters.find(item => item.depot === $("scenario-depot").value && item.role === role);
   $("scenario-master-info").textContent = selected
-    ? `Current and defunct masters are included. ${role === "driver" ? `${selected.diagramCoverage.kilometreEntries} defunct diagram kilometre records available; coverage is ${selected.diagramCoverage.status}. Rostered and actual kilometres default to the current job diagram and can be edited.` : ""}`
+    ? `Current and defunct masters are included. ${role === "driver" ? `${kilometreCoverage(selected.diagramCoverage)} Rostered and actual kilometres default to the current job diagram and can be edited.` : ""}`
     : "The current master is included. Upload this depot's defunct master in Comparison settings.";
   $("scenario-existing").value = "";
   $("scenario-defunct").value = "";
@@ -78,9 +84,9 @@ async function previewReference() {
     const imported = Object.entries(master.diagramData || {});
     const coverageText = $("scenario-role").value === "guard"
       ? "Guard comparison times come from the defunct master roster; diagram kilometres are not used."
-      : `${imported.length} imported diagrams, ${master.diagramCoverage?.kilometreEntries || 0} kilometre records. Diagram coverage: ${master.diagramCoverage?.status || "master roster only"}.`;
+      : `${imported.length} diagram time records. ${kilometreCoverage(master.diagramCoverage)} ${master.diagramCoverage?.photoDiagrams || 0} diagrams verified from owner photos.`;
     $("scenario-reference-info").textContent = `${jobs.length} job labels observed in ${reference.sourceFile}. ${coverageText} ${conflicts.length ? conflicts.map(job => job.job).join(", ") + " has line-specific times in the master." : ""}`;
-    $("scenario-reference-table").innerHTML = `<table><caption>Imported diagrams and times observed in the defunct master</caption><thead><tr><th scope="col">Job</th><th scope="col">Start</th><th scope="col">Finish</th><th scope="col">Length</th><th scope="col">Km</th><th scope="col">Source</th></tr></thead><tbody>${imported.map(([job, diagram]) => `<tr><th scope="row">${escape(job)}</th><td>${escape(diagram.signOn)}</td><td>${escape(diagram.offDuty)}</td><td>${durationText(Math.round(diagram.rosteredHrs * 60))}</td><td>${typeof diagram.rosteredKm === "number" ? diagram.rosteredKm : escape(diagram.kilometresStatus || "Unknown")}</td><td>Imported diagram${diagram.sourceFlag ? ` · ${escape(diagram.sourceFlag)}` : ""}</td></tr>`).join("")}${jobs.flatMap(job => job.variants.map(variant => `<tr><th scope="row">${escape(job.job)}<small>${escape(variant.weekdays.join(", "))}</small></th><td>${time(variant.start)}</td><td>${time(variant.finish)}</td><td>${durationText(variant.durationMinutes)}</td><td>Unknown</td><td>Master roster · inferred</td></tr>`)).join("")}</tbody></table>`;
+    $("scenario-reference-table").innerHTML = `<table><caption>Imported diagrams and times observed in the defunct master</caption><thead><tr><th scope="col">Job</th><th scope="col">Start</th><th scope="col">Finish</th><th scope="col">Length</th><th scope="col">Km</th><th scope="col">Source</th></tr></thead><tbody>${imported.map(([job, diagram]) => `<tr><th scope="row">${escape(job)}<small>${escape(diagram.dayPattern)}</small></th><td>${escape(diagram.signOn)}</td><td>${escape(diagram.offDuty)}</td><td>${durationText(Math.round(diagram.rosteredHrs * 60))}</td><td>${typeof diagram.rosteredKm === "number" ? diagram.rosteredKm : escape(diagram.kilometresStatus || "Unknown")}</td><td>${diagram.referenceSource === "owner-supplied-photo" ? "Owner photo" : "Imported diagram"}${diagram.sourceFlag ? ` · ${escape(diagram.sourceFlag)}` : ""}</td></tr>`).join("")}${jobs.flatMap(job => job.variants.map(variant => `<tr><th scope="row">${escape(job.job)}<small>${escape(variant.weekdays.join(", "))}</small></th><td>${time(variant.start)}</td><td>${time(variant.finish)}</td><td>${durationText(variant.durationMinutes)}</td><td>Unknown</td><td>Master roster · inferred</td></tr>`)).join("")}</tbody></table>`;
     referenceDownloadUrl = URL.createObjectURL(new Blob([JSON.stringify({ ...reference, importedDiagrams: master.diagramData || {}, diagramCoverage: master.diagramCoverage || null }, null, 2)], { type: "application/json" }));
     $("scenario-reference-download").href = referenceDownloadUrl;
     $("scenario-reference-download").download = `defunct-${$("scenario-role").value}-job-reference.json`;
