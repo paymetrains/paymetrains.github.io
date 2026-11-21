@@ -2,6 +2,7 @@ import { readPdf } from "./pdf-reader.mjs";
 import { parseRoster, toIsoDate, buildJobDictionary, shiftDurationMinutes } from "./roster-core.mjs";
 import { hydrateMaster, hydrateReferenceMaster, selectMaster } from "./master-store.mjs";
 import { calculateScenarioLine, activeScenarioRows } from "./scenario-model.mjs";
+import { scenarioRules, scenarioRulesText } from "./scenario-rules.mjs";
 import { STATUS_LABELS, blankFortnight } from "./fortnight-model.mjs";
 import { buildRosterJobReference } from "./roster-job-reference.mjs";
 import { scenarioCsv, scenarioTimesheetCsv, timeClaimReference } from "./scenario-export.mjs";
@@ -168,6 +169,8 @@ function uploadedMarkup(day) {
 }
 
 function isHigherComparison(day, source) {
+  if (day.comparisons[source].disabled) return false;
+  if (day.comparisons[source === "existing" ? "defunct" : "existing"].disabled) return true;
   return day.comparisons[source].amount > day.comparisons[source === "existing" ? "defunct" : "existing"].amount;
 }
 
@@ -175,6 +178,7 @@ function masterMarkup(day, source) {
     const item = day.comparisons[source];
     const wins = isHigherComparison(day, source);
     const assignment = day[source];
+    if (item.disabled) return `<div class="master-comparison"><div class="master-shift">${shiftMarkup(assignment)}</div><div class="master-value"><strong>Not eligible</strong></div></div><small class="master-basis">${escape(item.reason)}</small>`;
     let basis = "";
     if (day.status === "work") {
       if (item.basis.source === "Worked roster") basis = "Custom duty · actual times";
@@ -239,7 +243,7 @@ function kilometreEditor(line) {
     <p class="hint">Current job distances are prefilled when known. Edit either value. Defunct comparisons keep their own reference distances, including eligible RR diagrams at 0 km. Blank means unknown.</p>
     ${line.dates.filter(day => day.status === "work").map(day => `<fieldset><legend>${escape(dateLabel(day.date))} · ${escape(day.worked.job || "Custom")}</legend><div class="field-pair">
       ${["rosteredKm", "actualKm"].map(field => `<label>${field === "rosteredKm" ? "Rostered kilometres" : "Actual kilometres"}<input type="number" min="0" max="1000" step="0.001" inputmode="decimal" data-km-line="${line.line}" data-km-date="${day.date}" data-km-field="${field}" value="${day.kilometres?.[field] ?? ""}"></label>`).join("")}
-      </div><p class="hint">Defunct reference ${escape(day.kilometres?.referenceJob || day.worked.job || "")}: ${day.kilometres?.defunctKm ?? "unknown"} km</p></fieldset>`).join("")}</details>`;
+      </div><p class="hint">${day.defunctClaimsAllowed === false ? "Defunct claims disabled for swapped shift" : `Defunct reference ${escape(day.kilometres?.referenceJob || day.worked.job || "")}: ${day.kilometres?.defunctKm ?? "unknown"} km`}</p></fieldset>`).join("")}</details>`;
 }
 
 function renderLineDetail(element) {
@@ -311,6 +315,7 @@ $("scenario-form").onsubmit = async event => {
     const rate = Number($("scenario-rate").value);
     const alignment = $("scenario-alignment").value;
     const weekdayOvertimeAfterFourth = Number($("scenario-later-rate").value);
+    const rules = scenarioRules({ checkDefunctDiagram: $("scenario-check-defunct-diagram").checked, allowDefunctSwaps: $("scenario-allow-defunct-swaps").checked });
     $("scenario-status").textContent = "Reading fortnight roster…";
     const raw = await readPdf($("scenario-current").files[0], { detectStrikes: true });
     const current = parseRoster(raw, "fortnight");
@@ -329,10 +334,10 @@ $("scenario-form").onsubmit = async event => {
     const unique = new Set(current.rows.map(row => row.line));
     if (unique.size !== current.rows.length) throw new Error("The fortnight PDF repeats line numbers. Choose one depot and role.");
     const { master, defunct } = await loadMasters(current, depot, role);
-    calculationContext = { engine: window.PayEngine, master, defunct, current, role, rate, alignment, weekdayOvertimeAfterFourth };
+    calculationContext = { engine: window.PayEngine, master, defunct, current, role, rate, alignment, weekdayOvertimeAfterFourth, rules };
     const named = activeScenarioRows(master, current);
     if (!named.length) throw new Error("No named, active crew lines were found in this roster.");
-    report = { generatedAt: new Date().toISOString(), depot, role, rate, alignment, weekdayOvertimeAfterFourth,
+    report = { generatedAt: new Date().toISOString(), depot, role, rate, alignment, weekdayOvertimeAfterFourth, rules,
       current: raw.fileName, existingMaster: master.fileName || "Bundled existing master", defunctMaster: defunct.fileName || "Bundled defunct master", diagramCoverage: defunct.diagramCoverage || null, kilometreAssumption: role === "driver" ? "editable-rostered-and-actual-kilometres" : null,
       dates: current.dates.map(toIsoDate), skippedInactive: current.rows.filter(row => row.employeeName.trim()).length - named.length,
       rosterLines: current.rows.map(row => ({ line: row.line, hasNormalJobs: row.cells.some(cell => cell.status === "WORK" && /^(?:\d+|SBY|FREELANCE)$/i.test(cell.jobNumber)) })).sort((a, b) => a.line - b.line), lines: [] };
@@ -341,7 +346,7 @@ $("scenario-form").onsubmit = async event => {
       await new Promise(resolve => setTimeout(resolve, 0));
       try {
         if (!master.lines.has(row.line) || !defunct.lines.has(row.line)) throw new Error("This line is missing from one of the masters.");
-        const { employeeName, ...line } = calculateScenarioLine({ engine: window.PayEngine, master, defunct, current, line: row.line, rate, role, alignment, weekdayOvertimeAfterFourth });
+        const { employeeName, ...line } = calculateScenarioLine({ ...calculationContext, line: row.line });
         report.lines.push(line);
       } catch (error) {
         const date = error.message.match(/^\d{4}-\d{2}-\d{2}/)?.[0];
@@ -352,7 +357,7 @@ $("scenario-form").onsubmit = async event => {
     }
     report.lines.sort((a, b) => a.line - b.line);
     const priced = report.lines.filter(line => !line.error);
-    $("scenario-context").textContent = `${dateLabel(report.dates[0])}–${dateLabel(report.dates[13])} · ${role === "guard" ? "Guard" : "Driver"} · ${money(rate)}/hour. Fifth and later weekday WOBOD rate assumed at ${weekdayOvertimeAfterFourth * 100}% plus 50% on worked time. ${alignment === "same-date" ? "Time comparisons use the same roster date." : "Time credits are excluded for starts over 12 hours apart."}${role === "driver" ? " Rostered and actual kilometres default to the current job diagram; entered values override these defaults. Missing kilometre data remain unknown." : ""}`;
+    $("scenario-context").textContent = `${scenarioRulesText(rules)} ${dateLabel(report.dates[0])}–${dateLabel(report.dates[13])} · ${role === "guard" ? "Guard" : "Driver"} · ${money(rate)}/hour. Fifth and later weekday WOBOD rate assumed at ${weekdayOvertimeAfterFourth * 100}% plus 50% on worked time. ${alignment === "same-date" ? "Time comparisons use the same roster date." : "Time credits are excluded for starts over 12 hours apart."}${role === "driver" ? " Rostered and actual kilometres default to the current job diagram; entered values override these defaults. Missing kilometre data remain unknown." : ""}`;
     $("scenario-total").textContent = `${priced.length} lines calculated · ${money(priced.reduce((sum, line) => sum + line.difference, 0))} total extra${priced.length !== named.length ? ` · ${named.length - priced.length} lines need an entry checked` : ""}${report.skippedInactive ? ` · ${report.skippedInactive} seconded lines excluded` : ""}`;
     $("scenario-filter").value = "";
     renderLines();
@@ -475,7 +480,7 @@ $("scenario-pdf").onclick = async () => {
       : (resultPeriod === "full" ? [0, 1] : [resultPeriod === "week1" ? 0 : 1]).map(week => ({ label: `Week ${week + 1}`, dates: line.dates.slice(week * 7, week * 7 + 7) }));
     return periods.map(({ label, dates }) => {
       return `<section class="print-line${resultView === "timesheet" ? " print-timesheet" : ""}${dates.some(day => day.kilometres?.claimedExtraKm) ? " print-with-kilometres" : ""}"><h1>${resultView === "timesheet" ? "Timesheet summary" : "Roster scenario"} · Line ${line.line} · ${label}</h1>
-        <p class="print-context">${escape(report.current)} · ${escape(report.role)} · ${money(report.rate)}/hour · ${escape(dateLabel(dates[0].date))}–${escape(dateLabel(dates.at(-1).date))}<br>Current: ${escape(report.existingMaster)} · Defunct: ${escape(report.defunctMaster)}<br>${report.alignment === "same-date" ? "Time comparisons use the same roster date." : "Time credits excluded for starts over 12 hours apart."} Fifth and later weekday WOBOD: ${report.weekdayOvertimeAfterFourth * 100}% plus 50% on worked time.${report.role === "driver" ? `<br>Rostered and actual kilometres default to the current job diagram; entered values override these defaults. Defunct diagram coverage: ${escape(report.diagramCoverage?.status || "unknown")}; missing distances remain unknown.` : ""}</p>
+        <p class="print-context">${escape(report.current)} · ${escape(report.role)} · ${money(report.rate)}/hour · ${escape(dateLabel(dates[0].date))}–${escape(dateLabel(dates.at(-1).date))}<br>${escape(scenarioRulesText(report.rules))}<br>Current: ${escape(report.existingMaster)} · Defunct: ${escape(report.defunctMaster)}<br>${report.alignment === "same-date" ? "Time comparisons use the same roster date." : "Time credits excluded for starts over 12 hours apart."} Fifth and later weekday WOBOD: ${report.weekdayOvertimeAfterFourth * 100}% plus 50% on worked time.${report.role === "driver" ? `<br>Rostered and actual kilometres default to the current job diagram; entered values override these defaults. Defunct diagram coverage: ${escape(report.diagramCoverage?.status || "unknown")}; missing distances remain unknown.` : ""}</p>
         ${resultView === "timesheet" ? timesheetMarkup(line, dates) : rosterMarkup(line, dates)}
         <p class="print-totals"><strong>${label === "Full fortnight" ? "Fortnight" : label} daily extra ${money(dates.reduce((sum, day) => sum + day.difference, 0))}</strong><br>Fortnight baseline ${money(line.baseline)} · Fortnight scenario gross ${money(line.maximum)} · Fortnight adjustment difference ${money(line.adjustmentDifference)} · <strong>Fortnight total extra ${money(line.difference)}</strong></p>
         <p class="print-context">${resultView === "timesheet" ? "MR marks a defunct-roster claim. Job length is actual work only." : "Green marks the higher daily comparison. Actual work and separate time claims are shown separately."} Unofficial train crew pay calculator.</p></section>`;

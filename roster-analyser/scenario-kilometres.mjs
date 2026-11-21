@@ -40,7 +40,8 @@ export function kilometreOptions(options, kilometres) {
       { source: "Defunct diagram", job: kilometres.job, rosteredKm: kilometres.defunctKm },
     ];
     const line = kilometres.defunctLineReference;
-    if (line && option.basis.job === line.job && option.basis.source.includes("Defunct master") && kilometres.job !== line.job)
+    if (line && option.basis.job === line.job && option.basis.source.includes("Defunct master") &&
+        !references.some(reference => reference.job === line.job && reference.rosteredKm === line.rosteredKm))
       references.push(line);
     return [option, ...references.flatMap(reference => {
       const extraKm = distance(Math.max(0, kilometres.assumedActualKm - reference.rosteredKm));

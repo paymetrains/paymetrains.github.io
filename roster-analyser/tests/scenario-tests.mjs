@@ -36,10 +36,48 @@ function fixture() {
     dates: blankFortnight("2026-11-15").map(row => new Date(`${row.date}T12:00:00`)),
     rows: [{ line: 10, employeeName: "Example crew", cells }],
   };
-  return { engine, master, defunct, current, line: 10, rate: 50, role: "driver" };
+  // Historical behaviour remains available when both optional rules are enabled.
+  return { engine, master, defunct, current, line: 10, rate: 50, role: "driver", rules: { checkDefunctDiagram: true, allowDefunctSwaps: true } };
 }
 
 const result = calculateScenarioLine(fixture());
+// Each optional rule acts independently; line/day remains the fixed baseline.
+const policy = fixture();
+policy.master.diagramData["1"].rosteredKm = 100;
+policy.master.diagramData["3"].rosteredKm = 100;
+policy.defunct.diagramData["1"] = { dayPattern: "Sun-Sat", signOn: "02:00", offDuty: "10:00", rosteredKm: 0 };
+policy.defunct.diagramData["2"] = { dayPattern: "Sun-Sat", signOn: "04:00", offDuty: "12:00", rosteredKm: 80 };
+policy.defunct.diagramData["3"] = { dayPattern: "Sun-Sat", signOn: "02:00", offDuty: "10:00", rosteredKm: 0 };
+delete policy.rules;
+const standardPolicy = calculateScenarioLine(policy);
+assert.deepEqual(standardPolicy.rules, { checkDefunctDiagram: false, allowDefunctSwaps: false });
+assert.ok(standardPolicy.dates[1].alternatives.some(option => option.source.includes("Defunct master") && option.job === "2"));
+assert.ok(!standardPolicy.dates[1].alternatives.some(option => option.source.includes("Defunct master job reference")));
+assert.equal(standardPolicy.dates[1].kilometres.referenceJob, "2");
+assert.equal(standardPolicy.dates[1].kilometres.claimedExtraKm, 20);
+for (const diagram of [false, true]) for (const swaps of [false, true]) {
+  const output = calculateScenarioLine({ ...policy, rules: { checkDefunctDiagram: diagram, allowDefunctSwaps: swaps } });
+  assert.equal(output.dates[1].alternatives.some(option => option.source.includes("Defunct master job reference")), diagram);
+  assert.equal(output.dates[2].comparisons.defunct.disabled, !swaps);
+  assert.equal(output.dates[2].defunctClaimsAllowed, swaps);
+  if (!swaps) {
+    for (const day of output.dates.filter(day => day.swapped)) {
+      assert.ok(day.alternatives.every(option => !option.source.includes("Defunct") && !option.kilometreReference?.source.includes("Defunct")));
+      assert.equal(day.kilometres.defunctKm, null);
+      assert.equal(day.kilometres.additionalPay, 0);
+    }
+  }
+  assert.deepEqual(output.dates[5].wobodSources, ["Existing master"]);
+  assert.equal(output.dates[2].alternatives.some(option => option.kilometreReference?.source === "Defunct diagram"), diagram && swaps);
+}
+const sameLineJob = fixture();
+sameLineJob.master.diagramData["1"].rosteredKm = 100;
+sameLineJob.defunct.lines.get(10).cells[1] = parseCell("06:00 - 14:00 1", 1);
+sameLineJob.defunct.diagramData["1"] = { dayPattern: "Sun-Sat", signOn: "06:00", offDuty: "14:00", rosteredKm: 80 };
+const sameLineDay = calculateScenarioLine({ ...sameLineJob, rules: {} }).dates[1];
+assert.equal(sameLineDay.kilometres.claimedExtraKm, 20);
+assert.equal(sameLineDay.kilometres.referenceJob, "1");
+console.log("PASS defunct switches default off, preserve line/day time and distance comparisons, and independently gate own diagrams and all swapped defunct claims");
 assert.ok(result.dates[0].wobod);
 assert.deepEqual(result.dates[0].wobodSources, ["Defunct master"]);
 assert.equal(result.dates[1].comparison.source, "Defunct master");

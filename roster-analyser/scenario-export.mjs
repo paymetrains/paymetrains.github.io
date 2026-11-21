@@ -36,11 +36,11 @@ export function scenarioCsv(lines, selectDates, lineAmount) {
     const dates = selectDates(line.dates);
     for (const day of dates) {
       const existing = day.comparisons.existing;
-      const defunct = day.comparisons.defunct;
+      const defunct = day.comparisons.defunct.disabled ? { basis: {}, amount: null } : day.comparisons.defunct;
       rows.push(["daily", line.line, day.date, day.status, day.worked.job, time(day.worked.start), time(day.worked.finish), day.worked.minutes,
         day.swapped ? "Yes" : "No", day.swapLines.join("; "), day.wobod ? "Yes" : "No", day.wobodSources.join("; "),
         day.existing?.job, time(day.existing?.start), time(day.existing?.finish), existing.basis.job, time(existing.basis.start), time(existing.basis.finish), amount(existing.amount),
-        day.defunct?.job, time(day.defunct?.start), time(day.defunct?.finish), defunct.basis.job, time(defunct.basis.start), time(defunct.basis.finish), amount(defunct.amount),
+        day.defunct?.job, time(day.defunct?.start), time(day.defunct?.finish), defunct.basis.job, time(defunct.basis.start), time(defunct.basis.finish), defunct.amount === null ? "" : amount(defunct.amount),
         day.comparison.source, day.comparison.job, amount(day.workedOnlyPay),
         day.workedOnlyClaims.map(claim => `${claim.label}${claim.minutes ? ` (${claim.minutes} min)` : ""}: ${amount(lineAmount(claim))}`).join("; "),
         day.separateTimeClaims.map(claim => `${claim.label}${claim.minutes ? ` (${claim.minutes} min)` : ""}: ${amount(claim.amount)} · Against ${timeClaimReference(claim, day.comparison)}`).join("; "),

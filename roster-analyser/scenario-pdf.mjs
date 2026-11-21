@@ -1,4 +1,5 @@
 import { timesheetEntries } from "./scenario-timesheet.mjs";
+import { scenarioRulesText } from "./scenario-rules.mjs";
 
 const money = value => Number(value).toLocaleString("en-AU", { style: "currency", currency: "AUD" });
 const date = value => new Date(`${value}T12:00:00`).toLocaleDateString("en-AU", { weekday: "short", day: "numeric", month: "short" });
@@ -51,6 +52,7 @@ export async function timesheetPdf(report, lines, period = "full") {
         `Current: ${report.existingMaster} | Defunct: ${report.defunctMaster}`,
         dates?.length ? `${date(dates[0].date)} - ${date(dates.at(-1).date)} | Rostered times: current master; swapped shifts: current job reference.` : "",
         "MR marks a defunct-roster claim. Job length is actual work only.",
+        ...(report.rules ? [scenarioRulesText(report.rules)] : []),
         ...(report.role === "driver" ? ["Rostered and actual kilometres default to the current job diagram; entered values override defaults. Missing distances remain unknown."] : []),
       ].filter(Boolean);
       const wrapped = context.flatMap(text => doc.splitTextToSize(text, width));

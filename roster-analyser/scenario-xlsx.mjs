@@ -3,6 +3,7 @@ import { shiftDurationMinutes } from "./roster-core.mjs";
 import { timeClaimReference } from "./scenario-export.mjs";
 import { timesheetEntries } from "./scenario-timesheet.mjs";
 import { kilometreClaimText } from "./scenario-kilometres.mjs";
+import { scenarioRulesText } from "./scenario-rules.mjs";
 
 const moneyFormat = '"$"#,##0.00;[Red]("$"#,##0.00)';
 const money = value => Number(value).toLocaleString("en-AU", { style: "currency", currency: "AUD" });
@@ -31,6 +32,7 @@ function shiftText(shift) {
 }
 
 function referenceText(day, source) {
+  if (day.comparisons[source].disabled) return day.comparisons[source].reason;
   const comparison = day.comparisons[source].basis;
   const assignment = day[source];
   if (day.status !== "work") return "";
@@ -89,10 +91,10 @@ export async function scenarioWorkbook(report, lines, period, lineAmount, view =
     sheet.getRow(2).height = 26;
     mergedCell(sheet, 3, 1, 20).value = `${report.current} · ${report.role} · ${money(report.rate)}/hour · ${dates[0]} to ${dates.at(-1)}`;
     mergedCell(sheet, 4, 1, 20).value = `Existing: ${report.existingMaster}. Defunct: ${report.defunctMaster}. ${report.alignment === "same-date" ? "Time comparisons use the same roster date." : "Time credits excluded for starts over 12 hours apart."} Fifth and later weekday WOBOD: ${report.weekdayOvertimeAfterFourth * 100}% plus 50% on worked time.`;
-    mergedCell(sheet, 5, 1, 20).value = "Green: higher comparison. Blue: swapped. Lines without diagram, SBY or Freelance shifts are blank. Amounts are a snapshot of the app calculation.";
+    mergedCell(sheet, 5, 1, 20).value = "Green: higher comparison. Blue: swapped. Lines without diagram, SBY or Freelance shifts are blank. Amounts are a snapshot of the app calculation. " + (report.rules ? scenarioRulesText(report.rules) : "");
     sheet.getRow(3).height = 20;
     sheet.getRow(4).height = 30;
-    sheet.getRow(5).height = 20;
+    sheet.getRow(5).height = 30;
     sheet.getCell(6, 1).value = "Line";
     sheet.getCell(6, 2).value = "Source";
     dates.forEach((date, index) => {
@@ -149,11 +151,11 @@ export async function scenarioWorkbook(report, lines, period, lineAmount, view =
           const textLines = shiftText(day[source]).split("\n").reduce((sum, text) => sum + Math.max(1, Math.ceil(text.length / 26)), 0);
           const reference = referenceText(day, source);
           masterHeights[offset] = Math.max(masterHeights[offset], textLines * 13 + (reference ? Math.ceil(reference.length / 28) * 12 : 0) + 8);
-          value.value = day.comparisons[source].amount;
+          value.value = day.comparisons[source].disabled ? "Not eligible" : day.comparisons[source].amount;
           value.numFmt = moneyFormat;
           value.alignment = { vertical: "top", horizontal: "right" };
           const other = source === "existing" ? "defunct" : "existing";
-          if (day.comparisons[source].amount > day.comparisons[other].amount) {
+          if (!day.comparisons[source].disabled && (day.comparisons[other].disabled || day.comparisons[source].amount > day.comparisons[other].amount)) {
             for (const cell of [info, value]) {
               cell.fill = { type: "pattern", pattern: "solid", fgColor: { argb: colour.fill } };
               cell.border = { top: { style: "thin", color: { argb: colour.green } }, bottom: { style: "thin", color: { argb: colour.green } } };
@@ -221,9 +223,9 @@ function addTimesheetSheet(workbook, report, lines, week) {
   sheet.getRow(2).height = 26;
   mergedCell(sheet, 3, 1, 9).value = `${report.current} · ${report.role} · ${money(report.rate)}/hour`;
   mergedCell(sheet, 4, 1, 9).value = "Rostered times: current master line for unswapped shifts; worked job's current reference for swapped shifts. MR comments give the defunct comparison. Job length is actual work only.";
-  mergedCell(sheet, 5, 1, 9).value = `Current: ${report.existingMaster}. Defunct: ${report.defunctMaster}.`;
+  mergedCell(sheet, 5, 1, 9).value = `Current: ${report.existingMaster}. Defunct: ${report.defunctMaster}. ${report.rules ? scenarioRulesText(report.rules) : ""}`;
   sheet.getRow(4).height = 24;
-  sheet.getRow(5).height = 24;
+  sheet.getRow(5).height = 36;
   ["Line", "Date", "Job number", "Rostered start", "Actual start", "Rostered finish", "Actual finish", "Claims", "Job length"].forEach((label, index) => {
     const cell = sheet.getCell(6, index + 1);
     cell.value = label;

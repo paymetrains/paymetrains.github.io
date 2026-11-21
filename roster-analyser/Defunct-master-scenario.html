@@ -34,6 +34,10 @@
         <p id="scenario-master-info" class="hint">Checking included masters and diagrams…</p>
         <details class="shift-options">
           <summary>Comparison settings</summary>
+          <label class="check-label"><input id="scenario-check-defunct-diagram" type="checkbox">Check against defunct diagram</label>
+          <p class="hint">Also compare the uploaded job against its own defunct diagram. The defunct job on the same line and day is always the baseline reference.</p>
+          <label class="check-label"><input id="scenario-allow-defunct-swaps" type="checkbox">Allow defunct claims on swapped shifts</label>
+          <p class="hint">When off, swapped shifts cannot claim defunct time or kilometres. Current-roster claims still apply. When on, defunct comparisons must use the same job.</p>
           <label>Replace existing master for this run<input id="scenario-existing" type="file" accept=".pdf,application/pdf"></label>
           <label>Replace defunct master for this run<input id="scenario-defunct" type="file" accept=".pdf,application/pdf"></label>
           <label>Time comparisons<select id="scenario-alignment">
@@ -49,7 +53,7 @@
           <a id="scenario-reference-download" hidden>Download job reference JSON</a>
           <div id="scenario-reference-table" class="reference-table" tabindex="0" role="region" aria-label="Defunct job times, kilometres and reference source"></div>
         </details>
-        <p class="hint">Work on an OFF or ADO day in either master counts as WOBOD. For swapped shifts, only the current master's OFF/ADO can trigger WOBOD; time credits use the same job only.</p>
+        <p class="hint">Unswapped work on an OFF or ADO day in either master counts as WOBOD. Swapped shifts only use the current master's OFF/ADO for WOBOD.</p>
         <button class="primary full" type="submit" id="scenario-run">Compare all lines</button>
       </form>
       <p id="scenario-status" role="status" aria-live="polite"></p>
