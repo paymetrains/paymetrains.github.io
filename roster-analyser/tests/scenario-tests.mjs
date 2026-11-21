@@ -352,6 +352,26 @@ for (const day of distanceResult.dates) {
 }
 const guardDistance = calculateScenarioLine({ ...kilometreFixture, role: "guard" }).dates[1];
 assert.equal(guardDistance.kilometres, null);
+const rrReplacement = fixture();
+rrReplacement.master.diagramData["1"].rosteredKm = 100;
+rrReplacement.defunct.diagramData["1"] = { dayPattern: "Sun-Sat", signOn: "06:00", offDuty: "14:00", rosteredHrs: 8, rosteredKm: 80, kilometresStatus: "known" };
+rrReplacement.defunct.lines.get(10).cells[1] = parseCell("06:00 - 14:00 RR", 1);
+let rrDay = calculateScenarioLine(rrReplacement).dates[1];
+assert.equal(rrDay.kilometres.claimedExtraKm, 100);
+assert.equal(rrDay.kilometres.defunctKm, 0);
+assert.equal(rrDay.kilometres.referenceJob, "RR");
+assert.equal(rrDay.kilometres.defunctKilometresStatus, "known");
+assert.ok(timesheetEntries({ dates: [rrDay] })[0].claims.some(note => note.includes("100 km MR - Defunct RR (0 km)")));
+delete rrReplacement.defunct.diagramData["1"];
+rrDay = calculateScenarioLine(rrReplacement).dates[1];
+assert.equal(rrDay.kilometres.claimedExtraKm, 100);
+assert.equal(rrDay.kilometres.referenceJob, "RR");
+rrReplacement.current.rows[0].cells[1] = parseCell("06:00 - 14:00 1 (WS 20)", 1);
+rrDay = calculateScenarioLine(rrReplacement).dates[1];
+assert.equal(rrDay.kilometres.defunctLineReference, null);
+assert.equal(rrDay.kilometres.claimedExtraKm, 0);
+assert.ok(!rrDay.alternatives.some(option => option.kilometreReference?.job === "RR"));
+console.log("PASS unswapped drivers replacing defunct RR claim kilometres against zero, with RR in comments; swaps exclude that line reference");
 delete kilometreFixture.master.diagramData["1"].rosteredKm;
 const unknownDistance = calculateScenarioLine(kilometreFixture).dates[1];
 assert.equal(unknownDistance.kilometres.assumedActualKm, null);

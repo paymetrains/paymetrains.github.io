@@ -1,6 +1,6 @@
 const distance = value => Math.round((value + Number.EPSILON) * 1000) / 1000;
 
-export function scenarioKilometres(row, currentDiagram, defunctDiagram, role) {
+export function scenarioKilometres(row, currentDiagram, defunctDiagram, role, defunctLine = null) {
   if (role !== "driver" || row.status !== "work") return null;
   const enteredExtraKm = row.extraKm === "" || row.extraKm == null ? 0 : Number(row.extraKm);
   if (!Number.isFinite(enteredExtraKm) || enteredExtraKm < 0 || enteredExtraKm > 1000)
@@ -18,17 +18,31 @@ export function scenarioKilometres(row, currentDiagram, defunctDiagram, role) {
     assumption: currentKm === null ? null : "current-diagram-plus-entered-extras",
     defunctFlag: defunctDiagram?.sourceFlag || null,
     defunctKilometresStatus: zeroDistanceDuty ? "known" : defunctDiagram?.kilometresStatus || "unavailable",
+    // An unswapped job can also claim against its defunct line's RR duty.
+    // Keep this separate from the worked job's own defunct diagram distance.
+    defunctLineReference: !row.swapLines?.length && defunctLine?.status === "WORK" &&
+      String(defunctLine.jobNumber || "").trim().toUpperCase() === "RR"
+      ? { source: "Defunct master", job: "RR", rosteredKm: 0 } : null,
   };
 }
 
 export function kilometreOptions(options, kilometres) {
-  if (!kilometres || kilometres.assumedActualKm === null || kilometres.defunctKm === null) return options;
-  const extraKm = distance(Math.max(0, kilometres.assumedActualKm - kilometres.defunctKm));
-  if (extraKm <= kilometres.enteredExtraKm) return options;
-  return options.flatMap(option => [option, {
-    row: { ...option.row, extraKm },
-    basis: { ...option.basis, kilometreReference: { source: "Defunct diagram", job: kilometres.job, rosteredKm: kilometres.defunctKm, actualKm: kilometres.assumedActualKm, extraKm } },
-  }]);
+  if (!kilometres || kilometres.assumedActualKm === null) return options;
+  return options.flatMap(option => {
+    const references = kilometres.defunctKm === null ? [] : [
+      { source: "Defunct diagram", job: kilometres.job, rosteredKm: kilometres.defunctKm },
+    ];
+    const line = kilometres.defunctLineReference;
+    if (line && option.basis.job === line.job && option.basis.source.includes("Defunct master") && kilometres.job !== line.job)
+      references.push(line);
+    return [option, ...references.flatMap(reference => {
+      const extraKm = distance(Math.max(0, kilometres.assumedActualKm - reference.rosteredKm));
+      if (extraKm <= kilometres.enteredExtraKm) return [];
+      return [{ row: { ...option.row, extraKm },
+        basis: { ...option.basis, kilometreReference: { ...reference, actualKm: kilometres.assumedActualKm, extraKm } },
+      }];
+    })];
+  });
 }
 
 export function kilometreClaimText(day) {
@@ -36,6 +50,6 @@ export function kilometreClaimText(day) {
   if (!value || !value.claimedExtraKm) return "";
   const amount = `${value.claimedExtraKm} km`;
   return value.reference === "defunct"
-    ? `Extra km ${amount} MR - Defunct ${value.job} (${value.defunctKm} km)`
+    ? `Extra km ${amount} MR - Defunct ${value.referenceJob || value.job} (${value.defunctKm} km)`
     : `Extra km ${amount}`;
 }

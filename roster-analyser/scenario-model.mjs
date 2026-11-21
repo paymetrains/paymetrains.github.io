@@ -199,7 +199,7 @@ export function calculateScenarioLine({ engine, master, defunct, current, line, 
       item.leaveHours = 8;
       notes.push(`${row.date} · CIL modeled as 8 hours of paid accrued leave.`);
     }
-    item.kilometres = role === "driver" ? scenarioKilometres(item, matchingKilometres(master, item.jobNumber, index), matchingKilometres(defunct, item.jobNumber, index), role) : null;
+    item.kilometres = role === "driver" ? scenarioKilometres(item, matchingKilometres(master, item.jobNumber, index), matchingKilometres(defunct, item.jobNumber, index), role, defunct.lines.get(Number(line))?.cells[index]) : null;
     return item;
   });
   if (!rows.some(row => !["off", "ado", "nta", "blank"].includes(row.status)))
@@ -273,7 +273,12 @@ export function calculateScenarioLine({ engine, master, defunct, current, line, 
       worked: { job: row.jobNumber, start: row.actualStart, finish: row.actualFinish, minutes: row.actualStart && row.actualFinish ? shiftDurationMinutes(row.actualStart, row.actualFinish) : null, rawText: row.rawText },
       rostered: { job: row.jobNumber, start: row.rosteredStart, finish: row.rosteredFinish },
       currentJobReference,
-      kilometres: row.kilometres ? { ...row.kilometres, claimedExtraKm: pay.lines.some(item => /^Extra kilometre time included/.test(item.label)) ? Number(chosen.row.extraKm || 0) : 0, reference: chosen.basis.kilometreReference ? "defunct" : "current", additionalPay: kilometreDifference } : null,
+      kilometres: row.kilometres ? { ...row.kilometres,
+        defunctKm: chosen.basis.kilometreReference?.rosteredKm ?? row.kilometres.defunctKm,
+        defunctKilometresStatus: chosen.basis.kilometreReference ? "known" : row.kilometres.defunctKilometresStatus,
+        referenceJob: chosen.basis.kilometreReference?.job || row.kilometres.job,
+        claimedExtraKm: pay.lines.some(item => /^Extra kilometre time included/.test(item.label)) ? Number(chosen.row.extraKm || 0) : 0,
+        reference: chosen.basis.kilometreReference ? "defunct" : "current", additionalPay: kilometreDifference } : null,
       existing: original, defunct: old, comparison: chosen.basis,
       comparisons: {
         defunct: masterComparison(maximum.priced[index], "defunct", row.swapLines?.length ? row.jobNumber : null),
