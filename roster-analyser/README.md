@@ -22,7 +22,9 @@ Comparisons use the worked job, not the job given away in a swap. A numbered job
 
 Timesheet PDF export generates A4 landscape pages directly, with a 277 mm table spanning the printable width, wrapped comments and a reserved job-length column. It uses locally bundled jsPDF 4.2.1 and AutoTable 5.0.9, so no external PDF service is involved. The full-fortnight view keeps 14 days together with adaptive text sizing. Roster comparison exports continue to use the browser print dialog.
 
-For drivers, an unswapped job replacing RR on the defunct master line can claim its assumed actual kilometres against RR's confirmed zero-kilometre baseline. This is a separate candidate from the worked job's own defunct diagram distance. The kilometre comment identifies RR when that candidate wins; swapped shifts do not gain this defunct-line comparison.
+Review Roads diagrams (RR, RR1, RR2 and other numbered RR variants) have a confirmed zero-kilometre baseline in both calculators. Normal driver imports and edited job references retain their published/master times, while entered extra kilometres remain payable. Zero kilometres do not make a diagram unclaimable.
+
+For drivers, an unswapped job replacing Review Roads on the defunct master line can claim its assumed actual kilometres against that zero-kilometre baseline. This is a separate candidate from the worked job's own defunct diagram distance. The kilometre comment identifies the RR job when that candidate wins; swapped shifts do not gain this defunct-line comparison.
 
 Defunct references are indexed in `data/scenarios/index.json`. The current snapshot includes 24 depot/role master rosters. Auburn's owner-supplied guard and driver master assignments are preserved; imported data supplement their job references. Other included depots use imported defunct master assignments. Waterfall driver/guard masters remain unavailable in this snapshot and require a temporary upload.
 

@@ -1,5 +1,6 @@
 import { NSW_PUBLIC_HOLIDAYS } from "./public-holidays.js";
 import * as claimModule from "./shift-claims.js";
+import { isZeroKilometreDuty } from "./diagram-kilometres.mjs";
 const shiftClaims = claimModule.default || globalThis.RosterShiftClaims;
 
 export function rosterTimeClaim(row) {
@@ -556,7 +557,9 @@ export function editedJobReference(master, row, job) {
   const assigned = assignedSwapPartner(row.line, job, row.workSwap?.partners || []);
   const baseline = getBaseline(cell, master.lines.get(Number(row.line))?.cells[row.dayIndex] || {},
     master.jobDictionary.jobs[normaliseJob(job)], [], master.diagramData, row.dayIndex, true, assigned?.original);
-  return baseline.start && baseline.finish ? { ...baseline, assignedLine: baseline.source === "swap_master_line" ? assigned?.line : null } : null;
+  return baseline.start && baseline.finish ? { ...baseline,
+    rosteredKm: isZeroKilometreDuty(baseline.jobNumber) ? 0 : baseline.rosteredKm,
+    assignedLine: baseline.source === "swap_master_line" ? assigned?.line : null } : null;
 }
 
 function compareCell({
@@ -722,7 +725,7 @@ function compareCell({
     leaveRosteredFinish: changeType === "annual_leave_as_hol" ? leaveFinish : "",
     originalStart: originalDiagram?.start || "",
     originalFinish: originalDiagram?.finish || "",
-    rosteredKm: baseline.rosteredKm,
+    rosteredKm: isZeroKilometreDuty(baseline.jobNumber) ? 0 : baseline.rosteredKm,
     rosteredOff: ["OFF", "ADO", "NTA"].includes(scheduledCell.status) ? true : isWorkCell(scheduledCell) ? false : undefined,
     jobNumber: actualCell.jobNumber,
     masterJobNumber: masterCell.jobNumber,
@@ -777,7 +780,7 @@ function referenceDiagram(diagram, job, dayIndex) {
     start: diagram.signOn.replace(":", ""),
     finish: diagram.offDuty.replace(":", ""),
     duration: minutesToHHMM(Math.round(diagram.rosteredHrs * 60)),
-    rosteredKm: kmByDay[day] ?? diagram.rosteredKm,
+    rosteredKm: isZeroKilometreDuty(job) ? 0 : kmByDay[day] ?? diagram.rosteredKm,
   };
 }
 
