@@ -5,7 +5,7 @@
   "depot": "auburn",
   "role": "driver",
   "reference": "Sydney Drivers Defunct Nov2026 extraction report",
-  "note": "Transcribed from five owner-supplied photographs. Saturday is visible only through job 3024. Printed overnight finish times are retained above 24:00. M is retained without interpreting its meaning.",
+  "note": "Transcribed from six owner-supplied photographs covering all 149 numbered diagrams: 47 Monday–Thursday, 46 Friday, 28 Saturday and 28 Sunday. Printed overnight finish times are retained above 24:00. M is retained without interpreting its meaning.",
   "diagrams": {
     "1": {
       "days": "Mon-Thu",
@@ -944,6 +944,38 @@
       "duration": "8:33",
       "rosteredKm": 133.293,
       "sourcePhoto": "1000024144.jpg"
+    },
+    "3025": {
+      "days": "Sat",
+      "signOn": "17:58",
+      "signOff": "26:08",
+      "duration": "8:10",
+      "rosteredKm": 191.762,
+      "sourcePhoto": "1000024145.jpg"
+    },
+    "3026": {
+      "days": "Sat",
+      "signOn": "18:04",
+      "signOff": "26:37",
+      "duration": "8:33",
+      "rosteredKm": 160.483,
+      "sourcePhoto": "1000024145.jpg"
+    },
+    "3027": {
+      "days": "Sat",
+      "signOn": "19:00",
+      "signOff": "27:30",
+      "duration": "8:30",
+      "rosteredKm": 0,
+      "sourcePhoto": "1000024145.jpg"
+    },
+    "3028": {
+      "days": "Sat",
+      "signOn": "22:00",
+      "signOff": "30:30",
+      "duration": "8:30",
+      "rosteredKm": 0,
+      "sourcePhoto": "1000024145.jpg"
     },
     "4001": {
       "days": "Sun",

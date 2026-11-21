@@ -18,6 +18,7 @@
         "1000024142.jpg",
         "1000024143.jpg",
         "1000024144.jpg",
+        "1000024145.jpg",
         "1000024140.jpg"
       ]
     },
@@ -33,7 +34,7 @@
     "diagramTimes": 149,
     "kilometreEntries": 150,
     "manualKilometreEntries": 11,
-    "photoDiagrams": 145,
+    "photoDiagrams": 149,
     "numericJobs": 149,
     "missingNumericKilometres": [],
     "numericKilometresComplete": true,
@@ -8777,8 +8778,8 @@
       "printedDuration": "8:33"
     },
     "3025": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Sat",
+      "dayPatternSource": "owner-photo",
       "signOn": "17:58",
       "offDuty": "02:08",
       "rosteredHrs": 8.166666666666666,
@@ -8786,11 +8787,17 @@
       "kilometresStatus": "known",
       "sourceFlag": null,
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 1,
+      "sourcePhoto": "1000024145.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "17:58",
+      "printedSignOff": "26:08",
+      "printedDuration": "8:10"
     },
     "3026": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Sat",
+      "dayPatternSource": "owner-photo",
       "signOn": "18:04",
       "offDuty": "02:37",
       "rosteredHrs": 8.55,
@@ -8798,11 +8805,17 @@
       "kilometresStatus": "known",
       "sourceFlag": null,
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 1,
+      "sourcePhoto": "1000024145.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "18:04",
+      "printedSignOff": "26:37",
+      "printedDuration": "8:33"
     },
     "3027": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Sat",
+      "dayPatternSource": "owner-photo",
       "signOn": "19:00",
       "offDuty": "03:30",
       "rosteredHrs": 8.5,
@@ -8810,11 +8823,17 @@
       "kilometresStatus": "known",
       "sourceFlag": "shed",
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 1,
+      "sourcePhoto": "1000024145.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "19:00",
+      "printedSignOff": "27:30",
+      "printedDuration": "8:30"
     },
     "3028": {
-      "dayPattern": "Sun-Sat",
-      "dayPatternSource": "not-specified-by-source",
+      "dayPattern": "Sat",
+      "dayPatternSource": "owner-photo",
       "signOn": "22:00",
       "offDuty": "06:30",
       "rosteredHrs": 8.5,
@@ -8822,7 +8841,13 @@
       "kilometresStatus": "known",
       "sourceFlag": "shed",
       "rosteredStandby": false,
-      "referenceSource": "imported-defunct-diagram"
+      "referenceSource": "owner-supplied-photo",
+      "offDutyDayOffset": 1,
+      "sourcePhoto": "1000024145.jpg",
+      "providedOn": "2026-11-22",
+      "printedSignOn": "22:00",
+      "printedSignOff": "30:30",
+      "printedDuration": "8:30"
     },
     "4001": {
       "dayPattern": "Sun",
@@ -10132,6 +10157,34 @@
       "referenceSource": "owner-supplied-photo",
       "providedOn": "2026-11-22",
       "sourcePhoto": "1000024144.jpg"
+    },
+    "3025": {
+      "rosteredKm": 191.762,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024145.jpg"
+    },
+    "3026": {
+      "rosteredKm": 160.483,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024145.jpg"
+    },
+    "3027": {
+      "rosteredKm": 0,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024145.jpg"
+    },
+    "3028": {
+      "rosteredKm": 0,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied-photo",
+      "providedOn": "2026-11-22",
+      "sourcePhoto": "1000024145.jpg"
     },
     "4001": {
       "rosteredKm": 102.425,
