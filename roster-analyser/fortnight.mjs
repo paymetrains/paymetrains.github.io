@@ -501,6 +501,7 @@ function selectField(name, label, value, options) {
     `<option value="${key}" ${String(value ?? "") === key ? "selected" : ""}>${text}</option>`).join("")}</select></label>`;
 }
 function editorMarkup(row) {
+  const actualKm = row.actualKm ?? (row.rosteredKm == null || row.rosteredKm === "" ? "" : Number(row.rosteredKm) + Number(row.extraKm || 0));
   const implicitTimes = row.status === "work" && row.changeType === "custom_duty" && !row.manualRosterTimes;
   const showRostered = row.status === "cancelled" || LEAVE_STATUSES.includes(row.status) ||
     (row.status === "work" && (row.rosteredStart !== row.actualStart || row.rosteredFinish !== row.actualFinish));
@@ -517,6 +518,7 @@ function editorMarkup(row) {
       <div class="field-pair">${timeField("actualStart", "Start", row.actualStart)}${timeField("actualFinish", "Finish", row.actualFinish)}</div>
       <p class="hint" id="worked-duration" hidden>Total worked <output for="actualStart actualFinish" id="worked-total"></output></p>
     </fieldset>
+    ${state.role === "driver" ? `<div id="driver-kilometres"><div class="field-pair">${numberField("rosteredKm", "Rostered kilometres", row.rosteredKm)}${numberField("actualKm", "Actual kilometres", actualKm)}</div><p class="hint">Prefilled from the current job reference when available. Edit either distance. Only kilometres above the rostered distance are claimed; unknown distances stay blank.</p></div>` : ""}
     <div id="relinquishment-fields" hidden>
       <p class="hint">Under four hours worked: eight hours of sick leave. From four hours worked: only the scheduled remainder is sick leave.</p>
       ${row.timedRelinquishment && !row.hasRelinquishmentSchedule ? numberField("relinquishmentShiftHours", "Full scheduled shift (hours)", row.relinquishmentShiftHours) : ""}
@@ -534,7 +536,6 @@ function editorMarkup(row) {
       <div id="annual-loading">${selectField("annualLoading", "Confirmed annual leave loading", row.annualLoading, [["", "None"], ["0.175", "17.5%"], ["0.20", "20%"]])}</div>
       <div id="work-extras">
         ${timeField("milageTime", "Time 209 km was passed (suburban)", row.milageTime)}
-        ${state.role === "driver" ? numberField("extraKm", "Approved extra kilometres (suburban driver)", row.extraKm) : ""}
         ${state.role === "driver" ? checkbox("straightSix", "Qualifying suburban straight six-hour shift", row.straightSix) : ""}
         ${selectField("picnicClaim", "Confirmed picnic day credit", row.picnicClaim, [["", "None"], ["paid", "Pay"], ["bank", "Accrue"]])}
       </div>
@@ -595,6 +596,7 @@ function wireEditor() {
     $("leave-extras").hidden = !leave;
     $("annual-loading").hidden = status !== "annual";
     $("actual-fields").hidden = !work && !relinquished;
+    if ($("driver-kilometres")) $("driver-kilometres").hidden = !work;
     const total = entry.actualStart && entry.actualFinish ? durationBetween(entry.actualStart, entry.actualFinish) : "";
     $("worked-total").value = displayClock(total);
     $("worked-duration").hidden = !total;
@@ -614,9 +616,13 @@ function wireEditor() {
   form.elements.jobNumber.addEventListener("change", () => {
     if (form.elements.status.value !== "work" || saved.timedRelinquishment) return;
     const ref = jobChanged() ? editedJobReference(state.masterForReview, saved, form.elements.jobNumber.value.trim()) :
-      { start: saved.rosteredStart, finish: saved.rosteredFinish };
+      { start: saved.rosteredStart, finish: saved.rosteredFinish, rosteredKm: saved.rosteredKm };
     form.elements.rosteredStart.value = displayClock(ref?.start);
     form.elements.rosteredFinish.value = displayClock(ref?.finish);
+    if (state.role === "driver") {
+      form.elements.rosteredKm.value = ref?.rosteredKm ?? "";
+      form.elements.actualKm.value = jobChanged() ? ref?.rosteredKm ?? "" : saved.actualKm ?? ref?.rosteredKm ?? "";
+    }
     rosteredFields.open = true;
     updateFields();
   });
@@ -647,7 +653,12 @@ function wireEditor() {
         !form.elements.rosteredStart.value && !form.elements.rosteredFinish.value;
     }
     if (row.changeType === "custom_duty") row.jobLabel = row.jobNumber;
-    for (const key of ["extraKm", "picnicClaim"])
+    if (state.role === "driver") {
+      row.rosteredKm = form.elements.rosteredKm.value;
+      row.actualKm = form.elements.actualKm.value;
+      row.extraKm = "";
+    }
+    for (const key of ["picnicClaim"])
       row[key] = row.status === "work" ? form.elements[key]?.value.trim() || "" : "";
     // Removed manual controls must not leave invisible pay overrides behind.
     for (const key of ["intercityKm", "unassociatedMinutes", "departureGap",

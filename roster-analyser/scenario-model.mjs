@@ -180,13 +180,14 @@ export function maximiseOptions(options, limit, guaranteeEligible = true) {
   return best.choices;
 }
 
-export function calculateScenarioLine({ engine, master, defunct, current, line, rate, role, alignment = "same-date", weekdayOvertimeAfterFourth = 2, extraKilometres = {} }) {
+export function calculateScenarioLine({ engine, master, defunct, current, line, rate, role, alignment = "same-date", weekdayOvertimeAfterFourth = 2, extraKilometres = {}, kilometresByDate = {} }) {
   const imported = importLine(master, current, line);
   const settings = { role, alignment, existingJobs: master.rosterJobReference || buildRosterJobReference(master), defunctJobs: defunct.rosterJobReference || buildRosterJobReference(defunct) };
   const notes = [];
   const rows = imported.rows.map((row, index) => {
     const item = { ...row, reviewed: true, creditAlignment: "same-date" };
     if (role === "driver" && Object.hasOwn(extraKilometres, row.date)) item.extraKm = extraKilometres[row.date];
+    if (role === "driver" && Object.hasOwn(kilometresByDate, row.date)) item.kilometreInput = kilometresByDate[row.date];
     if (/^NR\b|Off\s+RosteP/i.test(row.rawText)) {
       item.status = "off";
       notes.push(`${row.date} · ${row.rawText} treated as a day off.`);
@@ -208,6 +209,7 @@ export function calculateScenarioLine({ engine, master, defunct, current, line, 
       matchingRosterJob(jobs, item.jobNumber, index));
     item.kilometres = role === "driver" ? scenarioKilometres(item, matchingKilometres(master, item.jobNumber, index), matchingKilometres(defunct, item.jobNumber, index), role, defunctCell,
       { current: roadsReference(currentCell, settings.existingJobs), defunct: roadsReference(defunctCell, settings.defunctJobs) }) : null;
+    if (item.kilometres) item.extraKm = item.kilometres.enteredExtraKm;
     return item;
   });
   if (!rows.some(row => !["off", "ado", "nta", "blank"].includes(row.status)))

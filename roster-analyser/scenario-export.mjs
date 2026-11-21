@@ -24,7 +24,7 @@ export function scenarioCsv(lines, selectDates, lineAmount) {
     "Defunct master job", "Defunct master start", "Defunct master finish", "Defunct comparison job", "Defunct comparison start", "Defunct comparison finish", "Defunct comparison amount",
     "Selected comparison source", "Selected comparison job", "Actual shift pay", "Actual shift items", "Separate time claims", "Daily baseline pay", "Daily scenario pay", "Daily extra",
     "Selected dates extra", "Fortnight baseline pay", "Fortnight scenario gross", "Fortnight adjustment difference", "Fortnight total extra", "Error",
-    "Current diagram km", "Defunct diagram km", "Entered extra km", "Assumed actual km", "Claimed extra km", "Kilometre reference", "Additional kilometre pay"];
+    "Rostered km", "Defunct reference km", "Current extra km", "Actual km", "Claimed extra km", "Kilometre reference", "Additional kilometre pay"];
   const rows = [columns];
   for (const line of lines) {
     if (line.error) {

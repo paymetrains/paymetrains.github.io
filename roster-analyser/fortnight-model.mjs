@@ -1,5 +1,6 @@
 import { analyseRosters, toIsoDate, rosterShiftMinutes, shiftDurationMinutes, RELINQUISHMENT_MINUTES } from "./roster-core.mjs";
 import { NSW_PUBLIC_HOLIDAYS } from "./public-holidays.js";
+import { kilometreValue, extraKilometres } from "./diagram-kilometres.mjs";
 import { isIsoDate } from "./master-store.mjs";
 
 export const DAYS = ["sun", "mon", "tues", "wed", "thur", "fri", "sat"];
@@ -225,6 +226,8 @@ export function validateShift(row) {
     }
     for (const [field, label, limit] of [
       ["extraKm", "Extra kilometres", 1000],
+      ["rosteredKm", "Rostered kilometres", 1000],
+      ["actualKm", "Actual kilometres", 1000],
       ["intercityKm", "Intercity kilometres", 643.999],
       ["unassociatedMinutes", "Unassociated work minutes", 1440],
       ["departureGap", "Sign-on to departure minutes", 1440],
@@ -289,6 +292,8 @@ export function toEngineTable(rows, payrate, rosterType, settings = {}) {
         `${row.date}: ${errors[0] || "Review this shift before calculating."}`,
       );
     const item = { ...(settings.scenarioComparison ? row : withAutomaticTimeClaim(row)), day: DAYS[index % 7] };
+    if (!settings.scenarioComparison && settings.role === "driver" && Object.hasOwn(row, "actualKm"))
+      item.extraKm = extraKilometres(kilometreValue(row.actualKm), kilometreValue(row.rosteredKm));
     item.RDO = ["off", "ado", "nta", "blank"].includes(row.status);
     item.sick = row.status === "sick";
     item.hol = row.status === "hol";

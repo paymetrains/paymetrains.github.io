@@ -1,4 +1,4 @@
-import { isReviewRoads, isZeroKilometreDuty } from "./diagram-kilometres.mjs";
+import { isReviewRoads, isZeroKilometreDuty, kilometreValue, extraKilometres } from "./diagram-kilometres.mjs";
 
 const distance = value => Math.round((value + Number.EPSILON) * 1000) / 1000;
 
@@ -13,12 +13,16 @@ export function scenarioKilometres(row, currentDiagram, defunctDiagram, role, de
   const job = String(row.jobNumber || "").trim().toUpperCase();
   const currentZero = isZeroKilometreDuty(job, reviewRoadsReferences.current);
   const defunctZero = isZeroKilometreDuty(job, reviewRoadsReferences.defunct);
-  const currentKm = currentZero ? 0 : known(currentDiagram) ? currentDiagram.rosteredKm : null;
+  const diagramKm = currentZero ? 0 : known(currentDiagram) ? currentDiagram.rosteredKm : null;
+  const input = row.kilometreInput;
+  const currentKm = input && Object.hasOwn(input, "rosteredKm") ? kilometreValue(input.rosteredKm) : diagramKm;
   const defunctKm = defunctZero ? 0 : known(defunctDiagram) ? defunctDiagram.rosteredKm : null;
+  const actualKm = input && Object.hasOwn(input, "actualKm") ? kilometreValue(input.actualKm) : diagramKm === null ? null : distance(diagramKm + enteredExtraKm);
+  const baselineExtraKm = input ? extraKilometres(actualKm, currentKm) : enteredExtraKm;
   return {
-    job: row.jobNumber, currentKm, defunctKm, enteredExtraKm,
-    assumedActualKm: currentKm === null ? null : distance(currentKm + enteredExtraKm),
-    assumption: currentKm === null ? null : "current-diagram-plus-entered-extras",
+    job: row.jobNumber, currentKm, diagramKm, rosteredKm: currentKm, actualKm, defunctKm, enteredExtraKm: baselineExtraKm,
+    assumedActualKm: actualKm,
+    assumption: input && Object.hasOwn(input, "actualKm") ? "user-entered-actual-kilometres" : actualKm === null ? null : "current-diagram-default",
     defunctFlag: defunctDiagram?.sourceFlag || null,
     defunctKilometresStatus: defunctZero ? "known" : defunctDiagram?.kilometresStatus || "unavailable",
     // An unswapped job can also claim against its defunct line's RR duty.
