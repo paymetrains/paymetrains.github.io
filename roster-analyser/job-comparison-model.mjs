@@ -3,8 +3,11 @@ import { normaliseJob, shiftDurationMinutes } from "./roster-core.mjs";
 import { buildRosterJobReference, matchingRosterJob } from "./roster-job-reference.mjs";
 import { matchingDiagram, matchingKilometres } from "./scenario-model.mjs";
 import { scenarioKilometres } from "./scenario-kilometres.mjs";
+import { hasReviewRoadsReference } from "./diagram-kilometres.mjs";
 
 export const JOB_DAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+// Ordinary reference week for these 2026 diagrams; no public holidays.
+export const JOB_COMPARISON_WEEK = "2026-11-15";
 const round = amount => Math.round((amount + Number.EPSILON) * 100) / 100;
 const duration = minutes => `${String(Math.floor(minutes / 60)).padStart(2, "0")}${String(minutes % 60).padStart(2, "0")}`;
 
@@ -25,7 +28,7 @@ export function compareJob({ engine, start, day, worked, reference, role, rate, 
   const normal = priceJob(engine, start, day, worked, worked, role, rate, "", 0);
   const knownKm = role !== "driver" || (Number.isFinite(kilometres?.currentKm) && Number.isFinite(kilometres?.defunctKm));
   const extraKm = role === "driver" && knownKm ? Math.round(Math.max(0, kilometres.currentKm - kilometres.defunctKm) * 1000) / 1000 : 0;
-  if (!reference) return { normalPay: normal.total, currentClaimPay: normal.total, defunctClaimPay: null, defunctGain: null, recommendation: "incomplete", bestPay: null, extraPay: null, extraKm: null, kilometrePay: null, completeKm: knownKm, claims: [], issue: "No unique defunct times for this job." };
+  if (!reference) return { normalPay: normal.total, currentClaimPay: normal.total, defunctClaimPay: null, defunctGain: null, recommendation: "incomplete", bestPay: null, extraPay: null, extraKm: role === "driver" && knownKm ? extraKm : null, kilometrePay: role === "driver" && knownKm && extraKm === 0 ? 0 : null, completeKm: knownKm, claims: [], issue: "No unique defunct times for this job." };
   const choices = ["", "credit", "compare"].map(amendment => ({ amendment, reference,
     ...priceJob(engine, start, day, worked, reference, role, rate, amendment, extraKm) }));
   const defunctClaimPay = Math.max(...choices.map(choice => choice.total));
@@ -44,7 +47,7 @@ export function compareJob({ engine, start, day, worked, reference, role, rate, 
     completeKm: knownKm, claims, issue: null };
 }
 
-export function compareAsyJobs({ engine, master, defunct, role, rate, start }) {
+export function compareAsyJobs({ engine, master, defunct, role, rate, start = JOB_COMPARISON_WEEK }) {
   if (!Number.isFinite(Number(rate)) || Number(rate) <= 0) throw new Error("Enter an hourly rate greater than zero.");
   const dates = blankFortnight(start);
   if (!dates.length || new Date(`${start}T12:00:00Z`).getUTCDay() !== 0) throw new Error("Choose a Sunday for the week start.");
@@ -63,9 +66,11 @@ export function compareAsyJobs({ engine, master, defunct, role, rate, start }) {
     const reference = importedReference || matchingRosterJob(defunctJobs, job, day);
     const kilometres = role === "driver" ? scenarioKilometres({ status: "work", jobNumber: job, extraKm: 0 },
       matchingKilometres(master, job, day), matchingKilometres(defunct, job, day), role, null,
-      { current: Boolean(matchingRosterJob(currentJobs, job, day)), defunct: Boolean(matchingRosterJob(defunctJobs, job, day)) }) : null;
+      { current: hasReviewRoadsReference(currentJobs, job), defunct: hasReviewRoadsReference(defunctJobs, job) }) : null;
+    const knownKm = role !== "driver" || (Number.isFinite(kilometres?.currentKm) && Number.isFinite(kilometres?.defunctKm));
+    const extraKm = role === "driver" && knownKm ? Math.round(Math.max(0, kilometres.currentKm - kilometres.defunctKm) * 1000) / 1000 : null;
     const comparison = worked ? compareJob({ engine, start, day, worked, reference, role, rate, kilometres })
-      : { normalPay: null, currentClaimPay: null, defunctClaimPay: null, defunctGain: null, recommendation: "incomplete", bestPay: null, extraPay: null, extraKm: null, kilometrePay: null, completeKm: role !== "driver", claims: [], issue: "Current master has multiple times for this job; choose a line in the scenario app." };
+      : { normalPay: null, currentClaimPay: null, defunctClaimPay: null, defunctGain: null, recommendation: "incomplete", bestPay: null, extraPay: null, extraKm, kilometrePay: extraKm === 0 ? 0 : null, completeKm: knownKm, claims: [], issue: "Current master has multiple times for this job; choose a line in the scenario app." };
     const row = { job, days: [JOB_DAYS[day]], date: dates[day].date, worked, reference,
       workedSource: published ? "Current diagram data" : "Current master roster",
       referenceSource: importedReference ? "Defunct diagram data" : "Defunct master roster", kilometres, ...comparison };

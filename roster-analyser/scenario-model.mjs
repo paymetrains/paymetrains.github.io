@@ -3,7 +3,7 @@ import { breakdownEntries } from "./payslip.mjs";
 import { buildRosterJobReference, matchingRosterJob } from "./roster-job-reference.mjs";
 import { normaliseJob, shiftDurationMinutes } from "./roster-core.mjs";
 import { scenarioKilometres, kilometreOptions } from "./scenario-kilometres.mjs";
-import { isReviewRoads } from "./diagram-kilometres.mjs";
+import { isReviewRoads, hasReviewRoadsReference } from "./diagram-kilometres.mjs";
 
 const cents = value => Math.round((value + Number.EPSILON) * 100);
 const round = value => cents(value) / 100;
@@ -206,7 +206,7 @@ export function calculateScenarioLine({ engine, master, defunct, current, line, 
     const defunctCell = defunct.lines.get(Number(line))?.cells[index];
     const roadsReference = (cell, jobs) => isReviewRoads(item.jobNumber) && Boolean(
       (cell?.status === "WORK" && cell.start && cell.finish && normaliseJob(cell.jobNumber) === normaliseJob(item.jobNumber)) ||
-      matchingRosterJob(jobs, item.jobNumber, index));
+      hasReviewRoadsReference(jobs, item.jobNumber));
     item.kilometres = role === "driver" ? scenarioKilometres(item, matchingKilometres(master, item.jobNumber, index), matchingKilometres(defunct, item.jobNumber, index), role, defunctCell,
       { current: roadsReference(currentCell, settings.existingJobs), defunct: roadsReference(defunctCell, settings.defunctJobs) }) : null;
     if (item.kilometres) item.extraKm = item.kilometres.enteredExtraKm;

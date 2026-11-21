@@ -79,7 +79,7 @@ $("comparison-form").onsubmit = async event => {
   try {
     const role = $("job-role").value;
     const data = await load(role);
-    results = compareAsyJobs({ ...data, engine: window.PayEngine, role, rate: Number($("job-rate").value), start: $("job-week").value });
+    results = compareAsyJobs({ ...data, engine: window.PayEngine, role, rate: Number($("job-rate").value) });
     resultRole = role;
     $("job-summary").textContent = `${new Set(results.map(row => row.job)).size} current ${role} jobs · ${results.filter(row => row.extraPay > 0).length} job/day comparisons with extra pay · ${results.filter(row => row.issue).length} need a time reference${role === "driver" ? ` · ${results.filter(row => !row.completeKm).length} have incomplete kilometre data` : ""}.`;
     $("job-results").hidden = false;
@@ -95,8 +95,5 @@ $("comparison-form").addEventListener("input", () => {
 });
 $("job-grade").addEventListener("change", () => { $("job-custom-rate").hidden = Boolean($("job-grade").value); });
 for (const id of ["job-search", "job-day", "job-sort"]) $(id).addEventListener(id === "job-search" ? "input" : "change", render);
-const today = new Date(new Intl.DateTimeFormat("en-CA", { timeZone: "Australia/Sydney" }).format(new Date()) + "T12:00:00Z");
-today.setUTCDate(today.getUTCDate() - today.getUTCDay());
-$("job-week").value = today.toISOString().slice(0, 10);
 changeRole();
 load("driver").then(() => { $("job-status").textContent = "ASY references ready. Choose your settings and compare jobs."; }).catch(error => { $("job-status").textContent = error.message; });

@@ -2,9 +2,11 @@ import assert from "node:assert/strict";
 import { createRequire } from "node:module";
 import { readFileSync } from "node:fs";
 import { hydrateReferenceMaster } from "../master-store.mjs";
-import { compareJob, compareAsyJobs } from "../job-comparison-model.mjs";
+import { compareJob, compareAsyJobs, JOB_COMPARISON_WEEK } from "../job-comparison-model.mjs";
+import { blankFortnight } from "../fortnight-model.mjs";
 
 const engine = createRequire(import.meta.url)("../pay-calculator.js");
+assert.ok(blankFortnight(JOB_COMPARISON_WEEK).every(row => !row.ph));
 const worked = { jobNumber: "1", start: "0600", finish: "1400" };
 const context = { engine, worked, start: "2026-11-15", day: 1, rate: 50, role: "driver" };
 const km = { currentKm: 100, defunctKm: 80 };
@@ -32,12 +34,17 @@ const guard = compareJob({ ...context, reference: worked, kilometres: km, role: 
 assert.equal(guard.extraKm, null);
 assert.equal(guard.extraPay, 0);
 assert.equal(compareJob({ ...context, reference: null, kilometres: km }).bestPay, null);
+const noRoadsTimes = compareJob({ ...context, reference: null, kilometres: { currentKm: 0, defunctKm: 0 } });
+assert.equal(noRoadsTimes.extraKm, 0);
+assert.equal(noRoadsTimes.completeKm, true);
+assert.equal(noRoadsTimes.bestPay, null);
 
 for (const role of ["driver", "guard"]) {
   const load = path => hydrateReferenceMaster(JSON.parse(readFileSync(new URL(path, import.meta.url))));
   const master = load(`../data/masters/bundled/auburn-${role}.json`);
   const defunct = load(`../data/scenarios/auburn-${role}-defunct.json`);
   const rows = compareAsyJobs({ engine, master, defunct, role, rate: 50, start: "2026-11-15" });
+  assert.deepEqual(compareAsyJobs({ engine, master, defunct, role, rate: 50 }), rows);
   assert.ok(rows.length > 100);
   assert.ok(rows.every(row => row.extraPay === null || row.extraPay >= 0));
   assert.ok(rows.every(row => row.worked == null || row.worked.jobNumber === row.job));
@@ -52,7 +59,13 @@ for (const role of ["driver", "guard"]) {
     assert.equal(zeroKmJob.completeKm, true);
     assert.equal(zeroKmJob.extraKm, zeroKmJob.kilometres.currentKm);
     assert.ok(rows.filter(row => /^\d+$/.test(row.job)).every(row => row.completeKm));
-    assert.ok(rows.some(row => !row.completeKm));
+    for (const row of rows.filter(row => ["RR", "SBY"].includes(row.job))) {
+      assert.equal(row.kilometres.currentKm, 0);
+      assert.equal(row.kilometres.defunctKm, 0);
+      assert.equal(row.extraKm, 0);
+      assert.equal(row.completeKm, true);
+    }
+    assert.ok(rows.some(row => row.issue));
   }
   console.log(`PASS ASY ${role} comparisons price current jobs only, preserve missing data and exclude line-based WOBOD and guarantee`);
 }

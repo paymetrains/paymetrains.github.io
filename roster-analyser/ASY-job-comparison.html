@@ -19,7 +19,6 @@
           <label>Role<select id="job-role"><option value="driver">Driver</option><option value="guard">Guard</option></select></label>
           <label>Pay grade<select id="job-grade"></select></label>
           <label id="job-custom-rate" hidden>Hourly rate<input id="job-rate" type="number" min="0.01" step="any" required></label>
-          <label>Week starting (Sunday)<input id="job-week" type="date" required></label>
         </div>
         <button type="submit" id="job-run" class="primary">Compare jobs</button>
       </form>
@@ -31,7 +30,7 @@
           <label>Day<select id="job-day"><option value="all">All days</option><option>Sun</option><option>Mon</option><option>Tue</option><option>Wed</option><option>Thu</option><option>Fri</option><option>Sat</option></select></label>
           <label>Sort by<select id="job-sort"><option value="number">Job number</option><option value="km">Extra kilometres</option><option value="pay">Extra pay</option></select></label>
         </div>
-        <p class="hint">Both claim values assume the current job is worked. The recommendation compares claiming against the current diagram with claiming against its defunct reference on the same date. Ties have no defunct gain. No line-based WOBOD or fortnight guarantee is included. Missing kilometre data produces an incomplete, time-only comparison.</p>
+        <p class="hint">Both claim values assume the current job is worked. The comparison uses standard weekday/Saturday/Sunday pay, without public-holiday penalties. Ties have no defunct gain. No line-based WOBOD or fortnight guarantee is included. Missing kilometre data produces an incomplete, time-only comparison.</p>
         <p id="job-count" class="hint" aria-live="polite"></p>
         <div id="job-list"></div>
       </section>
