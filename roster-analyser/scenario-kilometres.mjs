@@ -2,7 +2,7 @@ import { isReviewRoads, isZeroKilometreDuty } from "./diagram-kilometres.mjs";
 
 const distance = value => Math.round((value + Number.EPSILON) * 1000) / 1000;
 
-export function scenarioKilometres(row, currentDiagram, defunctDiagram, role, defunctLine = null) {
+export function scenarioKilometres(row, currentDiagram, defunctDiagram, role, defunctLine = null, reviewRoadsReferences = {}) {
   if (role !== "driver" || row.status !== "work") return null;
   const enteredExtraKm = row.extraKm === "" || row.extraKm == null ? 0 : Number(row.extraKm);
   if (!Number.isFinite(enteredExtraKm) || enteredExtraKm < 0 || enteredExtraKm > 1000)
@@ -11,19 +11,20 @@ export function scenarioKilometres(row, currentDiagram, defunctDiagram, role, de
   // Owner-confirmed: RR (Review Roads), SBY, SBYASY and SBDASY standby jobs have zero diagram kilometres.
   // This distance rule does not supply or change any shift times.
   const job = String(row.jobNumber || "").trim().toUpperCase();
-  const zeroDistanceDuty = isZeroKilometreDuty(job);
-  const currentKm = zeroDistanceDuty ? 0 : known(currentDiagram) ? currentDiagram.rosteredKm : null;
-  const defunctKm = zeroDistanceDuty ? 0 : known(defunctDiagram) ? defunctDiagram.rosteredKm : null;
+  const currentZero = isZeroKilometreDuty(job, reviewRoadsReferences.current);
+  const defunctZero = isZeroKilometreDuty(job, reviewRoadsReferences.defunct);
+  const currentKm = currentZero ? 0 : known(currentDiagram) ? currentDiagram.rosteredKm : null;
+  const defunctKm = defunctZero ? 0 : known(defunctDiagram) ? defunctDiagram.rosteredKm : null;
   return {
     job: row.jobNumber, currentKm, defunctKm, enteredExtraKm,
     assumedActualKm: currentKm === null ? null : distance(currentKm + enteredExtraKm),
     assumption: currentKm === null ? null : "current-diagram-plus-entered-extras",
     defunctFlag: defunctDiagram?.sourceFlag || null,
-    defunctKilometresStatus: zeroDistanceDuty ? "known" : defunctDiagram?.kilometresStatus || "unavailable",
+    defunctKilometresStatus: defunctZero ? "known" : defunctDiagram?.kilometresStatus || "unavailable",
     // An unswapped job can also claim against its defunct line's RR duty.
     // Keep this separate from the worked job's own defunct diagram distance.
     defunctLineReference: !row.swapLines?.length && defunctLine?.status === "WORK" &&
-      isReviewRoads(defunctLine.jobNumber)
+      defunctLine.start && defunctLine.finish && isReviewRoads(defunctLine.jobNumber)
       ? { source: "Defunct master", job: defunctLine.jobNumber, rosteredKm: 0 } : null,
   };
 }

@@ -558,7 +558,7 @@ export function editedJobReference(master, row, job) {
   const baseline = getBaseline(cell, master.lines.get(Number(row.line))?.cells[row.dayIndex] || {},
     master.jobDictionary.jobs[normaliseJob(job)], [], master.diagramData, row.dayIndex, true, assigned?.original);
   return baseline.start && baseline.finish ? { ...baseline,
-    rosteredKm: isZeroKilometreDuty(baseline.jobNumber) ? 0 : baseline.rosteredKm,
+    rosteredKm: isZeroKilometreDuty(baseline.jobNumber, ["master_line_day", "swap_master_line", "job_dictionary"].includes(baseline.source)) ? 0 : baseline.rosteredKm,
     assignedLine: baseline.source === "swap_master_line" ? assigned?.line : null } : null;
 }
 
@@ -725,7 +725,7 @@ function compareCell({
     leaveRosteredFinish: changeType === "annual_leave_as_hol" ? leaveFinish : "",
     originalStart: originalDiagram?.start || "",
     originalFinish: originalDiagram?.finish || "",
-    rosteredKm: isZeroKilometreDuty(baseline.jobNumber) ? 0 : baseline.rosteredKm,
+    rosteredKm: isZeroKilometreDuty(baseline.jobNumber, ["master_line_day", "swap_master_line", "job_dictionary"].includes(baseline.source)) ? 0 : baseline.rosteredKm,
     rosteredOff: ["OFF", "ADO", "NTA"].includes(scheduledCell.status) ? true : isWorkCell(scheduledCell) ? false : undefined,
     jobNumber: actualCell.jobNumber,
     masterJobNumber: masterCell.jobNumber,
