@@ -20,6 +20,8 @@ Comparisons use the worked job, not the job given away in a swap. A numbered job
 
 ## Master roster scenario
 
+`ASY-job-comparison.html` checks each current ASY guard or driver job against the same job's defunct reference, with weekday variants and sorting by extra kilometres or pay. Current diagrams are always the worked jobs. It uses the same engine for daily time/diagram-value claims and driver kilometre credits, marks missing data explicitly, and excludes line-based WOBOD and fortnight guarantee adjustments. Guards use the defunct master for their reference times.
+
 Timesheet PDF export generates A4 landscape pages directly, with a 277 mm table spanning the printable width, wrapped comments and a reserved job-length column. It uses locally bundled jsPDF 4.2.1 and AutoTable 5.0.9, so no external PDF service is involved. The full-fortnight view keeps 14 days together with adaptive text sizing. Roster comparison exports continue to use the browser print dialog.
 
 Review Roads diagrams (RR, RR1, RR2 and other numbered RR variants) have a confirmed zero-kilometre baseline in both calculators when a timed diagram reference is present on the selected master roster. The job label alone does not create that reference. Normal driver imports and edited job references retain the master times, while entered extra kilometres remain payable. Zero kilometres do not make a diagram unclaimable.

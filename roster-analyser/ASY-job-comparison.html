@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en-AU" data-theme="dark">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="color-scheme" content="dark">
+    <link rel="icon" href="./roster-pay.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="./fortnight.css">
+    <link rel="stylesheet" href="./job-comparison.css">
+    <title>ASY job comparison · Unofficial Pay Calculator</title>
+  </head>
+  <body>
+    <header class="topbar"><a class="brand" href="./index.html">Unofficial Pay Calculator</a></header>
+    <main>
+      <h1>ASY job comparison</h1>
+      <p class="intro">Work the current diagram. Claim against the same job in the defunct data.</p>
+      <form id="comparison-form">
+        <div class="comparison-controls">
+          <label>Role<select id="job-role"><option value="driver">Driver</option><option value="guard">Guard</option></select></label>
+          <label>Pay grade<select id="job-grade"></select></label>
+          <label id="job-custom-rate" hidden>Hourly rate<input id="job-rate" type="number" min="0.01" step="any" required></label>
+          <label>Week starting (Sunday)<input id="job-week" type="date" required></label>
+        </div>
+        <button type="submit" id="job-run" class="primary">Compare jobs</button>
+      </form>
+      <p id="job-status" role="status" aria-live="polite">Loading ASY references…</p>
+      <section id="job-results" hidden aria-label="Job comparisons">
+        <p id="job-summary"></p>
+        <div class="comparison-controls job-filters">
+          <label>Find a job<input id="job-search" type="search" placeholder="For example, 5014 or RR"></label>
+          <label>Day<select id="job-day"><option value="all">All days</option><option>Sun</option><option>Mon</option><option>Tue</option><option>Wed</option><option>Thu</option><option>Fri</option><option>Sat</option></select></label>
+          <label>Sort by<select id="job-sort"><option value="km">Extra kilometres</option><option value="pay">Extra pay</option><option value="number">Job number</option></select></label>
+        </div>
+        <p class="hint">Extra pay is above working the current job normally. Time claims and driver kilometre claims use the existing pay engine, comparing both shifts on the same date. No line-based WOBOD or fortnight guarantee is included. Missing kilometre data produces a time-only estimate.</p>
+        <p id="job-count" class="hint" aria-live="polite"></p>
+        <div id="job-list"></div>
+      </section>
+    </main>
+    <footer class="site-footer"><a href="./Defunct-master-scenario.html">Defunct Master Roster Scenario</a><br>Everything is calculated locally in your browser.</footer>
+    <script src="./standalone-overtime.js"></script>
+    <script src="./shift-claims.js"></script>
+    <script src="./pay-rates.js"></script>
+    <script src="./pay-calculator.js"></script>
+    <script type="module" src="./job-comparison.mjs"></script>
+  </body>
+</html>
