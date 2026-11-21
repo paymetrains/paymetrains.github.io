@@ -20,8 +20,8 @@
     "requestedJobs": 152,
     "queriedJobs": 140,
     "diagramTimes": 140,
-    "kilometreEntries": 142,
-    "manualKilometreEntries": 10,
+    "kilometreEntries": 143,
+    "manualKilometreEntries": 11,
     "notCountedEntries": 8
   },
   "masterRoster": {
@@ -8333,6 +8333,12 @@
     }
   },
   "kilometreData": {
+    "11": {
+      "rosteredKm": 0,
+      "kilometresStatus": "known",
+      "referenceSource": "owner-supplied",
+      "providedOn": "2026-11-21"
+    },
     "4020": {
       "rosteredKm": 187.091,
       "kilometresStatus": "known",

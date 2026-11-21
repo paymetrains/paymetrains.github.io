@@ -47,6 +47,10 @@ for (const role of ["driver", "guard"]) {
     assert.equal(job.kilometres.currentKm, 166.162);
     assert.equal(job.kilometres.defunctKm, 92.7);
     assert.equal(job.extraKm, 73.462);
+    const zeroKmJob = rows.find(row => row.job === "11");
+    assert.equal(zeroKmJob.kilometres.defunctKm, 0);
+    assert.equal(zeroKmJob.completeKm, true);
+    assert.equal(zeroKmJob.extraKm, zeroKmJob.kilometres.currentKm);
     assert.ok(rows.some(row => !row.completeKm));
   }
   console.log(`PASS ASY ${role} comparisons price current jobs only, preserve missing data and exclude line-based WOBOD and guarantee`);
