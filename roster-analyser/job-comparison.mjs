@@ -12,6 +12,15 @@ const references = {};
 let results = [];
 let resultRole;
 
+function recommendation(row) {
+  if (row.issue) return "Comparison incomplete";
+  if (row.recommendation === "incomplete") return row.defunctGain > 0
+    ? `Defunct adds at least ${money(row.defunctGain)} · time only` : "Kilometre comparison incomplete";
+  if (row.recommendation === "defunct") return `Defunct claim adds ${money(row.defunctGain)}`;
+  if (row.recommendation === "current") return "Claim against current diagram is better";
+  return "Same pay · keep current diagram";
+}
+
 function changeRole() {
   const role = $("job-role").value;
   updateGrades(role);
@@ -52,12 +61,12 @@ function render() {
   $("job-list").innerHTML = rows.map(row => `<details class="job-result"><summary>
       <span><strong>Job ${escape(row.job)}</strong><small>${escape(row.days.join(", "))}</small></span>
       <span class="job-km">${resultRole === "driver" ? `${row.extraKm == null ? "Kilometres unavailable" : `${km(row.extraKm)} extra`}<small>Current ${km(row.kilometres?.currentKm)} · Defunct ${km(row.kilometres?.defunctKm)}</small>` : row.claims.map(claim => `${escape(claim.label)}${claim.minutes ? ` ${claim.minutes} min` : ""}`).join(" · ") || "No additional time claim"}</span>
-      <span class="job-gain"><strong>${money(row.extraPay)}</strong><small>${row.issue ? "Reference needed" : !row.completeKm ? "extra · time only" : "extra pay"}</small></span>
+      <span class="job-gain ${row.recommendation === "incomplete" ? "reference-missing" : row.recommendation === "tie" ? "claim-tie" : ""}"><strong>${recommendation(row)}</strong></span>
     </summary><div class="job-reference-pair">
-      <div><h2>Current · worked</h2><p>${row.worked ? `${clock(row.worked.start)}–${clock(row.worked.finish)}` : "No unique times"}</p>${resultRole === "driver" ? `<p>${km(row.kilometres?.currentKm)}</p>` : ""}<p class="hint">${row.workedSource}</p></div>
-      <div><h2>Defunct · reference</h2><p>${row.reference ? `${clock(row.reference.start)}–${clock(row.reference.finish)}` : "No unique times"}</p>${resultRole === "driver" ? `<p>${km(row.kilometres?.defunctKm)}</p>` : ""}<p class="hint">${row.referenceSource}</p></div>
+      <div><h2>Defunct · reference</h2><p>${row.reference ? `${clock(row.reference.start)}–${clock(row.reference.finish)}` : "No unique times"}</p>${resultRole === "driver" ? `<p>${km(row.kilometres?.defunctKm)}</p>` : ""}<p>Claim value<br><strong>${money(row.defunctClaimPay)}${row.completeKm ? "" : " (time only)"}</strong></p><p class="hint">${row.referenceSource}</p></div>
+      <div><h2>Current · worked</h2><p>${row.worked ? `${clock(row.worked.start)}–${clock(row.worked.finish)}` : "No unique times"}</p>${resultRole === "driver" ? `<p>${km(row.kilometres?.currentKm)}</p>` : ""}<p>Claim value<br><strong>${money(row.currentClaimPay)}</strong></p><p class="hint">${row.workedSource}</p></div>
     </div><ul class="job-claim-details">
-      ${row.issue ? `<li class="reference-missing">${escape(row.issue)}</li>` : `<li>Normal current-job pay: ${money(row.normalPay)}. Best pay against its own defunct job: ${money(row.bestPay)}.</li>
+      ${row.issue ? `<li class="reference-missing">${escape(row.issue)}</li>` : `<li>Claim against current diagram: ${money(row.currentClaimPay)}. Claim against defunct diagram: ${money(row.defunctClaimPay)}${row.completeKm ? "" : " (time only)"}.</li>
       ${row.claims.map(claim => `<li>${escape(claim.label)}${claim.minutes ? `: ${claim.minutes} minutes` : ""} against defunct job ${escape(row.job)}.</li>`).join("")}
       ${resultRole === "driver" ? `<li>${row.extraKm == null ? "Missing distance: kilometre pay is not included." : `${km(row.extraKm)} above the defunct job. Additional kilometre pay in the winning calculation: ${money(row.kilometrePay)}.`}</li>` : ""}`}
     </ul></details>`).join("") || '<p class="hint">No matching jobs.</p>';

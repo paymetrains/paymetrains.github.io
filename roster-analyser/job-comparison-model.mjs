@@ -25,9 +25,12 @@ export function compareJob({ engine, start, day, worked, reference, role, rate, 
   const normal = priceJob(engine, start, day, worked, worked, role, rate, "", 0);
   const knownKm = role !== "driver" || (Number.isFinite(kilometres?.currentKm) && Number.isFinite(kilometres?.defunctKm));
   const extraKm = role === "driver" && knownKm ? Math.round(Math.max(0, kilometres.currentKm - kilometres.defunctKm) * 1000) / 1000 : 0;
-  if (!reference) return { normalPay: normal.total, bestPay: null, extraPay: null, extraKm: null, kilometrePay: null, completeKm: knownKm, claims: [], issue: "No unique defunct times for this job." };
+  if (!reference) return { normalPay: normal.total, currentClaimPay: normal.total, defunctClaimPay: null, defunctGain: null, recommendation: "incomplete", bestPay: null, extraPay: null, extraKm: null, kilometrePay: null, completeKm: knownKm, claims: [], issue: "No unique defunct times for this job." };
   const choices = ["", "credit", "compare"].map(amendment => ({ amendment, reference,
     ...priceJob(engine, start, day, worked, reference, role, rate, amendment, extraKm) }));
+  const defunctClaimPay = Math.max(...choices.map(choice => choice.total));
+  const defunctGain = round(defunctClaimPay - normal.total);
+  const recommendation = !knownKm ? "incomplete" : defunctGain > 0 ? "defunct" : defunctGain < 0 ? "current" : "tie";
   choices.push({ amendment: "", reference: worked, ...normal });
   const best = choices.sort((a, b) => b.total - a.total)[0];
   const withoutKm = priceJob(engine, start, day, worked, best.reference, role, rate, best.amendment, 0);
@@ -35,6 +38,7 @@ export function compareJob({ engine, start, day, worked, reference, role, rate, 
     .map(line => ({ label: line.label.replace(" included in shift pay", ""), minutes: line.minutes }));
   if (best.amendment === "compare" && best.total > normal.total) claims.push({ label: "Original job value", minutes: null });
   return { normalPay: normal.total, bestPay: best.total, extraPay: round(best.total - normal.total),
+    currentClaimPay: normal.total, defunctClaimPay, defunctGain, recommendation,
     extraKm: role === "driver" ? knownKm ? extraKm : null : null,
     kilometrePay: role === "driver" ? round(Math.max(0, best.total - withoutKm.total)) : null,
     completeKm: knownKm, claims, issue: null };
@@ -61,7 +65,7 @@ export function compareAsyJobs({ engine, master, defunct, role, rate, start }) {
       matchingKilometres(master, job, day), matchingKilometres(defunct, job, day), role, null,
       { current: Boolean(matchingRosterJob(currentJobs, job, day)), defunct: Boolean(matchingRosterJob(defunctJobs, job, day)) }) : null;
     const comparison = worked ? compareJob({ engine, start, day, worked, reference, role, rate, kilometres })
-      : { normalPay: null, bestPay: null, extraPay: null, extraKm: null, kilometrePay: null, completeKm: role !== "driver", claims: [], issue: "Current master has multiple times for this job; choose a line in the scenario app." };
+      : { normalPay: null, currentClaimPay: null, defunctClaimPay: null, defunctGain: null, recommendation: "incomplete", bestPay: null, extraPay: null, extraKm: null, kilometrePay: null, completeKm: role !== "driver", claims: [], issue: "Current master has multiple times for this job; choose a line in the scenario app." };
     const row = { job, days: [JOB_DAYS[day]], date: dates[day].date, worked, reference,
       workedSource: published ? "Current diagram data" : "Current master roster",
       referenceSource: importedReference ? "Defunct diagram data" : "Defunct master roster", kilometres, ...comparison };
