@@ -4,7 +4,7 @@ import { buildRosterJobReference, matchingRosterJob } from "./roster-job-referen
 import { normaliseJob, shiftDurationMinutes } from "./roster-core.mjs";
 import { scenarioKilometres, kilometreOptions } from "./scenario-kilometres.mjs";
 import { isReviewRoads, hasReviewRoadsReference, isZeroKilometreDuty } from "./diagram-kilometres.mjs";
-import { scenarioRules, canClaimDefunct } from "./scenario-rules.mjs";
+import { scenarioRules, canClaimDefunct, swapClassification } from "./scenario-rules.mjs";
 
 const cents = value => Math.round((value + Number.EPSILON) * 100);
 const round = value => cents(value) / 100;
@@ -13,9 +13,10 @@ const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
 function wobodSourcesFor(row, index, master, defunct, rules) {
   if (row.status !== "work") return [];
+  if (row.swapLines?.length && (!rules.allowSwappedWobod || row.swapClassification?.type !== "work-for-work")) return [];
   const off = source => ["OFF", "ADO"].includes(source.lines.get(row.line)?.cells[index]?.status);
   return [off(master) ? "Existing master" : "",
-    (!row.swapLines?.length || rules.allowSwappedWobod) && off(defunct) ? "Defunct master" : ""].filter(Boolean);
+    off(defunct) ? "Defunct master" : ""].filter(Boolean);
 }
 
 export function activeScenarioRows(master, current) {
@@ -183,13 +184,14 @@ export function maximiseOptions(options, limit, guaranteeEligible = true) {
   return best.choices;
 }
 
-export function calculateScenarioLine({ engine, master, defunct, current, line, rate, role, alignment = "same-date", weekdayOvertimeAfterFourth = 2, extraKilometres = {}, kilometresByDate = {}, rules: ruleOptions = {} }) {
+export function calculateScenarioLine({ engine, master, defunct, current, line, rate, role, alignment = "same-date", weekdayOvertimeAfterFourth = 2, extraKilometres = {}, kilometresByDate = {}, swapTypesByDate = {}, rules: ruleOptions = {} }) {
   const imported = importLine(master, current, line);
   const rules = scenarioRules(ruleOptions);
   const settings = { role, alignment, rules, existingJobs: master.rosterJobReference || buildRosterJobReference(master), defunctJobs: defunct.rosterJobReference || buildRosterJobReference(defunct) };
   const notes = [];
   const rows = imported.rows.map((row, index) => {
     const item = { ...row, reviewed: true, creditAlignment: "same-date" };
+    item.swapClassification = swapClassification(row, swapTypesByDate[row.date] ?? "auto");
     if (role === "driver" && Object.hasOwn(extraKilometres, row.date)) item.extraKm = extraKilometres[row.date];
     if (role === "driver" && Object.hasOwn(kilometresByDate, row.date)) item.kilometreInput = kilometresByDate[row.date];
     if (/^NR\b|Off\s+RosteP/i.test(row.rawText)) {
@@ -324,6 +326,7 @@ export function calculateScenarioLine({ engine, master, defunct, current, line, 
       separateTimeClaims,
       wobod: pay.WOBOD, wobodSources: pay.WOBOD ? wobodSources : [],
       swapped: Boolean(row.swapLines?.length),
+      swapClassification: row.swapClassification,
       defunctClaimsAllowed,
       swapLines: row.swapLines || [],
       baselinePay: baseline.totals[index] / 100,

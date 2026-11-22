@@ -67,7 +67,7 @@ for (const diagram of [false, true]) for (const swaps of [false, true]) {
       assert.equal(day.kilometres.additionalPay, 0);
     }
   }
-  assert.deepEqual(output.dates[5].wobodSources, ["Existing master"]);
+  assert.deepEqual(output.dates[5].wobodSources, []);
   assert.equal(output.dates[2].alternatives.some(option => option.kilometreReference?.source === "Defunct diagram"), diagram && swaps);
 }
 const sameLineJob = fixture();
@@ -90,8 +90,8 @@ assert.equal(result.dates[3].comparison.source, "Defunct master");
 assert.ok(result.dates[3].claims.some(claim => claim.label === "Lift-up included in shift pay" && claim.minutes === 180));
 assert.equal(result.dates[4].comparison.source, "Worked roster");
 assert.ok(result.dates[4].claims.every(claim => !/included in shift pay/.test(claim.label)));
-assert.ok(result.dates[5].wobod);
-assert.deepEqual(result.dates[5].wobodSources, ["Existing master"]);
+assert.equal(result.dates[5].wobod, false);
+assert.deepEqual(result.dates[5].wobodSources, []);
 assert.equal(Math.round((result.dates.reduce((sum, day) => sum + day.difference, 0) + result.adjustmentDifference) * 100), Math.round(result.difference * 100));
 console.log("PASS scenario traces both-master WOBOD and same-job swap claims to their comparison jobs");
 
@@ -115,17 +115,19 @@ swapOffFixture.defunct.lines.get(10).cells[5] = parseCell("OFF", 5);
 const swapOffResult = calculateScenarioLine(swapOffFixture);
 assert.equal(swapOffResult.dates[2].wobod, false);
 assert.deepEqual(swapOffResult.dates[2].wobodSources, []);
-assert.equal(swapOffResult.dates[5].wobod, true);
-assert.deepEqual(swapOffResult.dates[5].wobodSources, ["Existing master"]);
-assert.equal(timesheetEntries(swapOffResult)[5].claims[0], "WOBOD");
+assert.equal(swapOffResult.dates[5].wobod, false);
+assert.deepEqual(swapOffResult.dates[5].wobodSources, []);
+assert.ok(!timesheetEntries(swapOffResult)[5].claims.includes("WOBOD"));
 assert.equal(swapOffResult.dates[0].wobod, true);
 assert.deepEqual(swapOffResult.dates[0].wobodSources, ["Defunct master"]);
-console.log("PASS disabling the swapped WOBOD exception preserves current book-off WOBOD and unswapped defunct claims");
+console.log("PASS disabling swapped WOBOD excludes both masters on swaps and preserves unswapped claims");
 
 // Book-off eligibility is independent of permission to claim against defunct diagrams.
 for (const role of ["guard", "driver"]) {
   const swappedBookOff = fixture();
   swappedBookOff.role = role;
+  // This crew member confirms they already had work on the current-master OFF day.
+  swappedBookOff.swapTypesByDate = { "2026-11-20": "work-for-work" };
   swappedBookOff.defunct.lines.get(10).cells[2] = parseCell("ADO", 2);
   swappedBookOff.defunct.lines.get(10).cells[5] = parseCell("OFF", 5);
   swappedBookOff.master.diagramData["3"].rosteredKm = 100;
@@ -143,8 +145,8 @@ for (const role of ["guard", "driver"]) {
       assert.ok(day.separateTimeClaims.every(claim => !claim.comparison.source.includes("Defunct")));
       if (role === "driver") assert.equal(day.kilometres.defunctKm, null);
     }
-    assert.deepEqual(output.dates[5].wobodSources, allowSwappedWobod ? ["Existing master", "Defunct master"] : ["Existing master"]);
-    assert.equal(timesheetEntries(output)[5].claims[0], "WOBOD");
+    assert.deepEqual(output.dates[5].wobodSources, allowSwappedWobod ? ["Existing master", "Defunct master"] : []);
+    assert.equal(timesheetEntries(output)[5].claims.includes("WOBOD"), allowSwappedWobod);
     if (allowSwappedWobod) assert.equal(timesheetEntries(output)[2].claims[0], "WOBOD MR- Book-OFF day on Defunct roster");
   }
   const defaultOutput = calculateScenarioLine({ ...swappedBookOff, rules: {} });
@@ -161,6 +163,44 @@ for (const role of ["guard", "driver"]) {
   }
 }
 console.log("PASS swapped book-off WOBOD defaults on for either master, survives diagram/time/km restrictions, prices the payment and appears in timesheet comments");
+
+for (const role of ["guard", "driver"]) {
+  const workSwap = fixture();
+  workSwap.role = role;
+  workSwap.rules = {};
+  workSwap.defunct.lines.get(10).cells[2] = parseCell("OFF", 2);
+  let day = calculateScenarioLine(workSwap).dates[2];
+  assert.equal(day.swapClassification.type, "work-for-work");
+  assert.equal(day.wobod, true);
+  // An exchange of two days that were both work keeps the eligible date's WOBOD.
+  workSwap.current.rows[0].cells[1] = parseCell("08:00 - 16:00 3 (WS 20)", 1);
+  const rearranged = calculateScenarioLine(workSwap);
+  assert.equal(rearranged.dates[1].swapClassification.type, "work-for-work");
+  assert.equal(rearranged.dates[1].wobod, false);
+  assert.equal(rearranged.dates[2].wobod, true);
+  // Moving a day off excludes BOTH masters, irrespective of the incoming job.
+  workSwap.master.lines.get(20).cells[2] = parseCell("OFF", 2);
+  day = calculateScenarioLine(workSwap).dates[2];
+  assert.equal(day.swapClassification.type, "moves-day-off");
+  assert.equal(day.wobod, false);
+  day = calculateScenarioLine(workSwap).dates[5];
+  assert.equal(day.swapClassification.type, "moves-day-off");
+  assert.equal(day.wobod, false);
+  // A missing original assignment is unknown, not assumed work-for-work.
+  workSwap.current.rows[0].cells[2] = parseCell("08:00 - 16:00 3 (WS 99)", 2);
+  day = calculateScenarioLine(workSwap).dates[2];
+  assert.equal(day.swapClassification.type, "unknown");
+  assert.equal(day.wobod, false);
+  // Confirming actual pre-swap work overrides a master-based indication.
+  const corrected = calculateScenarioLine({ ...workSwap, swapTypesByDate: { "2026-11-20": "work-for-work" } }).dates[5];
+  assert.equal(corrected.swapClassification.source, "user");
+  assert.equal(corrected.swapClassification.inferredType, "moves-day-off");
+  assert.equal(corrected.wobod, true);
+  const excluded = calculateScenarioLine({ ...workSwap, swapTypesByDate: { "2026-11-17": "moves-day-off" } }).dates[2];
+  assert.equal(excluded.wobod, false);
+  assert.throws(() => calculateScenarioLine({ ...workSwap, swapTypesByDate: { "2026-11-17": "invalid" } }), /recognised swap type/);
+}
+console.log("PASS work-for-work swaps retain date eligibility, day-off moves and unknown swaps cannot create WOBOD, and confirmed pre-swap status overrides master indications");
 
 for (const day of result.dates) {
   assert.equal(day.worked.minutes, 480);
@@ -184,7 +224,7 @@ console.log("PASS roster-view data separates actual job length and time claims, 
 
 const summary = timesheetEntries(result);
 assert.equal(summary[0].claims[0], "WOBOD MR- Book-OFF day on Defunct roster");
-assert.equal(summary[5].claims[0], "WOBOD");
+assert.ok(!summary[5].claims.includes("WOBOD"));
 const bothOffFixture = fixture();
 bothOffFixture.current.rows[0].cells[5] = parseCell("08:00 - 16:00 3", 5);
 bothOffFixture.defunct.lines.get(10).cells[5] = parseCell("OFF", 5);
@@ -373,14 +413,14 @@ assert.ok(freelanceDay.separateTimeClaims.some(claim => claim.label === "Lay-bac
 swappedFreelance.current.rows[0].cells[5] = parseCell("08:00 - 16:00 Freelance (WS 20)", 5);
 swappedFreelance.defunct.lines.get(10).cells[5] = parseCell("OFF", 5);
 freelanceDay = calculateScenarioLine(swappedFreelance).dates[5];
-assert.equal(freelanceDay.wobod, true);
-assert.deepEqual(freelanceDay.wobodSources, ["Existing master"]);
+assert.equal(freelanceDay.wobod, false);
+assert.deepEqual(freelanceDay.wobodSources, []);
 const unswappedFreelance = fixture();
 unswappedFreelance.current.rows[0].cells[0] = parseCell("08:00 - 16:00 Freelance", 0);
 freelanceDay = calculateScenarioLine(unswappedFreelance).dates[0];
 assert.equal(freelanceDay.wobod, true);
 assert.deepEqual(freelanceDay.wobodSources, ["Defunct master"]);
-console.log("PASS Freelance swaps use same-job references only, retain current WOBOD and ignore swapped defunct book-off days");
+console.log("PASS Freelance swaps use same-job references and exclude swapped book-off WOBOD when preservation is disabled");
 
 const confirmedRoads = { current: true, defunct: true };
 const unreferencedRoads = scenarioKilometres({ status: "work", jobNumber: "RR1", extraKm: 0 }, null, null, "driver");

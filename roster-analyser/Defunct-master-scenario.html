@@ -38,8 +38,8 @@
           <p class="hint">Also compare the uploaded job against its own defunct diagram. The defunct job on the same line and day is always the baseline reference.</p>
           <label class="check-label"><input id="scenario-allow-defunct-swaps" type="checkbox">Allow defunct time and kilometre claims on swapped shifts</label>
           <p class="hint">When off, swapped shifts cannot claim defunct time or kilometres. Current-roster claims still apply. When on, defunct comparisons must use the same job.</p>
-          <label class="check-label"><input id="scenario-allow-swapped-wobod" type="checkbox" checked>Allow WOBOD on swapped book-off days</label>
-          <p class="hint">A worked swap on this line's defunct OFF/ADO day counts as WOBOD, whatever job is worked. This does not enable defunct time or kilometre claims. Current-master OFF/ADO always qualifies, even with this setting off.</p>
+          <label class="check-label"><input id="scenario-allow-swapped-wobod" type="checkbox" checked>Preserve WOBOD on work-for-work swaps</label>
+          <p class="hint">Keep WOBOD on qualifying current or defunct OFF/ADO days only when swapping work for work. Swaps that move days off do not qualify. Check or correct the swap type inside each result line. Defunct time and kilometre claims remain separate.</p>
           <label>Replace existing master for this run<input id="scenario-existing" type="file" accept=".pdf,application/pdf"></label>
           <label>Replace defunct master for this run<input id="scenario-defunct" type="file" accept=".pdf,application/pdf"></label>
           <label>Time comparisons<select id="scenario-alignment">
@@ -55,7 +55,7 @@
           <a id="scenario-reference-download" hidden>Download job reference JSON</a>
           <div id="scenario-reference-table" class="reference-table" tabindex="0" role="region" aria-label="Defunct job times, kilometres and reference source"></div>
         </details>
-        <p class="hint">Work on an OFF or ADO day in either master counts as WOBOD. For swapped shifts, the defunct book-off rule is controlled separately in Comparison settings.</p>
+        <p class="hint">Unswapped work on an OFF or ADO day in either master counts as WOBOD. Swapped work only retains WOBOD for work-for-work swaps with the preservation setting enabled.</p>
         <button class="primary full" type="submit" id="scenario-run">Compare all lines</button>
       </form>
       <p id="scenario-status" role="status" aria-live="polite"></p>

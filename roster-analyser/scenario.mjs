@@ -26,6 +26,7 @@ let resultPeriod = "full";
 let defunctCatalogue;
 let calculationContext = null;
 let kilometresByLine = {};
+let swapTypesByLine = {};
 
 function kilometreCoverage(coverage = {}) {
   return coverage.numericKilometresComplete
@@ -246,6 +247,17 @@ function kilometreEditor(line) {
       </div><p class="hint">${day.defunctClaimsAllowed === false ? "Defunct time and kilometre claims disabled for swapped shift" : `Defunct reference ${escape(day.kilometres?.referenceJob || day.worked.job || "")}: ${day.kilometres?.defunctKm ?? "unknown"} km`}</p></fieldset>`).join("")}</details>`;
 }
 
+function swapEditor(line) {
+  const swapped = line.dates.filter(day => day.swapped && day.status === "work");
+  if (!swapped.length) return "";
+  const labels = { "work-for-work": "Work for work", "moves-day-off": "Moves a day off", unknown: "Not established" };
+  return `<details class="scenario-swap-editor shift-options"><summary>Swap types and WOBOD eligibility</summary>
+    <p class="hint">WOBOD is retained only for work-for-work swaps. Initial types use current-master assignments, which may differ from the roster before swapping. Correct each type if needed. Moving a day off, or an unknown type, cannot create WOBOD.</p>
+    ${swapped.map(day => `<label>${escape(dateLabel(day.date))} · ${escape(day.worked.job || "Custom")} · WS ${escape(day.swapLines.join(", "))}<select data-swap-line="${line.line}" data-swap-date="${day.date}">
+      ${[["auto", `Use current master indication: ${labels[day.swapClassification.inferredType]}`], ...Object.entries(labels)].map(([value, label]) => `<option value="${value}"${day.swapClassification.selected === value ? " selected" : ""}>${escape(label)}</option>`).join("")}
+    </select></label>`).join("")}</details>`;
+}
+
 function renderLineDetail(element) {
   const target = element.querySelector(".scenario-line-detail");
   if (!element.open || target.childElementCount) return;
@@ -254,7 +266,7 @@ function renderLineDetail(element) {
     (resultView === "roster" ? rosterMarkup(line) : resultView === "timesheet" ? timesheetMarkup(line) : `<div class="scenario-day-list">${visibleDates(line.dates).map(dayMarkup).join("")}</div>`) +
     (resultPeriod !== "full" ? `<p class="scenario-pay-total">Week ${resultPeriod === "week1" ? "1" : "2"} daily extra ${money(visibleDates(line.dates).reduce((sum, day) => sum + day.difference, 0))}</p>` : "") +
     `<p class="scenario-pay-total">Fortnight daily extra ${money(line.dates.reduce((sum, day) => sum + day.difference, 0))} · Fortnight adjustment difference ${money(line.adjustmentDifference)} · Fortnight total extra ${money(line.difference)}</p>` +
-    (report.role === "driver" ? kilometreEditor(line) : "");
+    swapEditor(line) + (report.role === "driver" ? kilometreEditor(line) : "");
 }
 
 function filteredLines() {
@@ -305,6 +317,7 @@ $("scenario-form").onsubmit = async event => {
   report = null;
   calculationContext = null;
   kilometresByLine = {};
+  swapTypesByLine = {};
   $("scenario-status").className = "";
   const controls = [...$("scenario-form").querySelectorAll("input, select, button")];
   controls.forEach(control => { control.disabled = true; });
@@ -376,25 +389,28 @@ $("scenario-form").onsubmit = async event => {
 };
 $("scenario-filter").oninput = renderLines;
 $("scenario-lines").addEventListener("change", event => {
-  const input = event.target.closest("[data-km-line]");
+  const input = event.target.closest("[data-km-line], [data-swap-line]");
   if (!input || !report || !calculationContext) return;
   if (!input.checkValidity()) { input.reportValidity(); return; }
-  const line = Number(input.dataset.kmLine);
+  const isSwap = Boolean(input.dataset.swapLine);
+  const line = Number(isSwap ? input.dataset.swapLine : input.dataset.kmLine);
   const editorOpen = input.closest("details")?.open;
-  const date = input.dataset.kmDate;
-  const fields = input.closest("fieldset").querySelectorAll("[data-km-field]");
+  const date = isSwap ? input.dataset.swapDate : input.dataset.kmDate;
+  const fields = isSwap ? [] : input.closest("fieldset").querySelectorAll("[data-km-field]");
   const values = Object.fromEntries([...fields].map(field => [field.dataset.kmField, field.value]));
-  const kilometres = { ...kilometresByLine[line], [date]: values };
+  const kilometres = isSwap ? kilometresByLine[line] || {} : { ...kilometresByLine[line], [date]: values };
+  const swaps = isSwap ? { ...swapTypesByLine[line], [date]: input.value } : swapTypesByLine[line] || {};
   try {
-    const { employeeName, ...result } = calculateScenarioLine({ ...calculationContext, line, kilometresByDate: kilometres });
+    const { employeeName, ...result } = calculateScenarioLine({ ...calculationContext, line, kilometresByDate: kilometres, swapTypesByDate: swaps });
     kilometresByLine[line] = kilometres;
+    swapTypesByLine[line] = swaps;
     report.lines[report.lines.findIndex(item => item.line === line)] = result;
     renderLines();
-    if (editorOpen) $("scenario-lines").querySelector(`details[data-line="${line}"] .scenario-kilometre-editor`).open = true;
+    if (editorOpen) $("scenario-lines").querySelector(`details[data-line="${line}"] ${isSwap ? ".scenario-swap-editor" : ".scenario-kilometre-editor"}`).open = true;
     const priced = report.lines.filter(item => !item.error);
     const unpriced = report.lines.length - priced.length;
     $("scenario-total").textContent = `${priced.length} lines calculated · ${money(priced.reduce((sum, item) => sum + item.difference, 0))} total extra${unpriced ? ` · ${unpriced} lines not priced` : ""}${report.skippedInactive ? ` · ${report.skippedInactive} seconded lines excluded` : ""}`;
-    $("scenario-status").textContent = `Line ${line} recalculated with rostered and actual kilometres.`;
+    $("scenario-status").textContent = `Line ${line} recalculated with ${isSwap ? "updated swap type and WOBOD eligibility" : "rostered and actual kilometres"}.`;
   } catch (error) { $("scenario-status").textContent = error.message; }
 });
 for (const button of document.querySelectorAll("[data-result-period]")) button.onclick = () => {
