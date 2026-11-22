@@ -15,7 +15,7 @@ function wobodSourcesFor(row, index, master, defunct, rules) {
   if (row.status !== "work") return [];
   const off = source => ["OFF", "ADO"].includes(source.lines.get(row.line)?.cells[index]?.status);
   return [off(master) ? "Existing master" : "",
-    canClaimDefunct(row, rules) && !row.swapLines?.length && off(defunct) ? "Defunct master" : ""].filter(Boolean);
+    (!row.swapLines?.length || rules.allowSwappedWobod) && off(defunct) ? "Defunct master" : ""].filter(Boolean);
 }
 
 export function activeScenarioRows(master, current) {
@@ -285,6 +285,7 @@ export function calculateScenarioLine({ engine, master, defunct, current, line, 
     const pay = maximum.result.payObj[index];
     const wobodSources = wobodSourcesFor(row, index, master, defunct, rules);
     const defunctClaimsAllowed = canClaimDefunct(row, rules);
+    const defunctWobodOnly = !defunctClaimsAllowed && wobodSources.includes("Defunct master");
     const largeChange = row.status === "work" && [original, old].some(cell => cell?.start && Math.abs(clockMinutes(cell.start) - clockMinutes(row.actualStart)) > 720);
     const timeCredit = pay.lines.find(item => /^(Lift-up|Lay-back|Build-up) included in shift pay$/.test(item.label));
     const claimDifference = (withoutKilometreTotals[index] - workedOnlyTotals[index]) / 100;
@@ -311,7 +312,9 @@ export function calculateScenarioLine({ engine, master, defunct, current, line, 
         reference: chosen.basis.kilometreReference ? "defunct" : "current", additionalPay: kilometreDifference } : null,
       existing: original, defunct: old, comparison: chosen.basis,
       comparisons: {
-        defunct: { ...masterComparison(maximum.priced[index], "defunct", row.swapLines?.length ? row.jobNumber : null), disabled: !defunctClaimsAllowed, reason: !defunctClaimsAllowed ? "Defunct claims disabled for swapped shift" : "" },
+        defunct: { ...masterComparison(maximum.priced[index], "defunct", row.swapLines?.length ? row.jobNumber : null),
+          disabled: !defunctClaimsAllowed && !defunctWobodOnly, wobodOnly: defunctWobodOnly,
+          reason: !defunctClaimsAllowed ? `${defunctWobodOnly ? "WOBOD only · " : ""}Defunct time and kilometre claims disabled for swapped shift` : "" },
         existing: masterComparison(maximum.priced[index], "existing", row.swapLines?.length ? row.jobNumber : null),
       },
       amendment: chosen.row.amendment || "actual",

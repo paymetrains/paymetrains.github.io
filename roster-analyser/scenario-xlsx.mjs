@@ -32,7 +32,7 @@ function shiftText(shift) {
 }
 
 function referenceText(day, source) {
-  if (day.comparisons[source].disabled) return day.comparisons[source].reason;
+  if (day.comparisons[source].disabled || day.comparisons[source].wobodOnly) return day.comparisons[source].reason;
   const comparison = day.comparisons[source].basis;
   const assignment = day[source];
   if (day.status !== "work") return "";

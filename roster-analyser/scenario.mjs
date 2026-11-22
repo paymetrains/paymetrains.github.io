@@ -179,8 +179,8 @@ function masterMarkup(day, source) {
     const wins = isHigherComparison(day, source);
     const assignment = day[source];
     if (item.disabled) return `<div class="master-comparison"><div class="master-shift">${shiftMarkup(assignment)}</div><div class="master-value"><strong>Not eligible</strong></div></div><small class="master-basis">${escape(item.reason)}</small>`;
-    let basis = "";
-    if (day.status === "work") {
+    let basis = item.wobodOnly ? item.reason : "";
+    if (day.status === "work" && !item.wobodOnly) {
       if (item.basis.source === "Worked roster") basis = "Custom duty · actual times";
       else if (source === "defunct" && assignment && ["OFF", "ADO"].includes(assignment.status) && !item.basis.source.includes("Defunct master job reference")) basis = `${assignment.status} · actual shift value`;
       else if (day.swapped || shiftText(item.basis) !== shiftText(assignment) || item.basis.source.includes("master job reference"))
@@ -243,7 +243,7 @@ function kilometreEditor(line) {
     <p class="hint">Current job distances are prefilled when known. Edit either value. Defunct comparisons keep their own reference distances, including eligible RR diagrams at 0 km. Blank means unknown.</p>
     ${line.dates.filter(day => day.status === "work").map(day => `<fieldset><legend>${escape(dateLabel(day.date))} · ${escape(day.worked.job || "Custom")}</legend><div class="field-pair">
       ${["rosteredKm", "actualKm"].map(field => `<label>${field === "rosteredKm" ? "Rostered kilometres" : "Actual kilometres"}<input type="number" min="0" max="1000" step="0.001" inputmode="decimal" data-km-line="${line.line}" data-km-date="${day.date}" data-km-field="${field}" value="${day.kilometres?.[field] ?? ""}"></label>`).join("")}
-      </div><p class="hint">${day.defunctClaimsAllowed === false ? "Defunct claims disabled for swapped shift" : `Defunct reference ${escape(day.kilometres?.referenceJob || day.worked.job || "")}: ${day.kilometres?.defunctKm ?? "unknown"} km`}</p></fieldset>`).join("")}</details>`;
+      </div><p class="hint">${day.defunctClaimsAllowed === false ? "Defunct time and kilometre claims disabled for swapped shift" : `Defunct reference ${escape(day.kilometres?.referenceJob || day.worked.job || "")}: ${day.kilometres?.defunctKm ?? "unknown"} km`}</p></fieldset>`).join("")}</details>`;
 }
 
 function renderLineDetail(element) {
@@ -315,7 +315,7 @@ $("scenario-form").onsubmit = async event => {
     const rate = Number($("scenario-rate").value);
     const alignment = $("scenario-alignment").value;
     const weekdayOvertimeAfterFourth = Number($("scenario-later-rate").value);
-    const rules = scenarioRules({ checkDefunctDiagram: $("scenario-check-defunct-diagram").checked, allowDefunctSwaps: $("scenario-allow-defunct-swaps").checked });
+    const rules = scenarioRules({ checkDefunctDiagram: $("scenario-check-defunct-diagram").checked, allowDefunctSwaps: $("scenario-allow-defunct-swaps").checked, allowSwappedWobod: $("scenario-allow-swapped-wobod").checked });
     $("scenario-status").textContent = "Reading fortnight roster…";
     const raw = await readPdf($("scenario-current").files[0], { detectStrikes: true });
     const current = parseRoster(raw, "fortnight");

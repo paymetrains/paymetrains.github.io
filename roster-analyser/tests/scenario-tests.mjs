@@ -37,7 +37,7 @@ function fixture() {
     rows: [{ line: 10, employeeName: "Example crew", cells }],
   };
   // Historical behaviour remains available when both optional rules are enabled.
-  return { engine, master, defunct, current, line: 10, rate: 50, role: "driver", rules: { checkDefunctDiagram: true, allowDefunctSwaps: true } };
+  return { engine, master, defunct, current, line: 10, rate: 50, role: "driver", rules: { checkDefunctDiagram: true, allowDefunctSwaps: true, allowSwappedWobod: false } };
 }
 
 const result = calculateScenarioLine(fixture());
@@ -50,7 +50,7 @@ policy.defunct.diagramData["2"] = { dayPattern: "Sun-Sat", signOn: "04:00", offD
 policy.defunct.diagramData["3"] = { dayPattern: "Sun-Sat", signOn: "02:00", offDuty: "10:00", rosteredKm: 0 };
 delete policy.rules;
 const standardPolicy = calculateScenarioLine(policy);
-assert.deepEqual(standardPolicy.rules, { checkDefunctDiagram: false, allowDefunctSwaps: false });
+assert.deepEqual(standardPolicy.rules, { checkDefunctDiagram: false, allowDefunctSwaps: false, allowSwappedWobod: true });
 assert.ok(standardPolicy.dates[1].alternatives.some(option => option.source.includes("Defunct master") && option.job === "2"));
 assert.ok(!standardPolicy.dates[1].alternatives.some(option => option.source.includes("Defunct master job reference")));
 assert.equal(standardPolicy.dates[1].kilometres.referenceJob, "2");
@@ -120,7 +120,47 @@ assert.deepEqual(swapOffResult.dates[5].wobodSources, ["Existing master"]);
 assert.equal(timesheetEntries(swapOffResult)[5].claims[0], "WOBOD");
 assert.equal(swapOffResult.dates[0].wobod, true);
 assert.deepEqual(swapOffResult.dates[0].wobodSources, ["Defunct master"]);
-console.log("PASS swaps ignore defunct book-off WOBOD while preserving current book-off WOBOD and unswapped defunct claims");
+console.log("PASS disabling the swapped WOBOD exception preserves current book-off WOBOD and unswapped defunct claims");
+
+// Book-off eligibility is independent of permission to claim against defunct diagrams.
+for (const role of ["guard", "driver"]) {
+  const swappedBookOff = fixture();
+  swappedBookOff.role = role;
+  swappedBookOff.defunct.lines.get(10).cells[2] = parseCell("ADO", 2);
+  swappedBookOff.defunct.lines.get(10).cells[5] = parseCell("OFF", 5);
+  swappedBookOff.master.diagramData["3"].rosteredKm = 100;
+  swappedBookOff.defunct.diagramData["3"] = { dayPattern: "Sun-Sat", signOn: "02:00", offDuty: "10:00", rosteredKm: 0 };
+  for (const checkDefunctDiagram of [false, true]) for (const allowDefunctSwaps of [false, true]) for (const allowSwappedWobod of [false, true]) {
+    const output = calculateScenarioLine({ ...swappedBookOff, rules: { checkDefunctDiagram, allowDefunctSwaps, allowSwappedWobod } });
+    const day = output.dates[2];
+    assert.equal(day.wobod, allowSwappedWobod);
+    assert.deepEqual(day.wobodSources, allowSwappedWobod ? ["Defunct master"] : []);
+    assert.equal(day.comparisons.defunct.wobodOnly, allowSwappedWobod && !allowDefunctSwaps);
+    assert.equal(day.comparisons.defunct.disabled, !allowSwappedWobod && !allowDefunctSwaps);
+    assert.equal(day.claims.some(claim => claim.label === "WOBOD @ 50%"), allowSwappedWobod);
+    if (!allowDefunctSwaps) {
+      assert.ok(day.alternatives.every(option => !option.source.includes("Defunct") && !option.kilometreReference?.source.includes("Defunct")));
+      assert.ok(day.separateTimeClaims.every(claim => !claim.comparison.source.includes("Defunct")));
+      if (role === "driver") assert.equal(day.kilometres.defunctKm, null);
+    }
+    assert.deepEqual(output.dates[5].wobodSources, allowSwappedWobod ? ["Existing master", "Defunct master"] : ["Existing master"]);
+    assert.equal(timesheetEntries(output)[5].claims[0], "WOBOD");
+    if (allowSwappedWobod) assert.equal(timesheetEntries(output)[2].claims[0], "WOBOD MR- Book-OFF day on Defunct roster");
+  }
+  const defaultOutput = calculateScenarioLine({ ...swappedBookOff, rules: {} });
+  assert.equal(defaultOutput.dates[2].wobod, true);
+  assert.equal(defaultOutput.dates[2].comparisons.defunct.wobodOnly, true);
+  const disabledOutput = calculateScenarioLine({ ...swappedBookOff, rules: { allowSwappedWobod: false } });
+  assert.ok(defaultOutput.dates[2].scenarioPay > disabledOutput.dates[2].scenarioPay);
+  // Any timed working job qualifies; leave and an unworked book-off day do not.
+  swappedBookOff.current.rows[0].cells[2] = parseCell("08:00 - 16:00 EXG01 (WS 20)", 2);
+  assert.equal(calculateScenarioLine({ ...swappedBookOff, rules: {} }).dates[2].wobod, true);
+  for (const label of ["OFF", "SL"]) {
+    swappedBookOff.current.rows[0].cells[2] = parseCell(label, 2);
+    assert.equal(calculateScenarioLine({ ...swappedBookOff, rules: {} }).dates[2].wobod, false);
+  }
+}
+console.log("PASS swapped book-off WOBOD defaults on for either master, survives diagram/time/km restrictions, prices the payment and appears in timesheet comments");
 
 for (const day of result.dates) {
   assert.equal(day.worked.minutes, 480);
