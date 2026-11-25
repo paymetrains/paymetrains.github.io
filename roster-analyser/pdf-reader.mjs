@@ -46,7 +46,7 @@ export async function readPdf(file, { detectStrikes = false } = {}) {
 }
 
 // This roster export draws strike-throughs as thin filled rectangles in page space.
-function markStruckText(items, { fnArray, argsArray }, ops) {
+export function markStruckText(items, { fnArray, argsArray }, ops) {
   const transforms = fnArray.flatMap((op, index) => op === ops.transform ? [argsArray[index]] : []);
   if (transforms.length !== 1) return;
   const [sx, skewY, skewX, sy, tx, ty] = transforms[0];
@@ -58,7 +58,10 @@ function markStruckText(items, { fnArray, argsArray }, ops) {
     if (path.length !== 5 || !box) continue;
     const [left, top, right, bottom] = box;
     const thickness = (top - bottom) * sy;
-    if (thickness < 0.18 || thickness > 0.35 || (right - left) * sx < 1) continue;
+    // Exports use both ~0.24 pt and ~0.36 pt strike bars. Keep the
+    // text-relative position/overlap checks below so underlines and grids
+    // are not interpreted as crossed-out text.
+    if (thickness < 0.18 || thickness > 0.45 || (right - left) * sx < 1) continue;
     bars.push({ left: left * sx + tx, right: right * sx + tx, y: bottom * sy + ty });
   }
   for (const item of items) {

@@ -219,7 +219,7 @@ function renderEmployees() {
   const rows = (state.current?.rows || []).filter(
     (row) =>
       row.employeeName.trim() &&
-      !row.seconded,
+      !row.seconded && !row.crewUnavailable,
   );
   $("manual-line").innerHTML =
     '<option value="">Select your line</option>' +
@@ -257,8 +257,8 @@ async function readCurrent() {
         .match(/Depot:\s*(.*?)(?:\s+Layer:|\s+Fortnight ending)/i)?.[1]
         ?.trim() || "";
     const named = parsed.rows.filter((row) => row.employeeName.trim());
-    const seconded = named.filter((row) => row.seconded).length;
-    if (named.length === seconded)
+    const unavailable = named.filter((row) => row.seconded || row.crewUnavailable).length;
+    if (named.length === unavailable)
       throw new Error(
         "No named employee lines were found. Try another PDF or enter manually.",
       );
@@ -284,7 +284,7 @@ async function readCurrent() {
     state.current = parsed;
     renderEmployees();
     $("current-info").textContent =
-      `${niceDate(expected[0])}–${niceDate(expected[13])} ${parsed.dates[0].getFullYear()} · ${named.length - seconded} eligible lines${seconded ? ` · ${seconded} seconded out` : ""}`;
+      `${niceDate(expected[0])}–${niceDate(expected[13])} ${parsed.dates[0].getFullYear()} · ${named.length - unavailable} eligible lines${unavailable ? ` · ${unavailable} crew marked unavailable` : ""}`;
   } catch (error) {
     $("current-info").textContent =
       "This PDF could not be imported. Try another file or choose Enter manually.";

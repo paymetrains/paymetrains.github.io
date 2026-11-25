@@ -371,7 +371,7 @@ $("scenario-form").onsubmit = async event => {
     report.lines.sort((a, b) => a.line - b.line);
     const priced = report.lines.filter(line => !line.error);
     $("scenario-context").textContent = `${scenarioRulesText(rules)} ${dateLabel(report.dates[0])}–${dateLabel(report.dates[13])} · ${role === "guard" ? "Guard" : "Driver"} · ${money(rate)}/hour. Fifth and later weekday WOBOD rate assumed at ${weekdayOvertimeAfterFourth * 100}% plus 50% on worked time. ${alignment === "same-date" ? "Time comparisons use the same roster date." : "Time credits are excluded for starts over 12 hours apart."}${role === "driver" ? " Rostered and actual kilometres default to the current job diagram; entered values override these defaults. Missing kilometre data remain unknown." : ""}`;
-    $("scenario-total").textContent = `${priced.length} lines calculated · ${money(priced.reduce((sum, line) => sum + line.difference, 0))} total extra${priced.length !== named.length ? ` · ${named.length - priced.length} lines need an entry checked` : ""}${report.skippedInactive ? ` · ${report.skippedInactive} seconded lines excluded` : ""}`;
+    $("scenario-total").textContent = `${priced.length} lines calculated · ${money(priced.reduce((sum, line) => sum + line.difference, 0))} total extra${priced.length !== named.length ? ` · ${named.length - priced.length} lines need an entry checked` : ""}${report.skippedInactive ? ` · ${report.skippedInactive} crew lines marked unavailable excluded` : ""}`;
     $("scenario-filter").value = "";
     renderLines();
     $("scenario-results").hidden = false;
@@ -409,7 +409,7 @@ $("scenario-lines").addEventListener("change", event => {
     if (editorOpen) $("scenario-lines").querySelector(`details[data-line="${line}"] ${isSwap ? ".scenario-swap-editor" : ".scenario-kilometre-editor"}`).open = true;
     const priced = report.lines.filter(item => !item.error);
     const unpriced = report.lines.length - priced.length;
-    $("scenario-total").textContent = `${priced.length} lines calculated · ${money(priced.reduce((sum, item) => sum + item.difference, 0))} total extra${unpriced ? ` · ${unpriced} lines not priced` : ""}${report.skippedInactive ? ` · ${report.skippedInactive} seconded lines excluded` : ""}`;
+    $("scenario-total").textContent = `${priced.length} lines calculated · ${money(priced.reduce((sum, item) => sum + item.difference, 0))} total extra${unpriced ? ` · ${unpriced} lines not priced` : ""}${report.skippedInactive ? ` · ${report.skippedInactive} crew lines marked unavailable excluded` : ""}`;
     $("scenario-status").textContent = `Line ${line} recalculated with ${isSwap ? "updated swap type and WOBOD eligibility" : "rostered and actual kilometres"}.`;
   } catch (error) { $("scenario-status").textContent = error.message; }
 });

@@ -21,7 +21,7 @@ function wobodSourcesFor(row, index, master, defunct, rules) {
 
 export function activeScenarioRows(master, current) {
   return current.rows.filter(row => {
-    if (!row.employeeName.trim() || row.seconded) return false;
+    if (!row.employeeName.trim() || row.seconded || row.crewUnavailable) return false;
     if (!master.lines.has(row.line)) return true;
     const rows = importLine(master, current, row.line).rows;
     const seconded = rows.some(item => item.status === "seconded");

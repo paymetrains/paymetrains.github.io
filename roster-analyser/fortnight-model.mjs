@@ -73,6 +73,7 @@ export function importLine(master, current, line) {
   );
   if (!sourceRow) throw new Error("Choose a named employee line.");
   if (sourceRow.seconded) throw new Error("This crew member is seconded out of train crew pay.");
+  if (sourceRow.crewUnavailable) throw new Error(`This crew member is marked ${sourceRow.crewLeave || "unavailable"} in the name column. Choose the active replacement line.`);
   const result = analyseRosters(master, current, [sourceRow]);
   const missingLine = !master.lines.has(sourceRow.line);
   const rows = result.payRows.map((pay, index) => {

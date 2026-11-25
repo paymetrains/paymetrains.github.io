@@ -83,11 +83,14 @@ function parseRosterPage(page, type) {
     );
 
     const crewText = type === "fortnight" ? joinItems(leftItems.filter(item => !item.struckOut)) : "";
+    const crewLeave = crewLeaveCode(crewText);
     return {
       source: type,
       line: band.line,
       employeeName: parseEmployeeName(crewText),
-      seconded: /\bSecP?\s+open\b/i.test(crewText),
+      seconded: crewLeave === "SEC",
+      crewLeave,
+      crewUnavailable: Boolean(crewLeave),
       cells,
     };
   });
@@ -344,7 +347,7 @@ function analyseRosters(master, fortnight, selectedRows = fortnight.rows) {
   const currentLines = new Map(fortnight.rows.map(row => [row.line, row]));
 
   for (const fortnightRow of selectedRows) {
-    if (!fortnightRow.line || fortnightRow.seconded) continue;
+    if (!fortnightRow.line || fortnightRow.seconded || fortnightRow.crewUnavailable) continue;
     if (fortnightRow.employeeName) employees.add(fortnightRow.employeeName);
 
     const masterRow = master.lines.get(fortnightRow.line);
@@ -923,6 +926,14 @@ function joinItems(items) {
 
 function normalizeCellText(text) {
   return text.replace(/\s+/g, " ").trim();
+}
+
+function crewLeaveCode(text) {
+  // These are notes in the crew/name column, not leave on individual days.
+  // Crossed-out names and their notes have already been removed.
+  const code = text.match(/\(\s*(AL|ANNUAL\s+LEAVE|SECP?|INJ|SL|SICK|SIF|REL|LSL|LWOP|MAT\s*L|PH)\b/i)?.[1]?.toUpperCase();
+  if (/^SEC/.test(code || "")) return "SEC";
+  return code || "";
 }
 
 function parseEmployeeName(text) {
