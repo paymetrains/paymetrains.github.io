@@ -103,7 +103,7 @@ function findDateRow(items) {
   const candidates = [];
 
   for (const item of items) {
-    const matches = item.str.match(/\d{2}\/\d{2}\/\d{4}/g);
+    const matches = item.str.match(/\b\d{1,2}\/\d{1,2}\/\d{4}\b/g);
     if (!matches) continue;
     for (let index = 0; index < matches.length; index++) {
       candidates.push({
@@ -959,7 +959,7 @@ function median(values) {
 }
 
 function parseDate(value) {
-  const match = value.match(/(\d{2})\/(\d{2})\/(\d{4})/);
+  const match = value.match(/\b(\d{1,2})\/(\d{1,2})\/(\d{4})\b/);
   if (!match) throw new Error(`Bad date: ${value}`);
   return new Date(Number(match[3]), Number(match[2]) - 1, Number(match[1]));
 }
