@@ -41,6 +41,42 @@ function fixture() {
 }
 
 const result = calculateScenarioLine(fixture());
+for (const role of ["guard", "driver"]) {
+  const data = fixture();
+  data.role = role;
+  data.rules = {};
+  data.master.diagramData["1"].rosteredKm = 100;
+  const alternative = Array.from({ length: 14 }, (_, i) => parseCell("08:00 - 16:00 2", i));
+  alternative[1] = parseCell("OFF", 1);
+  alternative[2] = parseCell("OFF", 2);
+  alternative[3] = parseCell("06:00 - 14:00 RR", 3);
+  data.defunct.lines.set(20, { line: 20, cells: alternative });
+  const standard = calculateScenarioLine(data);
+  const cross = calculateScenarioLine({ ...data, defunctLine: 20 });
+  assert.equal(cross.line, 10);
+  assert.equal(cross.defunctLine, 20);
+  assert.equal(cross.baseline, standard.baseline);
+  assert.equal(cross.dates[0].wobod, false);
+  assert.deepEqual(cross.dates[1].wobodSources, ["Defunct master"]);
+  assert.equal(cross.dates[2].defunctClaimsAllowed, false);
+  assert.equal(cross.dates[2].comparisons.defunct.wobodOnly, true);
+  assert.equal(cross.dates[2].wobod, true); // work-for-work preservation still applies
+  assert.deepEqual(cross.dates.map(day => day.defunct.job), alternative.map(cell => cell.jobNumber || cell.status));
+  assert.deepEqual(cross.dates.map(day => day.worked), standard.dates.map(day => day.worked));
+  assert.deepEqual(cross.dates.map(day => day.existing), standard.dates.map(day => day.existing));
+  assert.equal(timesheetEntries(cross)[1].rosteredStart, "06:00");
+  if (role === "driver") {
+    assert.equal(cross.dates[3].kilometres.referenceJob, "RR");
+    assert.equal(cross.dates[3].kilometres.claimedExtraKm, 100);
+  }
+  const own = calculateScenarioLine({ ...data, defunctLine: 10 });
+  assert.deepEqual(own, standard);
+  assert.throws(() => calculateScenarioLine({ ...data, defunctLine: 999 }), /Defunct line 999 is missing/);
+  assert.throws(() => calculateScenarioLine({ ...data, defunctLine: 1.5 }), /valid defunct line/);
+  assert.throws(() => calculateScenarioLine({ ...data, defunctLine: "" }), /valid defunct line/);
+  assert.equal(data.defunct.lines.get(10).cells[0].status, "OFF");
+}
+console.log("PASS cross-line comparison changes only the defunct line/day time, WOBOD and kilometre references, preserves current references and validates missing lines");
 // Each optional rule acts independently; line/day remains the fixed baseline.
 const policy = fixture();
 policy.master.diagramData["1"].rosteredKm = 100;

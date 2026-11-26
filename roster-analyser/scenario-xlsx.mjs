@@ -130,7 +130,7 @@ export async function scenarioWorkbook(report, lines, period, lineAmount, view =
       sheet.getCell(first, 1).value = line.line;
       baseCell(sheet.getCell(first, 1));
       sheet.getCell(first, 1).font = { name: "Arial", size: 11, bold: true };
-      const labels = ["Existing master", "Defunct master", "Uploaded roster", "Daily breakdown", "Daily extra"];
+      const labels = ["Existing master", `Defunct master${line.defunctLine != null && line.defunctLine !== line.line ? ` · Line ${line.defunctLine}` : ""}`, "Uploaded roster", "Daily breakdown", "Daily extra"];
       labels.forEach((label, offset) => {
         const cell = sheet.getCell(first + offset, 2);
         baseCell(cell); cell.value = label;
@@ -221,7 +221,7 @@ function addTimesheetSheet(workbook, report, lines, week) {
   title.value = `Timesheet summary · Week ${week + 1}`;
   title.font = { name: "Arial", size: 15, bold: true };
   sheet.getRow(2).height = 26;
-  mergedCell(sheet, 3, 1, 9).value = `${report.current} · ${report.role} · ${money(report.rate)}/hour`;
+  mergedCell(sheet, 3, 1, 9).value = `${report.current} · ${report.role} · ${money(report.rate)}/hour${report.lineComparison ? ` · Current line ${report.lineComparison.currentLine} / defunct line ${report.lineComparison.defunctLine}` : ""}`;
   mergedCell(sheet, 4, 1, 9).value = "Rostered times: current master line for unswapped shifts; worked job's current reference for swapped shifts. MR comments give the defunct comparison. Job length is actual work only.";
   mergedCell(sheet, 5, 1, 9).value = `Current: ${report.existingMaster}. Defunct: ${report.defunctMaster}. ${report.rules ? scenarioRulesText(report.rules) : ""}`;
   sheet.getRow(4).height = 24;

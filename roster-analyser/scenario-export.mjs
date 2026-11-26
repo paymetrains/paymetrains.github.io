@@ -24,7 +24,7 @@ export function scenarioCsv(lines, selectDates, lineAmount) {
     "Defunct master job", "Defunct master start", "Defunct master finish", "Defunct comparison job", "Defunct comparison start", "Defunct comparison finish", "Defunct comparison amount",
     "Selected comparison source", "Selected comparison job", "Actual shift pay", "Actual shift items", "Separate time claims", "Daily baseline pay", "Daily scenario pay", "Daily extra",
     "Selected dates extra", "Fortnight baseline pay", "Fortnight scenario gross", "Fortnight adjustment difference", "Fortnight total extra", "Error",
-    "Rostered km", "Defunct reference km", "Current extra km", "Actual km", "Claimed extra km", "Kilometre reference", "Additional kilometre pay", "Swap type", "Swap type source"];
+    "Rostered km", "Defunct reference km", "Current extra km", "Actual km", "Claimed extra km", "Kilometre reference", "Additional kilometre pay", "Swap type", "Swap type source", "Defunct line"];
   const rows = [columns];
   for (const line of lines) {
     if (line.error) {
@@ -45,10 +45,11 @@ export function scenarioCsv(lines, selectDates, lineAmount) {
         day.workedOnlyClaims.map(claim => `${claim.label}${claim.minutes ? ` (${claim.minutes} min)` : ""}: ${amount(lineAmount(claim))}`).join("; "),
         day.separateTimeClaims.map(claim => `${claim.label}${claim.minutes ? ` (${claim.minutes} min)` : ""}: ${amount(claim.amount)} · Against ${timeClaimReference(claim, day.comparison)}`).join("; "),
         amount(day.baselinePay), amount(day.scenarioPay), amount(day.difference), "", "", "", "", "", "",
-        day.kilometres?.currentKm ?? "", day.kilometres?.defunctKm ?? "", day.kilometres?.enteredExtraKm ?? "", day.kilometres?.assumedActualKm ?? "", day.kilometres?.claimedExtraKm ?? "", day.kilometres?.reference || "", day.kilometres ? amount(day.kilometres.additionalPay) : "", day.swapClassification?.type || "", day.swapClassification?.source || ""]);
+        day.kilometres?.currentKm ?? "", day.kilometres?.defunctKm ?? "", day.kilometres?.enteredExtraKm ?? "", day.kilometres?.assumedActualKm ?? "", day.kilometres?.claimedExtraKm ?? "", day.kilometres?.reference || "", day.kilometres ? amount(day.kilometres.additionalPay) : "", day.swapClassification?.type || "", day.swapClassification?.source || "", line.defunctLine ?? line.line]);
     }
     const summary = Array(columns.length).fill("");
     summary[0] = "line-summary"; summary[1] = line.line;
+    summary[columns.indexOf("Defunct line")] = line.defunctLine ?? line.line;
     summary[columns.indexOf("Selected dates extra")] = amount(dates.reduce((sum, day) => sum + day.difference, 0));
     summary[columns.indexOf("Fortnight baseline pay")] = amount(line.baseline);
     summary[columns.indexOf("Fortnight scenario gross")] = amount(line.maximum);
@@ -60,12 +61,12 @@ export function scenarioCsv(lines, selectDates, lineAmount) {
 }
 
 export function scenarioTimesheetCsv(lines, selectDates) {
-  const rows = [["Line", "Date", "Job number", "Rostered start", "Actual start", "Rostered finish", "Actual finish", "Claims", "Job length (minutes)", "Swap lines"]];
+  const rows = [["Line", "Date", "Job number", "Rostered start", "Actual start", "Rostered finish", "Actual finish", "Claims", "Job length (minutes)", "Swap lines", "Defunct line"]];
   for (const line of lines) {
-    if (line.error) { rows.push([line.line, "", "", "", "", "", "", line.error, "", ""]); continue; }
+    if (line.error) { rows.push([line.line, "", "", "", "", "", "", line.error, "", "", line.defunctLine ?? line.line]); continue; }
     for (const row of timesheetEntries(line, selectDates(line.dates))) rows.push([
       line.line, row.date, row.job, row.rosteredStart, row.actualStart, row.rosteredFinish, row.actualFinish,
-      row.claims.join("\n"), row.minutes, row.swapped ? row.swapLines.join("; ") : "",
+      row.claims.join("\n"), row.minutes, row.swapped ? row.swapLines.join("; ") : "", line.defunctLine ?? line.line,
     ]);
   }
   return "\uFEFF" + rows.map(row => row.map(csvField).join(",")).join("\r\n") + "\r\n";

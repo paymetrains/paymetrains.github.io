@@ -34,8 +34,17 @@
         <p id="scenario-master-info" class="hint">Checking included masters and diagrams…</p>
         <details class="shift-options">
           <summary>Comparison settings</summary>
+          <label class="check-label"><input id="scenario-cross-line" type="checkbox">Compare different current and defunct lines</label>
+          <fieldset id="scenario-line-pair" hidden disabled>
+            <legend>Lines to compare</legend>
+            <div class="field-pair">
+              <label>Current line<input id="scenario-current-line" type="number" min="1" step="1" inputmode="numeric" required></label>
+              <label>Defunct line<input id="scenario-defunct-line" type="number" min="1" step="1" inputmode="numeric" required></label>
+            </div>
+            <p class="hint">Calculate the uploaded current line against this defunct line on the same fortnight dates. Current-master references stay on the current line. All other scenario rules still apply.</p>
+          </fieldset>
           <label class="check-label"><input id="scenario-check-defunct-diagram" type="checkbox">Check against defunct diagram</label>
-          <p class="hint">Also compare the uploaded job against its own defunct diagram. The defunct job on the same line and day is always the baseline reference.</p>
+          <p class="hint">Also compare the uploaded job against its own defunct diagram. The selected defunct line supplies the line/day reference; by default it matches the current line number.</p>
           <label class="check-label"><input id="scenario-allow-defunct-swaps" type="checkbox">Allow defunct time and kilometre claims on swapped shifts</label>
           <p class="hint">When off, swapped shifts cannot claim defunct time or kilometres. Current-roster claims still apply. When on, defunct comparisons must use the same job.</p>
           <label class="check-label"><input id="scenario-allow-swapped-wobod" type="checkbox" checked>Preserve WOBOD on work-for-work swaps</label>

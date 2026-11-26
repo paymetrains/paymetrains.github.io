@@ -16,7 +16,7 @@ function wobodSourcesFor(row, index, master, defunct, rules) {
   if (row.swapLines?.length && (!rules.allowSwappedWobod || row.swapClassification?.type !== "work-for-work")) return [];
   const off = source => ["OFF", "ADO"].includes(source.lines.get(row.line)?.cells[index]?.status);
   return [off(master) ? "Existing master" : "",
-    off(defunct) ? "Defunct master" : ""].filter(Boolean);
+    ["OFF", "ADO"].includes(defunct.lines.get(row.defunctLine ?? row.line)?.cells[index]?.status) ? "Defunct master" : ""].filter(Boolean);
 }
 
 export function activeScenarioRows(master, current) {
@@ -111,7 +111,7 @@ function variants(row, basis, settings) {
 
 function optionsFor(row, index, master, defunct, settings) {
   const currentCell = master.lines.get(row.line)?.cells[index];
-  const oldCell = defunct.lines.get(row.line)?.cells[index];
+  const oldCell = defunct.lines.get(row.defunctLine ?? row.line)?.cells[index];
   const diagram = matchingDiagram(master, row.jobNumber, index);
   const existingJob = !diagram && matchingRosterJob(settings.existingJobs, row.jobNumber, index);
   const defunctAllowed = canClaimDefunct(row, settings.rules);
@@ -184,13 +184,17 @@ export function maximiseOptions(options, limit, guaranteeEligible = true) {
   return best.choices;
 }
 
-export function calculateScenarioLine({ engine, master, defunct, current, line, rate, role, alignment = "same-date", weekdayOvertimeAfterFourth = 2, extraKilometres = {}, kilometresByDate = {}, swapTypesByDate = {}, rules: ruleOptions = {} }) {
+export function calculateScenarioLine({ engine, master, defunct, current, line, defunctLine = line, rate, role, alignment = "same-date", weekdayOvertimeAfterFourth = 2, extraKilometres = {}, kilometresByDate = {}, swapTypesByDate = {}, rules: ruleOptions = {} }) {
+  defunctLine = Number(defunctLine);
+  if (!Number.isInteger(defunctLine) || defunctLine < 1) throw new Error("Enter a valid defunct line number.");
+  if (!defunct.lines.has(defunctLine)) throw new Error(`Defunct line ${defunctLine} is missing from the selected defunct master.`);
   const imported = importLine(master, current, line);
   const rules = scenarioRules(ruleOptions);
   const settings = { role, alignment, rules, existingJobs: master.rosterJobReference || buildRosterJobReference(master), defunctJobs: defunct.rosterJobReference || buildRosterJobReference(defunct) };
   const notes = [];
   const rows = imported.rows.map((row, index) => {
     const item = { ...row, reviewed: true, creditAlignment: "same-date" };
+    item.defunctLine = defunctLine;
     item.swapClassification = swapClassification(row, swapTypesByDate[row.date] ?? "auto");
     if (role === "driver" && Object.hasOwn(extraKilometres, row.date)) item.extraKm = extraKilometres[row.date];
     if (role === "driver" && Object.hasOwn(kilometresByDate, row.date)) item.kilometreInput = kilometresByDate[row.date];
@@ -209,7 +213,7 @@ export function calculateScenarioLine({ engine, master, defunct, current, line, 
       notes.push(`${row.date} · CIL modeled as 8 hours of paid accrued leave.`);
     }
     const currentCell = master.lines.get(Number(line))?.cells[index];
-    const defunctCell = defunct.lines.get(Number(line))?.cells[index];
+    const defunctCell = defunct.lines.get(defunctLine)?.cells[index];
     const roadsReference = (cell, jobs) => isReviewRoads(item.jobNumber) && Boolean(
       (cell?.status === "WORK" && cell.start && cell.finish && normaliseJob(cell.jobNumber) === normaliseJob(item.jobNumber)) ||
       hasReviewRoadsReference(jobs, item.jobNumber));
@@ -282,7 +286,7 @@ export function calculateScenarioLine({ engine, master, defunct, current, line, 
   const workedHolidayLines = dailyHolidayLines(workedOnly);
   const dates = rows.map((row, index) => {
     const original = snapshot(master.lines.get(Number(line))?.cells[index]);
-    const old = snapshot(defunct.lines.get(Number(line))?.cells[index]);
+    const old = snapshot(defunct.lines.get(defunctLine)?.cells[index]);
     const chosen = maximum.chosen[index];
     const pay = maximum.result.payObj[index];
     const wobodSources = wobodSourcesFor(row, index, master, defunct, rules);
@@ -302,7 +306,7 @@ export function calculateScenarioLine({ engine, master, defunct, current, line, 
       : swapAssignment?.jobNumber === row.jobNumber && swapAssignment.status === "WORK" ? { job: row.jobNumber, start: swapAssignment.start, finish: swapAssignment.finish }
       : { job: row.jobNumber, start: row.actualStart, finish: row.actualFinish };
     return {
-      date: row.date, status: row.status,
+      date: row.date, status: row.status, defunctLine,
       worked: { job: row.jobNumber, start: row.actualStart, finish: row.actualFinish, minutes: row.actualStart && row.actualFinish ? shiftDurationMinutes(row.actualStart, row.actualFinish) : null, rawText: row.rawText },
       rostered: { job: row.jobNumber, start: row.rosteredStart, finish: row.rosteredFinish },
       currentJobReference,
@@ -339,7 +343,7 @@ export function calculateScenarioLine({ engine, master, defunct, current, line, 
   const dailyDifference = dates.reduce((sum, day) => sum + cents(day.difference), 0);
   const difference = round(maximum.result.grossPay - baseline.result.grossPay);
   return {
-    line: Number(line), employeeName: imported.employeeName, rosterType: imported.rosterType,
+    line: Number(line), defunctLine, employeeName: imported.employeeName, rosterType: imported.rosterType,
     baseline: baseline.result.grossPay, maximum: maximum.result.grossPay, difference,
     adjustmentDifference: (cents(difference) - dailyDifference) / 100,
     dates, notes, rules,

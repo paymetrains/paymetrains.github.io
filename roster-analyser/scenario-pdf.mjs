@@ -50,6 +50,7 @@ export async function timesheetPdf(report, lines, period = "full") {
       const context = [
         `${report.current} - ${report.role} - ${money(report.rate)}/hour`,
         `Current: ${report.existingMaster} | Defunct: ${report.defunctMaster}`,
+        ...(line.defunctLine != null && line.defunctLine !== line.line ? [`Current line ${line.line} | Defunct line ${line.defunctLine}`] : []),
         dates?.length ? `${date(dates[0].date)} - ${date(dates.at(-1).date)} | Rostered times: current master; swapped shifts: current job reference.` : "",
         "MR marks a defunct-roster claim. Job length is actual work only.",
         ...(report.rules ? [scenarioRulesText(report.rules)] : []),
